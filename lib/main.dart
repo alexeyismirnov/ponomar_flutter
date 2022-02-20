@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -6,12 +8,14 @@ import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 import 'main_page.dart';
 import 'library_page.dart';
+import 'globals.dart';
 
-Future<Null> main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
   await ConfigParam.initSharedParams();
+  await JSON.load();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -19,7 +23,7 @@ Future<Null> main() async {
 
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', ''), Locale('ru', '')],
-      path: 'ui',
+      path: 'ui,cal,reading',
       assetLoader: DirectoryAssetLoader(basePath: "assets/translations"),
       fallbackLocale: const Locale('en', ''),
       startLocale: const Locale('en', ''),

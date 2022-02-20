@@ -12,8 +12,8 @@ class LibraryPage extends StatefulWidget {
 }
 
 class _LibraryPageState extends State<LibraryPage> {
-  DateTime date;
-  DateTime savedDate;
+  late DateTime date;
+  late DateTime savedDate;
 
   @override
   void initState() {
