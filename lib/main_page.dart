@@ -14,7 +14,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   late DateTime date;
-  late ChurchCalendar cal;
+  late Cal cal;
   late int initialPage;
   late PageController _controller;
 
@@ -68,7 +68,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     if (d == null) return;
 
     date = DateTime(d.year, d.month, d.day);
-    cal = ChurchCalendar.fromDate(date);
+    cal = Cal.fromDate(date);
   }
 
   Widget _buildPage(int index) {
@@ -114,9 +114,8 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
           child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 600),
               child: NestedScrollView(
-                  headerSliverBuilder:
-                      (BuildContext context, bool innerBoxIsScrolled) =>
-                          [CalendarAppbar()],
+                  headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) =>
+                      [CalendarAppbar()],
                   body: Padding(
                       padding: const EdgeInsets.all(15),
                       child: PageView.builder(

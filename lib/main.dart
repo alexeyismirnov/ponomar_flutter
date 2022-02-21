@@ -28,10 +28,7 @@ Future<void> main() async {
       fallbackLocale: const Locale('en', ''),
       startLocale: const Locale('en', ''),
       child: RestartWidget(ContainerPage(tabs: [
-        AnimatedTab(
-            icon: const Icon(Icons.home),
-            title: 'homepage',
-            content: MainPage()),
+        AnimatedTab(icon: const Icon(Icons.home), title: 'homepage', content: MainPage()),
         AnimatedTab(
             icon: const ImageIcon(
               AssetImage('assets/images/library.png'),

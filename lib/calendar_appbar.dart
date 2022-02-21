@@ -44,15 +44,13 @@ class CalendarAppbar extends StatelessWidget {
       elevation: 0.0,
       toolbarHeight: 50.0,
       pinned: false,
-      title: Text(title.tr(),
-          textAlign: TextAlign.left,
-          style: Theme.of(context).textTheme.headline6),
+      title:
+          Text(title.tr(), textAlign: TextAlign.left, style: Theme.of(context).textTheme.headline6),
       centerTitle: false,
       actions: showActions
           ? [
               IconButton(
-                  icon: const Icon(Icons.rate_review_outlined, size: 30.0),
-                  onPressed: () {}),
+                  icon: const Icon(Icons.rate_review_outlined, size: 30.0), onPressed: () {}),
               _getActions(context)
             ]
           : []);

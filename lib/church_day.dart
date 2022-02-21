@@ -21,38 +21,30 @@ enum FeastType {
 }
 
 extension FeastTypeExt on FeastType {
-  String get name => [
-        "none",
-        "noSign",
-        "sixVerse",
-        "doxology",
-        "polyeleos",
-        "vigil",
-        "great"
-      ][index];
+  String get name =>
+      ["none", "noSign", "sixVerse", "doxology", "polyeleos", "vigil", "great"][index];
 }
 
 @JsonSerializable()
 class ChurchDay {
   @JsonKey(name: 'feastName')
-  final String name;
+  String name;
 
   @JsonKey(name: 'feastType')
-  final FeastType type;
+  FeastType type;
 
   @JsonKey(fromJson: _fromJson)
-  final DateTime? date;
+  DateTime? date;
 
   @JsonKey(name: 'reading')
-  final String? reading;
+  String? reading;
 
   @JsonKey(name: 'saint')
-  final String? comment;
+  String? comment;
 
-  factory ChurchDay.fromJson(Map<String, dynamic> json) =>
-      _$ChurchDayFromJson(json);
+  factory ChurchDay.fromJson(Map<String, dynamic> json) => _$ChurchDayFromJson(json);
 
-  ChurchDay(this.name, this.type, this.date, this.reading, this.comment);
+  ChurchDay(this.name, this.type, {this.date, this.reading, this.comment});
 
   @override
   String toString() {
