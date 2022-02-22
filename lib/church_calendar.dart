@@ -3,6 +3,8 @@ import 'dart:developer';
 
 import 'package:intl/intl.dart';
 import 'package:supercharged/supercharged.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:sprintf/sprintf.dart';
 
 import 'globals.dart';
 import 'church_day.dart';
@@ -12,6 +14,8 @@ class ChurchCalendar {
   late List<ChurchDay> days;
   late DateTime startOfYear, endOfYear;
   late DateTime greatLentStart, pascha, pentecost;
+  late DateTime leapStart, leapEnd;
+  late bool isLeapYear;
 
   static Map<int, ChurchCalendar> calendars = {};
 
@@ -35,6 +39,10 @@ class ChurchCalendar {
     pascha = paschaDay(year);
     greatLentStart = pascha - 48.days;
     pentecost = pascha + 49.days;
+
+    leapStart = DateTime(year, 2, 29);
+    leapEnd = DateTime(year, 3, 13);
+    isLeapYear = (year % 400) == 0 || ((year % 4 == 0) && (year % 100 != 0));
 
     initDays();
     initGreatLent();
@@ -330,12 +338,81 @@ class ChurchCalendar {
         return nearestSundayAfter(d);
     }
   }
+
+  static List<ChurchDay> getGreatFeast(DateTime d) =>
+      Cal.fromDate(d).days.where((e) => e.date == d && e.type == FeastType.great).toList();
 }
 
 extension ChurchCalendarFunc on ChurchCalendar {
   ChurchDay day(String name) => days.where((e) => e.name == name).first;
 
   DateTime d(String name) => day(name).date!;
+
+  List<ChurchDay> getDayDescription(DateTime d) =>
+      (days.where((e) => e.date == d && e.name.isNotEmpty).toList()
+            ..sort((a, b) => a.type.index - b.type.index))
+          .toList();
+
+  String? getWeekDescription(DateTime date) {
+    final dayOfWeek = (date.weekday == DateTime.sunday) ? "Sunday" : "Week";
+
+    if (date.isBetween(startOfYear, d("sundayOfPublicianAndPharisee") - 1.days)) {
+      return "${dayOfWeek}AfterPentecost"
+          .tr()
+          .format(((Cal.paschaDay(year - 1) + 50.days) >> date) ~/ 7 + 1);
+    } else if (date.isBetween(
+        d("sundayOfPublicianAndPharisee") + 1.days, d("sundayOfProdigalSon") - 1.days)) {
+      return "weekOfPublicianAndPharisee".tr();
+    } else if (date.isBetween(
+        d("sundayOfProdigalSon") + 1.days, d("sundayOfDreadJudgement") - 1.days)) {
+      return "weekOfProdigalSon".tr();
+    } else if (date.isBetween(
+        d("sundayOfDreadJudgement") + 1.days, d("cheesefareSunday") - 1.days)) {
+      return "weekOfDreadJudgement".tr();
+    } else if (date.isBetween(d("beginningOfGreatLent"), d("palmSunday") - 1.days)) {
+      return "${dayOfWeek}OfGreatLent".tr().format((greatLentStart >> date) ~/ 7 + 1);
+    } else if (date.isBetween(d("palmSunday") + 1.days, pascha - 1.days)) {
+      return "holyWeek".tr();
+    } else if (date.isBetween(pascha + 1.days, pascha + 6.days)) {
+      return "brightWeek".tr();
+    } else if (date.isBetween(pascha + 8.days, pentecost - 1.days)) {
+      return (date.weekday == DateTime.sunday)
+          ? null
+          : "WeekAfterPascha".tr().format((pascha >> date) ~/ 7 + 1);
+    } else if (date.isBetween(pentecost + 1.days, endOfYear)) {
+      return "${dayOfWeek}AfterPentecost".tr().format(((pentecost + 1.days) >> date) ~/ 7 + 1);
+    } else {
+      return null;
+    }
+  }
+
+  int? getTone(DateTime date) {
+    int tone(int dayNum) {
+      final reminder = (dayNum ~/ 7) % 8;
+      return (reminder == 0) ? 8 : reminder;
+    }
+
+    if (date.isBetween(startOfYear, d("palmSunday") - 1.days)) {
+      return tone(Cal.paschaDay(year - 1) >> date);
+    } else if (date.isBetween(pascha + 7.days, endOfYear)) {
+      return tone(pascha >> date);
+    } else {
+      return null;
+    }
+  }
+
+  String? getToneDescription(DateTime date) {
+    final tone = getTone(date);
+    return (tone != null) ? "tone".tr().format(tone) : null;
+  }
+}
+
+extension StringFormatExtension on String {
+  String format(var arguments) => sprintf(this, arguments);
+}
+
+extension DateTimeDiff on DateTime {
+  int operator >>(DateTime other) => other.difference(this).inDays;
 }
 
 typedef Cal = ChurchCalendar;

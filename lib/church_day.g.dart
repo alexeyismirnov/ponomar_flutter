@@ -9,9 +9,9 @@ part of 'church_day.dart';
 ChurchDay _$ChurchDayFromJson(Map<String, dynamic> json) => ChurchDay(
       json['feastName'] as String,
       $enumDecode(_$FeastTypeEnumMap, json['feastType']),
-      _fromJson(json['date'] as String),
-      json['reading'] as String?,
-      json['saint'] as String?,
+      date: _fromJson(json['date'] as String),
+      reading: json['reading'] as String?,
+      comment: json['saint'] as String?,
     );
 
 Map<String, dynamic> _$ChurchDayToJson(ChurchDay instance) => <String, dynamic>{

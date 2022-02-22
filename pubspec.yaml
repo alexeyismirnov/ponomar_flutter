@@ -20,6 +20,7 @@ dependencies:
   sqflite: ^2.0.2
   supercharged: ^2.1.1
   json_annotation: ^4.4.0
+  sprintf: ^6.0.0
   flutter_toolkit:
     path: /Users/alexey/workspace/flutter_toolkit
 
