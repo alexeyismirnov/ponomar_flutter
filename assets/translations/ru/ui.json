@@ -6,5 +6,7 @@
   "language": "Язык",
   "bg_color": "Фон",
   "homepage": "Главная",
-  "library": "Библиотека"
+  "library": "Библиотека",
+  "old_style": "(ст. ст.)"
+
 }

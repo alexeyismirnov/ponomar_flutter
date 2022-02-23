@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:supercharged/supercharged.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:sprintf/sprintf.dart';
 
 import 'globals.dart';
 import 'church_day.dart';
@@ -359,7 +358,7 @@ extension ChurchCalendarFunc on ChurchCalendar {
     if (date.isBetween(startOfYear, d("sundayOfPublicianAndPharisee") - 1.days)) {
       return "${dayOfWeek}AfterPentecost"
           .tr()
-          .format(((Cal.paschaDay(year - 1) + 50.days) >> date) ~/ 7 + 1);
+          .format([((Cal.paschaDay(year - 1) + 50.days) >> date) ~/ 7 + 1]);
     } else if (date.isBetween(
         d("sundayOfPublicianAndPharisee") + 1.days, d("sundayOfProdigalSon") - 1.days)) {
       return "weekOfPublicianAndPharisee".tr();
@@ -370,7 +369,7 @@ extension ChurchCalendarFunc on ChurchCalendar {
         d("sundayOfDreadJudgement") + 1.days, d("cheesefareSunday") - 1.days)) {
       return "weekOfDreadJudgement".tr();
     } else if (date.isBetween(d("beginningOfGreatLent"), d("palmSunday") - 1.days)) {
-      return "${dayOfWeek}OfGreatLent".tr().format((greatLentStart >> date) ~/ 7 + 1);
+      return "${dayOfWeek}OfGreatLent".tr().format([(greatLentStart >> date) ~/ 7 + 1]);
     } else if (date.isBetween(d("palmSunday") + 1.days, pascha - 1.days)) {
       return "holyWeek".tr();
     } else if (date.isBetween(pascha + 1.days, pascha + 6.days)) {
@@ -378,9 +377,9 @@ extension ChurchCalendarFunc on ChurchCalendar {
     } else if (date.isBetween(pascha + 8.days, pentecost - 1.days)) {
       return (date.weekday == DateTime.sunday)
           ? null
-          : "WeekAfterPascha".tr().format((pascha >> date) ~/ 7 + 1);
+          : "WeekAfterPascha".tr().format([(pascha >> date) ~/ 7 + 1]);
     } else if (date.isBetween(pentecost + 1.days, endOfYear)) {
-      return "${dayOfWeek}AfterPentecost".tr().format(((pentecost + 1.days) >> date) ~/ 7 + 1);
+      return "${dayOfWeek}AfterPentecost".tr().format([((pentecost + 1.days) >> date) ~/ 7 + 1]);
     } else {
       return null;
     }
@@ -403,16 +402,8 @@ extension ChurchCalendarFunc on ChurchCalendar {
 
   String? getToneDescription(DateTime date) {
     final tone = getTone(date);
-    return (tone != null) ? "tone".tr().format(tone) : null;
+    return (tone != null) ? "tone".tr().format([tone]) : null;
   }
-}
-
-extension StringFormatExtension on String {
-  String format(var arguments) => sprintf(this, arguments);
-}
-
-extension DateTimeDiff on DateTime {
-  int operator >>(DateTime other) => other.difference(this).inDays;
 }
 
 typedef Cal = ChurchCalendar;

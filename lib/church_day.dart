@@ -27,7 +27,7 @@ extension FeastTypeExt on FeastType {
 
 @JsonSerializable()
 class ChurchDay {
-  @JsonKey(name: 'feastName')
+  @JsonKey(name: 'feastName', defaultValue: '')
   String name;
 
   @JsonKey(name: 'feastType')
