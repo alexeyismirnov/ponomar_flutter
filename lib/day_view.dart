@@ -8,6 +8,38 @@ import 'church_day.dart';
 import 'church_calendar.dart';
 import 'globals.dart';
 
+class _FeastWidget extends StatelessWidget {
+  final ChurchDay d;
+  const _FeastWidget(this.d);
+
+  @override
+  Widget build(BuildContext context) {
+    if (d.type == FeastType.great) {
+      return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+          child: Row(children: [
+            SvgPicture.asset("assets/images/great.svg", height: 30),
+            const SizedBox(width: 10),
+            Expanded(
+                child: Text(d.name.tr(),
+                    style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.red)))
+          ]));
+    } else {
+      if (d.type.name != "none") {
+        return RichText(
+            text: TextSpan(children: [
+          WidgetSpan(
+              child:
+                  SvgPicture.asset("assets/images/${d.type.name.toLowerCase()}.svg", height: 15)),
+          TextSpan(text: d.name.tr(), style: Theme.of(context).textTheme.titleMedium)
+        ]));
+      } else {
+        return Text(d.name.tr(), style: Theme.of(context).textTheme.titleMedium);
+      }
+    }
+  }
+}
+
 class DayView extends StatefulWidget {
   final DateTime date, dateOld;
 
@@ -75,32 +107,6 @@ class _DayViewState extends State<DayView> {
     return dateWidget;
   }
 
-  Widget getFeastWidget(ChurchDay d) {
-    if (d.type == FeastType.great) {
-      return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-          child: Row(children: [
-            SvgPicture.asset("assets/images/great.svg", height: 30),
-            const SizedBox(width: 10),
-            Expanded(
-                child: Text(d.name.tr(),
-                    style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.red)))
-          ]));
-    } else {
-      if (d.type.name != "none") {
-        return RichText(
-            text: TextSpan(children: [
-          WidgetSpan(
-              child:
-                  SvgPicture.asset("assets/images/${d.type.name.toLowerCase()}.svg", height: 15)),
-          TextSpan(text: d.name.tr(), style: Theme.of(context).textTheme.titleMedium)
-        ]));
-      } else {
-        return Text(d.name.tr(), style: Theme.of(context).textTheme.titleMedium);
-      }
-    }
-  }
-
   Widget getDescription() {
     var list = [cal.getWeekDescription(date), cal.getToneDescription(date)];
     var weekDescr = list.whereType<String>().join('; ');
@@ -110,9 +116,9 @@ class _DayViewState extends State<DayView> {
     List<Widget> feastWidgets = [];
 
     if (greatFeasts.isNotEmpty) {
-      feastWidgets = greatFeasts.map((d) => getFeastWidget(d)).toList();
+      feastWidgets = greatFeasts.map((d) => _FeastWidget(d)).toList();
     } else {
-      feastWidgets = dayDescr.map((d) => getFeastWidget(d)).toList();
+      feastWidgets = dayDescr.map((d) => _FeastWidget(d)).toList();
     }
 
     return Column(
