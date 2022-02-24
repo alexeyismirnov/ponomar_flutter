@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
+import 'church_day.dart';
 import 'church_calendar.dart';
 import 'globals.dart';
 
@@ -73,17 +75,52 @@ class _DayViewState extends State<DayView> {
     return dateWidget;
   }
 
+  Widget getFeastWidget(ChurchDay d) {
+    if (d.type == FeastType.great) {
+      return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+          child: Row(children: [
+            SvgPicture.asset("assets/images/great.svg", height: 30),
+            const SizedBox(width: 10),
+            Expanded(
+                child: Text(d.name.tr(),
+                    style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.red)))
+          ]));
+    } else {
+      if (d.type.name != "none") {
+        return RichText(
+            text: TextSpan(children: [
+          WidgetSpan(
+              child:
+                  SvgPicture.asset("assets/images/${d.type.name.toLowerCase()}.svg", height: 15)),
+          TextSpan(text: d.name.tr(), style: Theme.of(context).textTheme.titleMedium)
+        ]));
+      } else {
+        return Text(d.name.tr(), style: Theme.of(context).textTheme.titleMedium);
+      }
+    }
+  }
+
   Widget getDescription() {
     var list = [cal.getWeekDescription(date), cal.getToneDescription(date)];
     var weekDescr = list.whereType<String>().join('; ');
     var dayDescr = cal.getDayDescription(date);
+    var greatFeasts = Cal.getGreatFeast(date);
+
+    List<Widget> feastWidgets = [];
+
+    if (greatFeasts.isNotEmpty) {
+      feastWidgets = greatFeasts.map((d) => getFeastWidget(d)).toList();
+    } else {
+      feastWidgets = dayDescr.map((d) => getFeastWidget(d)).toList();
+    }
 
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Text(weekDescr, style: Theme.of(context).textTheme.titleMedium)] +
-            dayDescr
-                .map((d) => Text(d.name.tr(), style: Theme.of(context).textTheme.titleMedium))
-                .toList());
+        children: (weekDescr.isNotEmpty
+                ? <Widget>[Text(weekDescr, style: Theme.of(context).textTheme.titleMedium)]
+                : <Widget>[]) +
+            feastWidgets);
   }
 
   @override
