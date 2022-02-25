@@ -7,5 +7,8 @@
   "bg_color": "Background",
   "homepage": "Home",
   "library": "Library",
-  "old_style": "(O. S.)"
+  "old_style": "(O. S.)",
+  "fasting_level": "Fasting level",
+  "laymen_fasting": "Laymen fasting",
+  "monastic_fasting": "Monastic fasting"
 }

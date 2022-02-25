@@ -7,6 +7,9 @@
   "bg_color": "Фон",
   "homepage": "Главная",
   "library": "Библиотека",
-  "old_style": "(ст. ст.)"
+  "old_style": "(ст. ст.)",
+  "fasting_level": "Степень поста",
+  "laymen_fasting": "Пост для мирян",
+  "monastic_fasting": "Монастырский устав"
 
 }

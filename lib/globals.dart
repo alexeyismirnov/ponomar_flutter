@@ -3,6 +3,7 @@ import 'package:sprintf/sprintf.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 class JSON {
   static late String calendar;
@@ -38,4 +39,9 @@ extension HexColor on Color {
 class DateChangedNotification extends Notification {
   late DateTime newDate;
   DateChangedNotification(this.newDate) : super();
+}
+
+
+extension ConfigParamExt on ConfigParam {
+  static var fastingLevel;
 }

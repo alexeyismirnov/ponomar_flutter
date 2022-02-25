@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'church_day.dart';
 import 'church_calendar.dart';
+import 'church_fasting.dart';
 import 'globals.dart';
 
 class _FeastWidget extends StatelessWidget {
@@ -16,7 +17,7 @@ class _FeastWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (d.type == FeastType.great) {
       return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+          padding: const EdgeInsets.only(top: 5),
           child: Row(children: [
             SvgPicture.asset("assets/images/great.svg", height: 30),
             const SizedBox(width: 10),
@@ -31,10 +32,13 @@ class _FeastWidget extends StatelessWidget {
           WidgetSpan(
               child:
                   SvgPicture.asset("assets/images/${d.type.name.toLowerCase()}.svg", height: 15)),
-          TextSpan(text: d.name.tr(), style: Theme.of(context).textTheme.titleMedium)
+          TextSpan(
+              text: d.name.tr(),
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500))
         ]));
       } else {
-        return Text(d.name.tr(), style: Theme.of(context).textTheme.titleMedium);
+        return Text(d.name.tr(),
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500));
       }
     }
   }
@@ -129,12 +133,23 @@ class _DayViewState extends State<DayView> {
             feastWidgets);
   }
 
+  Widget getFasting() {
+    final fasting = ChurchFasting.forDate(date);
+
+    return Row(children: [
+      SvgPicture.asset("assets/images/${fasting.type.icon}", height: 30),
+      const SizedBox(width: 10),
+      Expanded(
+          child: Text(fasting.description.tr(), style: Theme.of(context).textTheme.titleMedium))
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     const space = SizedBox(height: 10);
     return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [getDate(), space, getDescription()]);
+        children: [getDate(), space, getDescription(), space, getFasting()]);
   }
 }

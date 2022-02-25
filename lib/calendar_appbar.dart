@@ -3,6 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
+import 'globals.dart';
+import 'church_fasting.dart';
+
+class FastingLevelDialog extends StatelessWidget {
+  final labels = ['laymen_fasting', 'monastic_fasting'];
+
+  Widget _getListItem(BuildContext context, int index) {
+    return CheckboxListTile(
+        title: Text(labels[index]).tr(),
+        value: ConfigParamExt.fastingLevel.val() == index,
+        onChanged: (_) {
+          ConfigParamExt.fastingLevel.set(index);
+          ChurchFasting.fastingLevel = FastingLevel.values[index];
+          RestartWidget.restartApp(context);
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) => SelectorDialog(title: 'fasting_level', content: [
+        _getListItem(context, 0),
+        _getListItem(context, 1),
+      ]);
+}
+
 class CalendarAppbar extends StatelessWidget {
   final bool showActions;
   final String title;
@@ -30,7 +54,16 @@ class CalendarAppbar extends StatelessWidget {
               },
               child: ListTile(
                   leading: const Icon(Icons.color_lens_outlined, size: 30.0),
-                  title: const Text('bg_color').tr())))
+                  title: const Text('bg_color').tr()))),
+      PopupMenuItem(
+          child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+                FastingLevelDialog().show(context);
+              },
+              child: ListTile(
+                  leading: const Icon(Icons.restaurant_menu_outlined, size: 30.0),
+                  title: const Text('fasting_level').tr())))
     ];
 
     return PopupMenuButton(
