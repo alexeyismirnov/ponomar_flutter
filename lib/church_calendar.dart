@@ -352,6 +352,11 @@ extension ChurchCalendarFunc on ChurchCalendar {
             ..sort((a, b) => a.type.index - b.type.index))
           .toList();
 
+  List<ChurchDay> getDayReadings(DateTime d) =>
+      (days.where((e) => e.date == d && e.reading != null).toList()
+            ..sort((a, b) => a.type.index - b.type.index))
+          .toList();
+
   String? getWeekDescription(DateTime date) {
     final dayOfWeek = (date.weekday == DateTime.sunday) ? "Sunday" : "Week";
 

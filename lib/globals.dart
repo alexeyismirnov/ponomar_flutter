@@ -7,10 +7,16 @@ import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 class JSON {
   static late String calendar;
+  static late String apostle, readingsJohn, gospelMatthew, gospelLuke, readingsLent;
   static late Function(String) dateParser;
 
   static Future load() async {
     calendar = await rootBundle.loadString("assets/calendar/calendar.json");
+    apostle = await rootBundle.loadString("assets/calendar/ReadingApostle.json");
+    readingsJohn = await rootBundle.loadString("assets/calendar/ReadingJohn.json");
+    gospelMatthew = await rootBundle.loadString("assets/calendar/ReadingMatthew.json");
+    gospelLuke = await rootBundle.loadString("assets/calendar/ReadingLuke.json");
+    readingsLent = await rootBundle.loadString("assets/calendar/ReadingLent.json");
   }
 }
 
@@ -40,7 +46,6 @@ class DateChangedNotification extends Notification {
   late DateTime newDate;
   DateChangedNotification(this.newDate) : super();
 }
-
 
 extension ConfigParamExt on ConfigParam {
   static var fastingLevel;
