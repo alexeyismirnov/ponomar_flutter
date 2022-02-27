@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'church_day.dart';
 import 'church_calendar.dart';
 import 'church_fasting.dart';
+import 'church_reading.dart';
 import 'globals.dart';
 
 class _FeastWidget extends StatelessWidget {
@@ -144,12 +145,19 @@ class _DayViewState extends State<DayView> {
     ]);
   }
 
+  Widget getReading() {
+    final reading = ChurchReading.forDate(date);
+    print(reading);
+
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     const space = SizedBox(height: 10);
     return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [getDate(), space, getDescription(), space, getFasting()]);
+        children: [getDate(), space, getDescription(), space, getFasting(), space, getReading()]);
   }
 }

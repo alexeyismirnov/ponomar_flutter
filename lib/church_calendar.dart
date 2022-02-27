@@ -52,7 +52,7 @@ class ChurchCalendar {
 
   DateTime? dateParser(String date) {
     if (date != null) {
-      var dd = DateFormat("d MMMM").parse(date);
+      var dd = DateFormat("d MMMM", "en").parse(date);
       return DateTime(year, dd.month, dd.day);
     } else {
       return null;
@@ -356,6 +356,8 @@ extension ChurchCalendarFunc on ChurchCalendar {
       (days.where((e) => e.date == d && e.reading != null).toList()
             ..sort((a, b) => a.type.index - b.type.index))
           .toList();
+
+  List<ChurchDay> getAllReadings() => days.where((e) => e.reading != null).toList();
 
   String? getWeekDescription(DateTime date) {
     final dayOfWeek = (date.weekday == DateTime.sunday) ? "Sunday" : "Week";

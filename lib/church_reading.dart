@@ -1,8 +1,10 @@
 import 'package:supercharged/supercharged.dart';
 
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 import 'church_calendar.dart';
+import 'church_day.dart';
 import 'globals.dart';
 
 class LukeSpringParams {
@@ -41,6 +43,9 @@ class ChurchReading {
     gospelMatthew = List<String>.from(json.decode(JSON.gospelMatthew));
     gospelLuke = List<String>.from(json.decode(JSON.gospelLuke));
     readingsLent = List<String>.from(json.decode(JSON.readingsLent));
+
+    generateRR();
+    generateTransfers();
   }
 
   String GospelOfLent(DateTime date) {
@@ -117,12 +122,11 @@ class ChurchReading {
     return apostle[daysFromPentecost] + " " + gospelLuke[daysFromLukeStart];
   }
 
-  String? getRegularReading(DateTime date) {
+  String getRegularReading(DateTime date) {
     if (date.isBetween(cal.startOfYear, cal.d("sundayOfPublicianAndPharisee") - 1.days)) {
       return GospelOfLukeSpring(date);
     } else if (date.isBetween(cal.d("sundayOfPublicianAndPharisee"), cal.pascha - 1.days)) {
-      final reading = GospelOfLent(date);
-      return reading.isNotEmpty ? reading : null;
+      return GospelOfLent(date);
     } else if (date.isBetween(cal.pascha, cal.pentecost)) {
       return GospelOfJohn(date);
     } else if (date.isBetween(cal.pentecost + 1.days, cal.d("sundayAfterExaltation"))) {
@@ -130,12 +134,135 @@ class ChurchReading {
     } else if (date.isBetween(cal.d("sundayAfterExaltation") + 1.days, cal.endOfYear)) {
       return GospelOfLukeFall(date);
     } else {
+      return "";
+    }
+  }
+
+  generateRR() {
+    for (final d in (cal.startOfYear).rangeTo(cal.endOfYear)) {
+      rr[d] = [getRegularReading(d)];
+    }
+  }
+
+  DateTime? transferGreatFeast(DateTime date) {
+    DateTime newDate;
+
+    if (date.weekday == DateTime.sunday) {
       return null;
+    } else if (date.weekday == DateTime.monday) {
+      newDate = date + 1.days;
+
+      if (cal.getDayReadings(newDate).isNotEmpty) {
+        return null;
+      }
+    } else {
+      newDate = date - 1.days;
+      if (cal.getDayReadings(newDate).isNotEmpty) {
+        return null;
+      }
+    }
+
+    return newDate;
+  }
+
+  DateTime transferVigil(DateTime date) {
+    DateTime newDate;
+
+    if (date.weekday == DateTime.sunday) {
+      return date;
+    } else if (date.weekday == DateTime.monday) {
+      newDate = date + 1.days;
+
+      if (cal.getDayReadings(newDate).isNotEmpty) {
+        return date;
+      }
+    } else {
+      newDate = date - 1.days;
+      if (cal.getDayReadings(newDate).isNotEmpty) {
+        newDate = date + 1.days;
+
+        if (date.weekday == DateTime.saturday || cal.getDayReadings(newDate).isNotEmpty) {
+          return date;
+        }
+      }
+    }
+
+    return newDate;
+  }
+
+  generateTransfers() {
+    var formatter = DateFormat.EEEE("en");
+
+    rr[DateTime(cal.year, 1, 6)] = [];
+    rr[DateTime(cal.year, 1, 7)] = [];
+    rr[DateTime(cal.year, 1, 14)] = [];
+    rr[DateTime(cal.year, 1, 18)] = [];
+    rr[DateTime(cal.year, 1, 19)] = [];
+
+    for (final feast in cal.getAllReadings()) {
+      if (feast.date!.isBetween(cal.greatLentStart, cal.pentecost)) continue;
+      if (feast.type == FeastType.great) {
+        final oldDate = feast.date!;
+        final newDate = transferGreatFeast(oldDate);
+        final oldReading = rr[oldDate]!;
+
+        if (oldReading.isNotEmpty && newDate != null) {
+          final comment = "# %s Reading".format([formatter.format(oldDate)]);
+
+          for (final r in oldReading) {
+            rr[newDate]!.add("%s %s".format([r, comment]));
+          }
+
+          rr[oldDate] = [];
+        }
+      } else if (feast.type == FeastType.vigil) {
+        final oldDate = feast.date!;
+        final newDate = transferVigil(oldDate);
+        final oldReading = rr[oldDate]!;
+
+        if (oldReading.isNotEmpty && newDate != oldDate) {
+          final comment = "# %s Reading".format([formatter.format(oldDate)]);
+
+          for (final r in oldReading) {
+            rr[newDate]!.add("%s %s".format([r, comment]));
+          }
+
+          rr[oldDate] = [];
+        }
+      }
     }
   }
 
   List<String> getDailyReading(DateTime date) {
-    return [];
+    final feasts = cal.getDayReadings(date);
+
+    if (feasts.isNotEmpty) {
+      if (feasts.first.type == FeastType.great) {
+        return feasts.filter((f) => f.type == FeastType.great).map((f) => f.reading!).toList();
+      } else {
+        List<String> result = [];
+        final weekday = date.weekday;
+
+        if (date.isBetween(cal.greatLentStart, cal.d("sunday4GreatLent") - 1.days) &&
+            weekday != DateTime.saturday &&
+            weekday != DateTime.sunday) {
+          // only Lent reading
+          return rr[date]!;
+        } else if (date == cal.d("sundayOfZacchaeus") ||
+            date == cal.d("sundayOfPublicianAndPharisee") ||
+            date == cal.d("sundayOfProdigalSon") ||
+            date == cal.d("sundayOfDreadJudgement") ||
+            date == cal.d("cheesefareSunday")) {
+          result = List.from(rr[date]!)..addAll(feasts.map((f) => f.reading!));
+        } else {
+          result = List.from(feasts.map((f) => f.reading!))..addAll(rr[date]!);
+        }
+
+        return result.take(2).toList();
+      }
+    } else {
+      return rr[date]!;
+    }
   }
 
   static List<String> forDate(DateTime date) {
