@@ -4,11 +4,16 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 class JSON {
   static late String calendar;
   static late String apostle, readingsJohn, gospelMatthew, gospelLuke, readingsLent;
   static late Function(String) dateParser;
+
+  static late String OldTestamentItems, OldTestamentFilenames;
+  static late String NewTestamentItems, NewTestamentFilenames;
 
   static Future load() async {
     calendar = await rootBundle.loadString("assets/calendar/calendar.json");
@@ -17,6 +22,11 @@ class JSON {
     gospelMatthew = await rootBundle.loadString("assets/calendar/ReadingMatthew.json");
     gospelLuke = await rootBundle.loadString("assets/calendar/ReadingLuke.json");
     readingsLent = await rootBundle.loadString("assets/calendar/ReadingLent.json");
+
+    OldTestamentItems = await rootBundle.loadString("assets/bible/OldTestamentItems.json");
+    OldTestamentFilenames = await rootBundle.loadString("assets/bible/OldTestamentFilenames.json");
+    NewTestamentItems = await rootBundle.loadString("assets/bible/NewTestamentItems.json");
+    NewTestamentFilenames = await rootBundle.loadString("assets/bible/NewTestamentFilenames.json");
   }
 }
 
@@ -49,4 +59,12 @@ class DateChangedNotification extends Notification {
 
 extension ConfigParamExt on ConfigParam {
   static var fastingLevel;
+}
+
+Future<Database> openDB(String filename) async {
+  var databasesPath = await getDatabasesPath();
+  var path = join(databasesPath, filename);
+  var db = await openDatabase(path, readOnly: true);
+
+  return db;
 }

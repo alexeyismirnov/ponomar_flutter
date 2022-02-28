@@ -27,7 +27,7 @@ Future<void> main() async {
 
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en', ''), Locale('ru', '')],
-      path: 'ui,cal,reading',
+      path: 'ui,cal,reading,library',
       assetLoader: DirectoryAssetLoader(basePath: "assets/translations"),
       fallbackLocale: const Locale('en', ''),
       startLocale: const Locale('en', ''),
