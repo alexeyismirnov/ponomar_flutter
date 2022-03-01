@@ -1,6 +1,7 @@
 import 'package:group_list_view/group_list_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 import 'dart:async';
 import 'dart:convert';
@@ -27,7 +28,7 @@ class BibleUtil {
   }
 
   static Future<BibleUtil> fetch(String bookName, String lang, String whereExpr) async {
-    var db = await openDB(bookName + "_$lang.sqlite");
+    var db = await DB.open(bookName + "_$lang.sqlite");
 
     List<Map<String, Object?>> result =
         await db.query("scripture", columns: ["verse", "text"], where: whereExpr);
@@ -45,7 +46,7 @@ mixin BibleModel on BookModel {
   List<List<String>> get filenames;
 
   Future<int> numberOfChapters(String bookName) async {
-    var db = await openDB(bookName + "_$lang.sqlite");
+    var db = await DB.open(bookName + "_$lang.sqlite");
     return Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(DISTINCT chapter) FROM scripture'))!;
   }
@@ -59,14 +60,21 @@ mixin BibleModel on BookModel {
   Future<int> getNumChapters(IndexPath index) {
     return Future<int>.value(0);
   }
+
+  @override
+  Future prepare() async {
+    filenames.map((f) async => await DB.prepare("${f}_$lang.sqlite"));
+  }
 }
 
 class OldTestamentModel extends BookModel with BibleModel {
   @override
-  final List<List<String>> items = jsonDecode(JSON.OldTestamentItems);
+  final items =
+      jsonDecode(JSON.OldTestamentItems).map<List<String>>((l) => List<String>.from(l)).toList();
 
   @override
-  final List<List<String>> filenames = jsonDecode(JSON.OldTestamentFilenames);
+  final filenames =
+      jsonDecode(JSON.OldTestamentFilenames).map<List<String>>((l) => List<String>.from(l)).toList();
 
   @override
   String get code => "OldTestament";
@@ -81,13 +89,15 @@ class OldTestamentModel extends BookModel with BibleModel {
   String? author;
 
   @override
-  late String lang;
+  String lang;
 
   @override
   bool get hasChapters => true;
 
   @override
   Future get initFuture => Future.value(null);
+
+  OldTestamentModel(this.lang);
 
   @override
   Future<List<String>> getSections() {
@@ -107,10 +117,13 @@ class OldTestamentModel extends BookModel with BibleModel {
 
 class NewTestamentModel extends BookModel with BibleModel {
   @override
-  final List<List<String>> items = jsonDecode(JSON.NewTestamentItems);
+  final items =
+      jsonDecode(JSON.NewTestamentItems).map<List<String>>((l) => List<String>.from(l)).toList();
 
   @override
-  final List<List<String>> filenames = jsonDecode(JSON.NewTestamentFilenames);
+  final filenames = jsonDecode(JSON.NewTestamentFilenames)
+      .map<List<String>>((l) => List<String>.from(l))
+      .toList();
 
   @override
   String get code => "NewTestament";
@@ -125,13 +138,15 @@ class NewTestamentModel extends BookModel with BibleModel {
   String? author;
 
   @override
-  late String lang;
+  String lang;
 
   @override
   bool get hasChapters => true;
 
   @override
   Future get initFuture => Future.value(null);
+
+  NewTestamentModel(this.lang);
 
   @override
   Future<List<String>> getSections() {

@@ -21,6 +21,7 @@ dependencies:
   supercharged: ^2.1.1
   json_annotation: ^4.4.0
   sprintf: ^6.0.0
+  after_init: ^0.1.2
   group_list_view: ^1.1.1
   flutter_toolkit:
     path: /Users/alexey/workspace/flutter_toolkit

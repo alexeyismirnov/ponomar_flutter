@@ -10,6 +10,7 @@ import 'main_page.dart';
 import 'library_page.dart';
 import 'globals.dart';
 import 'church_fasting.dart';
+import 'bible_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,11 @@ Future<void> main() async {
   ChurchFasting.fastingLevel = FastingLevel.values[ConfigParamExt.fastingLevel.val()];
 
   await JSON.load();
+
+  await OldTestamentModel("en").prepare();
+  await OldTestamentModel("ru").prepare();
+  await NewTestamentModel("en").prepare();
+  await NewTestamentModel("ru").prepare();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

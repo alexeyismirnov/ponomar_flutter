@@ -4,8 +4,9 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+
+import 'dart:core';
+import 'dart:async';
 
 class JSON {
   static late String calendar;
@@ -59,12 +60,4 @@ class DateChangedNotification extends Notification {
 
 extension ConfigParamExt on ConfigParam {
   static var fastingLevel;
-}
-
-Future<Database> openDB(String filename) async {
-  var databasesPath = await getDatabasesPath();
-  var path = join(databasesPath, filename);
-  var db = await openDatabase(path, readOnly: true);
-
-  return db;
 }

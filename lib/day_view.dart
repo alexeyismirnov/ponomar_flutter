@@ -24,7 +24,7 @@ class _FeastWidget extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
                 child: Text(d.name.tr(),
-                    style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.red)))
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.red)))
           ]));
     } else {
       if (d.type.name != "none") {
@@ -89,7 +89,7 @@ class _DayViewState extends State<DayView> {
                         textAlign: TextAlign.left,
                         maxLines: 1,
                         minFontSize: 5,
-                        style: Theme.of(context).textTheme.headline6),
+                        style: Theme.of(context).textTheme.titleLarge),
                     AutoSizeText(df2.format(dateOld) + " " + "old_style".tr(),
                         textAlign: TextAlign.left,
                         maxLines: 1,

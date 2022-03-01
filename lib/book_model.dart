@@ -26,6 +26,8 @@ abstract class BookModel {
 
   Future get initFuture;
 
+  Future prepare();
+
   Future<List<String>> getSections();
   Future<List<String>> getItems(int sections);
 
