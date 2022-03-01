@@ -8,6 +8,8 @@ import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'dart:core';
 import 'dart:async';
 
+import 'book_model.dart';
+
 class JSON {
   static late String calendar;
   static late String apostle, readingsJohn, gospelMatthew, gospelLuke, readingsLent;
@@ -56,6 +58,11 @@ extension HexColor on Color {
 class DateChangedNotification extends Notification {
   late DateTime newDate;
   DateChangedNotification(this.newDate) : super();
+}
+
+class BookPositionNotification extends Notification {
+  late BookPosition pos;
+  BookPositionNotification(this.pos) : super();
 }
 
 extension ConfigParamExt on ConfigParam {

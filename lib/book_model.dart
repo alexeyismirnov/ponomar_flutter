@@ -9,9 +9,9 @@ class BookPosition {
   String? location;
   dynamic data;
 
-  BookPosition.modelIndex({this.model, this.index, this.chapter = 0});
-  BookPosition.location({this.model, this.location});
-  BookPosition.data({this.model, this.data});
+  BookPosition.modelIndex(this.model, this.index, [this.chapter = 0]);
+  BookPosition.location(this.model, this.location);
+  BookPosition.data(this.model, this.data);
   BookPosition.index({this.index, this.chapter = 0});
 }
 
@@ -29,7 +29,7 @@ abstract class BookModel {
   Future prepare();
 
   Future<List<String>> getSections();
-  Future<List<String>> getItems(int sections);
+  Future<List<String>> getItems(int section);
 
   Future<int> getNumChapters(IndexPath index);
 
