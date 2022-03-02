@@ -354,7 +354,7 @@ extension ChurchCalendarFunc on ChurchCalendar {
 
   List<ChurchDay> getDayReadings(DateTime d) =>
       (days.where((e) => e.date == d && e.reading != null).toList()
-            ..sort((a, b) => a.type.index - b.type.index))
+            ..sort((a, b) => b.type.index - a.type.index))
           .toList();
 
   List<ChurchDay> getAllReadings() => days.where((e) => e.reading != null).toList();

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'package:group_list_view/group_list_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:sqflite/sqflite.dart';
@@ -38,6 +40,26 @@ class BibleUtil {
 
   String getText() {
     return content.map((line) => line.text).join("\n");
+  }
+
+  List<TextSpan> getTextSpan(BuildContext context) {
+    double fontSize = 18;
+    List<TextSpan> result = [];
+
+    for (var line in content) {
+      result.add(TextSpan(
+          text: "${line.verse} ",
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Colors.red, fontSize: fontSize)));
+
+      result.add(TextSpan(
+          text: "${line.text}\n",
+          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: fontSize)));
+    }
+
+    return result;
   }
 }
 
@@ -97,7 +119,7 @@ mixin BibleModel on BookModel {
     final bookName = filenames[index.section][index.index];
 
     var result = await BibleUtil.fetch(bookName, lang, "chapter=${chapter + 1}");
-    return result.getText();
+    return result;
   }
 }
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 import 'book_model.dart';
+import 'bible_model.dart';
 
 class BookPageSingle extends StatefulWidget {
   final BookPosition pos;
@@ -17,7 +17,7 @@ class _BookPageSingleState extends State<BookPageSingle> {
 
   bool ready = false;
   String title = "";
-  late String content;
+  late BibleUtil content;
   late ScrollController _scrollController;
 
   @override
@@ -41,7 +41,9 @@ class _BookPageSingleState extends State<BookPageSingle> {
   Widget getContent() {
     if (!ready) return Container();
 
-    return Text(content, style: Theme.of(context).textTheme.titleMedium);
+    return RichText(text: TextSpan(children: content.getTextSpan(context)));
+
+    //return Text(content, style: Theme.of(context).textTheme.titleMedium);
   }
 
   @override
@@ -68,7 +70,7 @@ class _BookPageSingleState extends State<BookPageSingle> {
                                     floating: true,
                                     toolbarHeight: 50.0,
                                     pinned: false,
-                                    title: Text(title.tr(),
+                                    title: Text(title,
                                         textAlign: TextAlign.left,
                                         style: Theme.of(context).textTheme.headline6),
                                   ),

@@ -7,6 +7,7 @@ import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 import 'dart:core';
 import 'dart:async';
+import 'dart:convert';
 
 import 'book_model.dart';
 
@@ -17,6 +18,8 @@ class JSON {
 
   static late String OldTestamentItems, OldTestamentFilenames;
   static late String NewTestamentItems, NewTestamentFilenames;
+
+  static Map<String, Map<String, String>> bibleTrans = {};
 
   static Future load() async {
     calendar = await rootBundle.loadString("assets/calendar/calendar.json");
@@ -30,6 +33,11 @@ class JSON {
     OldTestamentFilenames = await rootBundle.loadString("assets/bible/OldTestamentFilenames.json");
     NewTestamentItems = await rootBundle.loadString("assets/bible/NewTestamentItems.json");
     NewTestamentFilenames = await rootBundle.loadString("assets/bible/NewTestamentFilenames.json");
+
+    bibleTrans['en'] = Map<String, String>.from(
+        jsonDecode(await rootBundle.loadString("assets/translations/en/reading.json")));
+    bibleTrans['ru'] = Map<String, String>.from(
+        jsonDecode(await rootBundle.loadString("assets/translations/ru/reading.json")));
   }
 }
 

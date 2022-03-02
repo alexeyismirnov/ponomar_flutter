@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ponomar/custom_list_tile.dart';
 
 import 'church_day.dart';
 import 'church_calendar.dart';
@@ -147,9 +148,24 @@ class _DayViewState extends State<DayView> {
 
   Widget getReading() {
     final reading = ChurchReading.forDate(date);
-    print(reading);
+    List<Widget> content = [];
 
-    return Container();
+    for (final r in reading) {
+      final currentReading = r.split("#");
+      var title = currentReading[0];
+      var subtitle = currentReading.length > 1 ? currentReading[1].trim().tr() : null;
+
+      title = JSON.bibleTrans[context.languageCode]!.entries
+          .fold(title, (String prev, e) => prev.replaceAll(e.key, e.value));
+
+      content.add(CustomListTile(title: title, subtitle: subtitle, onTap: () {}));
+    }
+
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: content);
   }
 
   @override
