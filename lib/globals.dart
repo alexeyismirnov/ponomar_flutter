@@ -76,3 +76,9 @@ class BookPositionNotification extends Notification {
 extension ConfigParamExt on ConfigParam {
   static var fastingLevel;
 }
+
+Iterable<int> getRange(int low, int high, [int step = 1]) sync* {
+  for (int i = low; i < high; i += step) {
+    yield i;
+  }
+}

@@ -1,49 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
-import 'book_model.dart';
-import 'bible_model.dart';
-
 class BookPageSingle extends StatefulWidget {
-  final BookPosition pos;
-  const BookPageSingle(this.pos);
+  final String title;
+  final Widget content;
+
+  const BookPageSingle(this.title, this.content);
 
   @override
   _BookPageSingleState createState() => _BookPageSingleState();
 }
 
 class _BookPageSingleState extends State<BookPageSingle> {
-  BookPosition get pos => widget.pos;
-
-  bool ready = false;
-  String title = "";
-  late BibleUtil content;
   late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-
     _scrollController = ScrollController()..addListener(() => setState(() {}));
-
-    pos.model!.getTitle(pos).then((_title) {
-      title = _title ?? "";
-      return pos.model!.getContent(pos);
-    }).then((_result) {
-      content = _result;
-
-      setState(() {
-        ready = true;
-      });
-    });
-  }
-
-  Widget getContent() {
-    if (!ready) return Container();
-
-    return RichText(text: TextSpan(children: content.getTextSpan(context)));
-
-    //return Text(content, style: Theme.of(context).textTheme.titleMedium);
   }
 
   @override
@@ -70,14 +44,14 @@ class _BookPageSingleState extends State<BookPageSingle> {
                                     floating: true,
                                     toolbarHeight: 50.0,
                                     pinned: false,
-                                    title: Text(title,
+                                    title: Text(widget.title,
                                         textAlign: TextAlign.left,
                                         style: Theme.of(context).textTheme.headline6),
                                   ),
 
                                   SliverToBoxAdapter(
                                       child: Padding(
-                                          padding: const EdgeInsets.all(15), child: getContent()))
+                                          padding: const EdgeInsets.all(15), child: widget.content))
                                   //    Padding(padding: const EdgeInsets.all(15), child: getContent())
                                 ])))))));
   }

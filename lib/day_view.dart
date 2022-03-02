@@ -10,6 +10,7 @@ import 'church_calendar.dart';
 import 'church_fasting.dart';
 import 'church_reading.dart';
 import 'globals.dart';
+import 'pericope.dart';
 
 class _FeastWidget extends StatelessWidget {
   final ChurchDay d;
@@ -158,7 +159,10 @@ class _DayViewState extends State<DayView> {
       title = JSON.bibleTrans[context.languageCode]!.entries
           .fold(title, (String prev, e) => prev.replaceAll(e.key, e.value));
 
-      content.add(CustomListTile(title: title, subtitle: subtitle, onTap: () {}));
+      content.add(CustomListTile(
+          title: title,
+          subtitle: subtitle,
+          onTap: () => PericopeView(currentReading[0]).push(context)));
     }
 
     return Column(

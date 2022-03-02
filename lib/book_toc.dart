@@ -6,7 +6,7 @@ import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'calendar_appbar.dart';
 import 'book_model.dart';
 import 'globals.dart';
-import 'book_page_single.dart';
+import 'pericope.dart';
 
 class _ChaptersView extends StatefulWidget {
   final BookPosition pos;
@@ -44,7 +44,7 @@ class _ChaptersViewState extends State<_ChaptersView> {
                 onTap: () =>
                     BookPositionNotification(BookPosition.modelIndex(pos.model, pos.index, i - 1))
                         .dispatch(context),
-                child: Container(
+                child: SizedBox(
                     width: 50,
                     height: 50,
                     child:
@@ -89,7 +89,7 @@ class _BookTOCState extends State<BookTOC> {
 
     return NotificationListener<Notification>(
         onNotification: (n) {
-          if (n is BookPositionNotification) BookPageSingle(n.pos).push(context);
+          if (n is BookPositionNotification) BibleChapterView(n.pos).push(context);
           return true;
         },
         child: GroupListView(

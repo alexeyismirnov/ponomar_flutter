@@ -43,7 +43,7 @@ class BibleUtil {
   }
 
   List<TextSpan> getTextSpan(BuildContext context) {
-    double fontSize = 18;
+    const double fontSize = 18;
     List<TextSpan> result = [];
 
     for (var line in content) {
