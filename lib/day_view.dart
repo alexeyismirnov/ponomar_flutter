@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:after_init/after_init.dart';
 
 import 'dart:developer';
+import 'dart:math';
 
 import 'church_day.dart';
 import 'church_calendar.dart';
@@ -14,6 +15,7 @@ import 'church_reading.dart';
 import 'globals.dart';
 import 'pericope.dart';
 import 'saint_model.dart';
+import 'icon_model.dart';
 import 'custom_list_tile.dart';
 
 class _FeastWidget extends StatelessWidget {
@@ -104,15 +106,31 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
   late Cal cal;
   late SaintModel saints;
 
+  late List<SaintIcon> icons = [];
+  late int pageSize;
+  late PageController _controller;
+
   @override
   void initState() {
     super.initState();
     cal = Cal.fromDate(date);
+    _controller = PageController(initialPage: 0);
   }
 
   @override
   void didInitState() async {
     saints = SaintModel(context.languageCode);
+
+    const itemWidth = 100;
+    const padding = 10;
+
+    pageSize = (MediaQuery.of(context).size.width - 4 * padding) ~/ (itemWidth + 10);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Widget getDate() {
@@ -192,6 +210,51 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
     ]);
   }
 
+  Widget getIcons() => FutureBuilder<List<SaintIcon>>(
+      future: IconModel.fetch(date),
+      builder: (BuildContext context, AsyncSnapshot<List<SaintIcon>> snapshot) {
+        if (snapshot.hasData) {
+          if (icons.isEmpty) {
+            icons = List<SaintIcon>.from(snapshot.data!);
+          }
+
+          Widget _iconPage(int page) {
+            final newItems =
+                icons.sublist(page * pageSize, min((page + 1) * pageSize, icons.length));
+
+            final pageNotFull = page > 0 && (page + 1) * pageSize > icons.length;
+
+            return Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment:
+                    pageNotFull ? MainAxisAlignment.start : MainAxisAlignment.spaceAround,
+                children: [
+                  if (!pageNotFull) ...[const Spacer()],
+                  ...newItems
+                      .map<Widget>((s) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                          child:  Image.asset(
+                                'assets/icons/${s.id}.jpg',
+                                height: 120.0,
+                                fit: BoxFit.contain,
+                              )))
+                      .toList(),
+                  if (!pageNotFull) ...[const Spacer()],
+                ]);
+          }
+
+          return Container(
+              margin: const EdgeInsets.symmetric(vertical: 20.0),
+              height: 120.0,
+              child: PageView.builder(
+                  controller: _controller,
+                  itemCount: (icons.length - 1) ~/ pageSize + 1,
+                  itemBuilder: (BuildContext context, int index) => _iconPage(index)));
+        } else {
+          return Container();
+        }
+      });
+
   Widget getReading() {
     final reading = ChurchReading.forDate(date);
     List<Widget> content = [];
@@ -258,6 +321,8 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
                     getDescription(),
                     space,
                     getFasting(),
+                    space,
+                    getIcons()
                   ])),
           space,
           getReading(),

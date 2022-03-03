@@ -12,6 +12,7 @@ import 'globals.dart';
 import 'church_fasting.dart';
 import 'bible_model.dart';
 import 'saint_model.dart';
+import 'icon_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,8 @@ Future<void> main() async {
 
   await SaintModel("en").prepare();
   await SaintModel("ru").prepare();
+
+  await IconModel.prepare();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
