@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:after_init/after_init.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_toolkit/config_param.dart';
 
 import 'book_model.dart';
 import 'bible_model.dart';
@@ -71,7 +72,7 @@ class _PericopeViewState extends State<PericopeView> with AfterInitMixin<Pericop
 
   @override
   void didInitState() async {
-    const double fontSize = 18;
+    double fontSize = ConfigParam.fontSize.val();
 
     BibleUtil bu;
     final lang = context.languageCode;

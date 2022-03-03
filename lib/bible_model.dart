@@ -20,10 +20,11 @@ class BibleVerse {
 
 class BibleUtil {
   List<BibleVerse> content = [];
+  String bookName = "";
 
   BibleUtil();
 
-  BibleUtil.fromMap(List<Map<String, Object?>> data) {
+  BibleUtil.fromMap(this.bookName, List<Map<String, Object?>> data) {
     for (final Map<String, Object?> d in data) {
       content.add(BibleVerse(d["verse"] as int, d["text"] as String));
     }
@@ -35,7 +36,7 @@ class BibleUtil {
     List<Map<String, Object?>> result =
         await db.query("scripture", columns: ["verse", "text"], where: whereExpr);
 
-    return BibleUtil.fromMap(result);
+    return BibleUtil.fromMap(bookName, result);
   }
 
   String getText() {
@@ -43,20 +44,37 @@ class BibleUtil {
   }
 
   List<TextSpan> getTextSpan(BuildContext context) {
-    const double fontSize = 18;
+    double fontSize = ConfigParam.fontSize.val();
     List<TextSpan> result = [];
 
     for (var line in content) {
+      var verseId = (bookName == "ps") ? "\n${line.verse}. " : "${line.verse} ";
+
       result.add(TextSpan(
-          text: "${line.verse} ",
+          text: verseId,
           style: Theme.of(context)
               .textTheme
               .bodyText1!
               .copyWith(color: Colors.red, fontSize: fontSize)));
 
-      result.add(TextSpan(
-          text: "${line.text}\n",
-          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: fontSize)));
+      if (bookName == "ps") {
+        int idx = line.text.indexOf(".");
+
+        result.add(TextSpan(
+            text: "${line.text.substring(0, idx)}\n",
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1!
+                .copyWith(color: Colors.red, fontSize: fontSize)));
+
+        result.add(TextSpan(
+            text: "${line.text.substring(idx + 2)}\n",
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: fontSize)));
+      } else {
+        result.add(TextSpan(
+            text: "${line.text}\n",
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: fontSize)));
+      }
     }
 
     return result;

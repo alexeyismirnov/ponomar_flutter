@@ -16,7 +16,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-  await ConfigParam.initSharedParams();
+  await ConfigParam.initSharedParams(initFontSize: 18);
   ConfigParamExt.fastingLevel = ConfigParam<int>('fastingLevel', initValue: 0);
   ChurchFasting.fastingLevel = FastingLevel.values[ConfigParamExt.fastingLevel.val()];
 
