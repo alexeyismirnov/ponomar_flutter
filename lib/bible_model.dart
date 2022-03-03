@@ -95,8 +95,6 @@ mixin BibleModel on BookModel {
   @override
   Future<int> getNumChapters(IndexPath index) async {
     final bookName = filenames[index.section][index.index];
-
-    print(bookName);
     var db = await DB.open(bookName + "_$lang.sqlite");
 
     return Sqflite.firstIntValue(

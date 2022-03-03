@@ -3,7 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ponomar/custom_list_tile.dart';
+import 'package:after_init/after_init.dart';
+
+import 'dart:developer';
 
 import 'church_day.dart';
 import 'church_calendar.dart';
@@ -11,10 +13,14 @@ import 'church_fasting.dart';
 import 'church_reading.dart';
 import 'globals.dart';
 import 'pericope.dart';
+import 'saint_model.dart';
+import 'custom_list_tile.dart';
 
 class _FeastWidget extends StatelessWidget {
   final ChurchDay d;
-  const _FeastWidget(this.d);
+  final TextStyle? style;
+
+  const _FeastWidget(this.d, {this.style});
 
   @override
   Widget build(BuildContext context) {
@@ -29,22 +35,55 @@ class _FeastWidget extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.red)))
           ]));
     } else {
+      var textStyle =
+          style ?? Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500);
+
       if (d.type.name != "none") {
-        return RichText(
-            text: TextSpan(children: [
-          WidgetSpan(
-              child:
-                  SvgPicture.asset("assets/images/${d.type.name.toLowerCase()}.svg", height: 15)),
-          TextSpan(
-              text: d.name.tr(),
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500))
-        ]));
+        return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 0),
+            child: RichText(
+                text: TextSpan(children: [
+              WidgetSpan(
+                  child: SvgPicture.asset("assets/images/${d.type.name.toLowerCase()}.svg",
+                      height: 15)),
+              TextSpan(text: d.name.tr(), style: textStyle)
+            ])));
       } else {
-        return Text(d.name.tr(),
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500));
+        return Padding(
+            padding: EdgeInsets.symmetric(vertical: 3, horizontal: 0),
+            child: Text(d.name.tr(), style: textStyle));
       }
     }
   }
+}
+
+class CardWithTitle extends StatelessWidget {
+  final String title;
+  final Widget content;
+
+  const CardWithTitle({Key? key, required this.title, required this.content}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Card(
+      elevation: 10.0,
+      child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: (title.isEmpty)
+              ? content
+              : Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                  GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      child: Row(children: [
+                        Flexible(
+                            fit: FlexFit.tight,
+                            child: AutoSizeText(title.tr().toUpperCase(),
+                                maxLines: 1,
+                                minFontSize: 5,
+                                style: Theme.of(context).textTheme.button)),
+                      ])),
+                  const Divider(color: Colors.black),
+                  content
+                ])));
 }
 
 class DayView extends StatefulWidget {
@@ -58,16 +97,22 @@ class DayView extends StatefulWidget {
   _DayViewState createState() => _DayViewState();
 }
 
-class _DayViewState extends State<DayView> {
+class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
   DateTime get date => widget.date;
   DateTime get dateOld => widget.dateOld;
 
   late Cal cal;
+  late SaintModel saints;
 
   @override
   void initState() {
     super.initState();
     cal = Cal.fromDate(date);
+  }
+
+  @override
+  void didInitState() async {
+    saints = SaintModel(context.languageCode);
   }
 
   Widget getDate() {
@@ -165,19 +210,59 @@ class _DayViewState extends State<DayView> {
           onTap: () => PericopeView(currentReading[0]).push(context)));
     }
 
-    return Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: content);
+    return CardWithTitle(
+        title: "Gospel of the day",
+        content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: content));
   }
+
+  Widget getSaints() => FutureBuilder<List<Saint>>(
+      future: saints.fetch(date),
+      builder: (BuildContext context, AsyncSnapshot<List<Saint>> snapshot) {
+        if (snapshot.hasData) {
+          return CardWithTitle(
+              title: "Memory of saints",
+              content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List<ChurchDay>.from(snapshot.data!)
+                      .map((s) => _FeastWidget(s, style: Theme.of(context).textTheme.titleMedium))
+                      .toList()));
+
+          // log(snapshot.data.toString());
+
+        } else {
+          return Container();
+        }
+      });
 
   @override
   Widget build(BuildContext context) {
     const space = SizedBox(height: 10);
-    return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [getDate(), space, getDescription(), space, getFasting(), space, getReading()]);
+    return SingleChildScrollView(
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+          CardWithTitle(
+              title: "",
+              content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    getDate(),
+                    space,
+                    getDescription(),
+                    space,
+                    getFasting(),
+                  ])),
+          space,
+          getReading(),
+          space,
+          getSaints()
+        ]));
   }
 }

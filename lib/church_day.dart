@@ -53,3 +53,5 @@ class ChurchDay {
 }
 
 DateTime _fromJson(String date) => JSON.dateParser(date);
+
+typedef Saint = ChurchDay;

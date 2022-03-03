@@ -77,21 +77,22 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       child: Center(
           child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 600),
-              child: NestedScrollView(
-                  headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) =>
-                      [CalendarAppbar()],
-                  body: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: PageView.builder(
-                        controller: _controller,
-                        itemBuilder: (BuildContext context, int index) {
-                          final currentDate = date.add(Duration(days: index - initialPage));
-                          return NotificationListener<Notification>(
-                              onNotification: (n) {
-                                if (n is DateChangedNotification) setDate(n.newDate);
-                                return true;
-                              },
-                              child: DayView(key: ValueKey(currentDate), date: currentDate));
-                        },
-                      ))))));
+              child: CustomScrollView(slivers: [
+                CalendarAppbar(),
+                SliverFillRemaining(
+                    child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: PageView.builder(
+                          controller: _controller,
+                          itemBuilder: (BuildContext context, int index) {
+                            final currentDate = date.add(Duration(days: index - initialPage));
+                            return NotificationListener<Notification>(
+                                onNotification: (n) {
+                                  if (n is DateChangedNotification) setDate(n.newDate);
+                                  return true;
+                                },
+                                child: DayView(key: ValueKey(currentDate), date: currentDate));
+                          },
+                        )))
+              ]))));
 }
