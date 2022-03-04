@@ -77,6 +77,7 @@ class CalendarAppbar extends StatelessWidget {
       elevation: 0.0,
       toolbarHeight: 50.0,
       pinned: false,
+      floating: true,
       title:
           Text(title.tr(), textAlign: TextAlign.left, style: Theme.of(context).textTheme.headline6),
       centerTitle: false,
