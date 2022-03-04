@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Alexey Smirnov on 3/4/22.
+  
+*/
+
+"CFBundleDisplayName" = "Calendar";
