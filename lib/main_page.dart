@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_toolkit/flutter_toolkit.dart';
-import 'package:ponomar/globals.dart';
+import 'package:after_init/after_init.dart';
+import 'package:jiffy/jiffy.dart';
 
+import 'globals.dart';
 import 'calendar_appbar.dart';
 import 'day_view.dart';
 
@@ -13,7 +15,7 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
+class _MainPageState extends State<MainPage> with WidgetsBindingObserver, AfterInitMixin<MainPage> {
   int initialPage = 100000;
 
   late DateTime date;
@@ -27,7 +29,18 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     setDate(DateTime.now());
 
     WidgetsBinding.instance?.addObserver(this);
-    Future.delayed(Duration.zero, () => postInit());
+  }
+
+  @override
+  void didInitState() async {
+    if (!ConfigParam.langSelected.val()) {
+      ConfigParam.langSelected.set(true);
+      AppLangDialog(
+        labels: const ["English", "Русский"],
+      ).show(context, canDismiss: false);
+    }
+
+    await Jiffy.locale(context.languageCode);
   }
 
   @override
@@ -51,15 +64,6 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
         break;
       default:
         break;
-    }
-  }
-
-  void postInit() {
-    if (!ConfigParam.langSelected.val()) {
-      ConfigParam.langSelected.set(true);
-      AppLangDialog(
-        labels: const ["English", "Русский"],
-      ).show(context, canDismiss: false);
     }
   }
 

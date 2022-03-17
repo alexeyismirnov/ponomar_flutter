@@ -17,6 +17,7 @@ import 'pericope.dart';
 import 'saint_model.dart';
 import 'icon_model.dart';
 import 'custom_list_tile.dart';
+import 'month_container.dart';
 
 class _FeastWidget extends StatelessWidget {
   final ChurchDay d;
@@ -162,17 +163,13 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
                         style: Theme.of(context).textTheme.subtitle1),
                   ]))
             ]),
-        onTap: () => showDatePicker(
-                    context: context,
-                    initialDate: date,
-                    locale: Locale(context.languageCode),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100))
-                .then((newDate) {
-              if (newDate != null) {
-                DateChangedNotification(newDate).dispatch(context);
-              }
-            }));
+        onTap: () {
+          MonthContainer(date).show(context).then((newDate) {
+            if (newDate != null) {
+              DateChangedNotification(newDate).dispatch(context);
+            }
+          });
+        });
 
     return dateWidget;
   }
@@ -233,11 +230,11 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
                   ...newItems
                       .map<Widget>((s) => Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                          child:  Image.asset(
-                                'assets/icons/${s.id}.jpg',
-                                height: 110.0,
-                                fit: BoxFit.contain,
-                              )))
+                          child: Image.asset(
+                            'assets/icons/${s.id}.jpg',
+                            height: 110.0,
+                            fit: BoxFit.contain,
+                          )))
                       .toList(),
                   if (!pageNotFull) ...[const Spacer()],
                 ]);
