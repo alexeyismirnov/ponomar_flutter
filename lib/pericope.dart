@@ -66,11 +66,6 @@ class _PericopeViewState extends State<PericopeView> with AfterInitMixin<Pericop
   List<Widget> content = [];
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void didInitState() async {
     double fontSize = ConfigParam.fontSize.val();
 

@@ -18,7 +18,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-  await ConfigParam.initSharedParams(initFontSize: 18);
+  await ConfigParam.initSharedParams(initFontSize: 20);
   ConfigParamExt.fastingLevel = ConfigParam<int>('fastingLevel', initValue: 0);
   ChurchFasting.fastingLevel = FastingLevel.values[ConfigParamExt.fastingLevel.val()];
 
@@ -31,6 +31,18 @@ Future<void> main() async {
 
   await SaintModel("en").prepare();
   await SaintModel("ru").prepare();
+
+  [
+    "troparion.sqlite",
+    "feofan.sqlite",
+    "liturgy.sqlite",
+    "new_testament_overview.sqlite",
+    "old_testament_overview.sqlite",
+    "synaxarion.sqlite",
+    "typika.sqlite",
+    "vigil.sqlite",
+    "zvezdinsky.sqlite"
+  ].forEach((f) async => await DB.prepare(basename: "assets/books", filename: f));
 
   await IconModel.prepare();
 

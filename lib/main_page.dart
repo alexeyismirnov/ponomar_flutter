@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_toolkit/flutter_toolkit.dart';
-import 'package:after_init/after_init.dart';
 import 'package:jiffy/jiffy.dart';
 
 import 'globals.dart';
@@ -15,7 +14,7 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> with WidgetsBindingObserver, AfterInitMixin<MainPage> {
+class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   int initialPage = 100000;
 
   late DateTime date;
@@ -29,10 +28,11 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver, AfterI
     setDate(DateTime.now());
 
     WidgetsBinding.instance?.addObserver(this);
+
+    Future.delayed(Duration.zero, () => postInit());
   }
 
-  @override
-  void didInitState() async {
+  void postInit() async {
     if (!ConfigParam.langSelected.val()) {
       ConfigParam.langSelected.set(true);
       AppLangDialog(
