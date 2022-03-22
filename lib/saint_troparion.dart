@@ -10,6 +10,8 @@ import 'church_calendar.dart';
 import 'book_page_single.dart';
 
 class SaintTroparionModel {
+  static Database? db;
+
   static Future<List<Troparion>> fetch(DateTime d) async {
     List<Troparion> saints = [];
     var cal = Cal.fromDate(d);
@@ -33,12 +35,11 @@ class SaintTroparionModel {
   }
 
   static Future<List<Troparion>> _saintData(DateTime d) async {
-    Database db;
     List<Troparion> result = [];
 
-    db = await DB.open("troparion.sqlite");
+    db ??= await DB.open("troparion.sqlite");
 
-    List<Map<String, Object?>> data = await db.query("tropari",
+    List<Map<String, Object?>> data = await db!.query("tropari",
         columns: ["title", "glas", "content"], where: "day=${d.day} AND month=${d.month}");
 
     for (final Map<String, Object?> row in data) {

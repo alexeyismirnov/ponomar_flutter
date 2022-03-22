@@ -17,6 +17,7 @@ import 'icon_model.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await GlobalPath.ensureInitialized();
 
   await ConfigParam.initSharedParams(initFontSize: 20);
   ConfigParamExt.fastingLevel = ConfigParam<int>('fastingLevel', initValue: 0);

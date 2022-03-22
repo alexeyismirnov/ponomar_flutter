@@ -55,7 +55,7 @@ class _FeastWidget extends StatelessWidget {
             ])));
       } else {
         return Padding(
-            padding: EdgeInsets.symmetric(vertical: 3, horizontal: 0),
+            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 0),
             child: Text(d.name.tr(), style: textStyle));
       }
     }
@@ -114,6 +114,9 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
 
   late int pageSize;
   late PageController _controller;
+
+  final space10 = const SizedBox(height: 10);
+  final space5 = const SizedBox(height: 5);
 
   @override
   void initState() {
@@ -272,6 +275,8 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
           title: title,
           subtitle: subtitle,
           onTap: () => PericopeView(currentReading[0]).push(context)));
+
+      content.add(space5);
     }
 
     if (context.languageCode == "ru") {
@@ -279,17 +284,21 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
           future: SaintTroparionModel.fetch(date),
           builder: (BuildContext context, AsyncSnapshot<List<Troparion>> snapshot) {
             if (snapshot.hasData) {
-              if (troparia.isEmpty) {
-                troparia = List<Troparion>.from(snapshot.data!);
-              }
+              troparia = List<Troparion>.from(snapshot.data!);
 
-              return CustomListTile(
-                  title: "Тропари и кондаки",
-                  onTap: () => SaintTroparionView(troparia).push(context));
-            } else {
-              return Container();
+              if (troparia.isNotEmpty) {
+                return CustomListTile(
+                    title: "Тропари и кондаки святым",
+                    onTap: () => SaintTroparionView(troparia).push(context));
+              }
             }
+
+            return Container();
           }));
+
+      content.add(space5);
+
+      content.add(TroparionDayModel(date));
     }
 
     return CardWithTitle(
@@ -323,7 +332,6 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
 
   @override
   Widget build(BuildContext context) {
-    const space = SizedBox(height: 10);
     return SingleChildScrollView(
         child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -336,16 +344,16 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     getDate(),
-                    space,
+                    space10,
                     getDescription(),
-                    space,
+                    space10,
                     getFasting(),
-                    space,
+                    space10,
                     getIcons()
                   ])),
-          space,
+          space10,
           getReading(),
-          space,
+          space10,
           getSaints()
         ]));
   }
