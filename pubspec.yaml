@@ -27,6 +27,7 @@ dependencies:
   jiffy: ^5.0.0
   quiver: ^3.0.1+1
   flutter_archive: ^4.2.0
+  audioplayers: ^0.20.1
   flutter_toolkit:
     path: /Users/alexey/workspace/flutter_toolkit
 

@@ -24,8 +24,9 @@ import 'troparion_model.dart';
 class _FeastWidget extends StatelessWidget {
   final ChurchDay d;
   final TextStyle? style;
+  final bool translate;
 
-  const _FeastWidget(this.d, {this.style});
+  const _FeastWidget(this.d, {this.style, this.translate = true});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class _FeastWidget extends StatelessWidget {
             SvgPicture.asset("assets/images/great.svg", height: 30),
             const SizedBox(width: 10),
             Expanded(
-                child: Text(d.name.tr(),
+                child: Text(translate ? d.name.tr() : d.name,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.red)))
           ]));
     } else {
@@ -51,12 +52,12 @@ class _FeastWidget extends StatelessWidget {
               WidgetSpan(
                   child: SvgPicture.asset("assets/images/${d.type.name.toLowerCase()}.svg",
                       height: 15)),
-              TextSpan(text: d.name.tr(), style: textStyle)
+              TextSpan(text: translate ? d.name.tr() : d.name, style: textStyle)
             ])));
       } else {
         return Padding(
             padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 0),
-            child: Text(d.name.tr(), style: textStyle));
+            child: Text(translate ? d.name.tr() : d.name, style: textStyle));
       }
     }
   }
@@ -320,7 +321,8 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: List<ChurchDay>.from(snapshot.data!)
-                      .map((s) => _FeastWidget(s, style: Theme.of(context).textTheme.titleMedium))
+                      .map((s) => _FeastWidget(s,
+                          style: Theme.of(context).textTheme.titleMedium, translate: false))
                       .toList()));
 
           // log(snapshot.data.toString());

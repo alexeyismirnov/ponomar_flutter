@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:supercharged/supercharged.dart';
-import 'package:after_init/after_init.dart';
 
 import 'troparion_model.dart';
 import 'church_calendar.dart';
 import 'book_page_single.dart';
+import 'audio_player.dart';
 
 class SaintTroparionModel {
   static Database? db;
@@ -58,44 +58,54 @@ class SaintTroparionView extends StatefulWidget {
   _SaintTroparionViewState createState() => _SaintTroparionViewState();
 }
 
-class _SaintTroparionViewState extends State<SaintTroparionView> with AfterInitMixin<SaintTroparionView> {
+class _SaintTroparionViewState extends State<SaintTroparionView> {
   String title = "Тропари и кондаки";
-  List<Widget> content = [];
+
+  late double fontSize;
 
   @override
-  void didInitState()  {
-    double fontSize = ConfigParam.fontSize.val();
+  void initState() {
+    super.initState();
 
-    for (final t in widget.troparia) {
-      final glas = t.glas ?? "";
-      var title = t.title;
+    fontSize = ConfigParam.fontSize.val();
+  }
 
-      if (glas.isNotEmpty) title += ", $glas";
+  Widget buildTroparion(Troparion t) {
+    List<Widget> content = [];
 
-      content.add(Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-                child: RichText(
-              text: TextSpan(
-                  text: title + "\n",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(fontWeight: FontWeight.bold, fontSize: fontSize + 2)),
-              textAlign: TextAlign.center,
-            ))
-          ]));
+    final glas = t.glas ?? "";
+    var title = t.title;
 
-      content.add(RichText(
-          text: TextSpan(children: [
-        TextSpan(
-            text: "${t.content}\n",
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: fontSize))
-      ])));
+    if (glas.isNotEmpty) title += ", $glas";
+
+    content.add(RichText(
+      text: TextSpan(
+          text: title,
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(fontWeight: FontWeight.bold, fontSize: fontSize + 2)),
+      textAlign: TextAlign.center,
+    ));
+
+    if ((t.url ?? "").isNotEmpty) {
       content.add(const SizedBox(height: 10));
+      content.add(AudioPlayerView(t.url!));
+      content.add(const SizedBox(height: 10));
+
+    } else {
+      content.add(const SizedBox(height: 20));
     }
+
+    content.add(RichText(
+        text: TextSpan(children: [
+      TextSpan(
+          text: "${t.content}\n",
+          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: fontSize))
+    ])));
+    content.add(const SizedBox(height: 10));
+
+    return Column(children: content);
   }
 
   @override
@@ -104,5 +114,5 @@ class _SaintTroparionViewState extends State<SaintTroparionView> with AfterInitM
       Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: content));
+          children: widget.troparia.map((t) => buildTroparion(t)).toList()));
 }
