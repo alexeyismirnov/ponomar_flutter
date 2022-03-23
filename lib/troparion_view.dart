@@ -1,66 +1,21 @@
 import 'package:flutter/material.dart';
 
-import 'package:sqflite/sqflite.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
-import 'package:supercharged/supercharged.dart';
 
 import 'troparion_model.dart';
-import 'church_calendar.dart';
 import 'book_page_single.dart';
 import 'audio_player.dart';
 
-class SaintTroparionModel {
-  static Database? db;
-
-  static Future<List<Troparion>> fetch(DateTime d) async {
-    List<Troparion> saints = [];
-    var cal = Cal.fromDate(d);
-
-    if (cal.isLeapYear) {
-      if (d.isBetween(cal.leapStart, cal.leapEnd - 1.days)) {
-        saints = await _saintData(d + 1.days);
-      } else if (d == cal.leapEnd) {
-        saints = await _saintData(DateTime(cal.year, 2, 29));
-      } else {
-        saints = await _saintData(d);
-      }
-    } else {
-      saints = await _saintData(d);
-      if (d == cal.leapEnd) {
-        saints.addAll(await _saintData(DateTime(2000, 2, 29)));
-      }
-    }
-
-    return saints;
-  }
-
-  static Future<List<Troparion>> _saintData(DateTime d) async {
-    List<Troparion> result = [];
-
-    db ??= await DB.open("troparion.sqlite");
-
-    List<Map<String, Object?>> data = await db!.query("tropari",
-        columns: ["title", "glas", "content"], where: "day=${d.day} AND month=${d.month}");
-
-    for (final Map<String, Object?> row in data) {
-      result.add(Troparion.fromMap(row));
-    }
-
-    return result;
-  }
-}
-
-class SaintTroparionView extends StatefulWidget {
+class TroparionView extends StatefulWidget {
   final List<Troparion> troparia;
-  const SaintTroparionView(this.troparia);
+  const TroparionView(this.troparia);
 
   @override
-  _SaintTroparionViewState createState() => _SaintTroparionViewState();
+  _TroparionViewState createState() => _TroparionViewState();
 }
 
-class _SaintTroparionViewState extends State<SaintTroparionView> {
+class _TroparionViewState extends State<TroparionView> {
   String title = "Тропари и кондаки";
-
   late double fontSize;
 
   @override

@@ -10,7 +10,7 @@ import 'church_calendar.dart';
 import 'custom_list_tile.dart';
 import 'file_download.dart';
 import 'globals.dart';
-import 'saint_troparion.dart';
+import 'troparion_view.dart';
 
 class Troparion {
   String title = "";
@@ -26,13 +26,75 @@ class Troparion {
   }
 }
 
-class TroparionDayModel extends StatelessWidget {
+class SaintTroparion extends StatelessWidget {
+  static Database? db;
+
+  final DateTime date;
+  final Cal cal;
+
+  SaintTroparion(this.date) : cal = Cal.fromDate(date);
+
+  Future<List<Troparion>> fetch(DateTime d) async {
+    List<Troparion> saints = [];
+
+    if (cal.isLeapYear) {
+      if (d.isBetween(cal.leapStart, cal.leapEnd - 1.days)) {
+        saints = await _saintData(d + 1.days);
+      } else if (d == cal.leapEnd) {
+        saints = await _saintData(DateTime(cal.year, 2, 29));
+      } else {
+        saints = await _saintData(d);
+      }
+    } else {
+      saints = await _saintData(d);
+      if (d == cal.leapEnd) {
+        saints.addAll(await _saintData(DateTime(2000, 2, 29)));
+      }
+    }
+
+    return saints;
+  }
+
+  Future<List<Troparion>> _saintData(DateTime d) async {
+    List<Troparion> result = [];
+
+    db ??= await DB.open("troparion.sqlite");
+
+    List<Map<String, Object?>> data = await db!.query("tropari",
+        columns: ["title", "glas", "content"], where: "day=${d.day} AND month=${d.month}");
+
+    for (final Map<String, Object?> row in data) {
+      result.add(Troparion.fromMap(row));
+    }
+
+    return result;
+  }
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<List<Troparion>>(
+      future: fetch(date),
+      builder: (BuildContext context, AsyncSnapshot<List<Troparion>> snapshot) {
+        if (snapshot.hasData) {
+          final troparia = List<Troparion>.from(snapshot.data!);
+
+          if (troparia.isNotEmpty) {
+            return CustomListTile(
+                title: "Тропари и кондаки святым",
+                onTap: () => TroparionView(troparia).push(context));
+          }
+        }
+
+        return Container();
+      });
+}
+
+class TroparionOfDay extends StatelessWidget {
   final DateTime date;
   final Cal cal;
 
   static Database? db;
 
-  TroparionDayModel(this.date) : cal = Cal.fromDate(date);
+  TroparionOfDay(this.date) : cal = Cal.fromDate(date);
 
   bool isAvailable() {
     if (date.isBetween(cal.d("palmSunday"), cal.pascha)) {
@@ -91,7 +153,7 @@ class TroparionDayModel extends StatelessWidget {
 
               if (troparia.isNotEmpty) {
                 return CustomListTile(
-                    title: title, onTap: () => SaintTroparionView(troparia).push(context));
+                    title: title, onTap: () => TroparionView(troparia).push(context));
               }
             }
 

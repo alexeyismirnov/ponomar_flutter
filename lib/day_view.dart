@@ -18,7 +18,6 @@ import 'saint_model.dart';
 import 'icon_model.dart';
 import 'custom_list_tile.dart';
 import 'month_container.dart';
-import 'saint_troparion.dart';
 import 'troparion_model.dart';
 
 class _FeastWidget extends StatelessWidget {
@@ -281,25 +280,9 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
     }
 
     if (context.languageCode == "ru") {
-      content.add(FutureBuilder<List<Troparion>>(
-          future: SaintTroparionModel.fetch(date),
-          builder: (BuildContext context, AsyncSnapshot<List<Troparion>> snapshot) {
-            if (snapshot.hasData) {
-              troparia = List<Troparion>.from(snapshot.data!);
-
-              if (troparia.isNotEmpty) {
-                return CustomListTile(
-                    title: "Тропари и кондаки святым",
-                    onTap: () => SaintTroparionView(troparia).push(context));
-              }
-            }
-
-            return Container();
-          }));
-
+      content.add(SaintTroparion(date));
       content.add(space5);
-
-      content.add(TroparionDayModel(date));
+      content.add(TroparionOfDay(date));
     }
 
     return CardWithTitle(
