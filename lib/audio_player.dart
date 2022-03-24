@@ -21,23 +21,29 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
     super.initState();
 
     player.onAudioPositionChanged.listen((Duration duration) {
-      setState(() {
-        currentTime = duration;
-      });
+      if (mounted) {
+        setState(() {
+          currentTime = duration;
+        });
+      }
     });
 
     player.onDurationChanged.listen((Duration duration) {
-      setState(() {
-        completeTime = duration;
-      });
+      if (mounted) {
+        setState(() {
+          completeTime = duration;
+        });
+      }
     });
 
     player.onPlayerCompletion.listen((event) {
       player.stop();
 
-      setState(() {
-        isPlaying = false;
-      });
+      if (mounted) {
+        setState(() {
+          isPlaying = false;
+        });
+      }
     });
   }
 
@@ -54,7 +60,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
         IconButton(
             icon: Icon(
               isPlaying ? Icons.pause_circle_outlined : Icons.play_circle_outlined,
-              color: Colors.black,
+              color: Theme.of(context).textTheme.bodyText1!.color,
               size: 35,
             ),
             onPressed: () async {

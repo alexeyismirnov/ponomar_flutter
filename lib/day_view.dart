@@ -19,6 +19,8 @@ import 'icon_model.dart';
 import 'custom_list_tile.dart';
 import 'month_container.dart';
 import 'troparion_model.dart';
+import 'troparion_day.dart';
+import 'troparion_feast.dart';
 
 class _FeastWidget extends StatelessWidget {
   final ChurchDay d;
@@ -283,6 +285,8 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
       content.add(SaintTroparion(date));
       content.add(space5);
       content.add(TroparionOfDay(date));
+      content.add(space5);
+      content.add(TroparionOfFeast(date));
     }
 
     return CardWithTitle(

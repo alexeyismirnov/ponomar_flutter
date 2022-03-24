@@ -7,8 +7,6 @@ import 'package:path/path.dart' as path;
 
 import 'dart:io';
 
-import 'globals.dart';
-
 class BookButton extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
@@ -50,11 +48,13 @@ class _FileDownloadState extends State<FileDownload> {
   late http.StreamedResponse _response;
 
   late File file;
+  late String title;
   bool isError = false;
 
   @override
   void initState() {
     super.initState();
+    title = 'downloading'.tr().toUpperCase();
     downloadFile();
   }
 
@@ -77,14 +77,18 @@ class _FileDownloadState extends State<FileDownload> {
       ..onDone(() async {
         if (isError) return;
 
+        setState(() {
+          title = "extracting".tr().toUpperCase();
+        });
+
         final filename = path.basename(widget.url);
         final file = File("${GlobalPath.documents}/$filename");
         await file.writeAsBytes(_bytes);
 
-        print(GlobalPath.documents);
+        // print(GlobalPath.documents);
 
         try {
-          ZipFile.extractToDirectory(
+          await ZipFile.extractToDirectory(
               zipFile: file, destinationDir: Directory(GlobalPath.documents));
         } catch (e) {
           print(e);
@@ -108,7 +112,7 @@ class _FileDownloadState extends State<FileDownload> {
               children: <Widget>[
                 Container(
                     padding: const EdgeInsets.only(bottom: 20.0, top: 10.0),
-                    child: Text('downloading'.tr().toUpperCase(),
+                    child: Text(title,
                         style: Theme.of(context).textTheme.button)),
                 if (_total == 0)
                   const Center(child: CircularProgressIndicator())
