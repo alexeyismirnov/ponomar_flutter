@@ -30,20 +30,20 @@ class SaintTroparion extends StatelessWidget {
 
   SaintTroparion(this.date) : cal = Cal.fromDate(date);
 
-  Future<List<Troparion>> fetch(DateTime d) async {
+  Future<List<Troparion>> fetch() async {
     List<Troparion> saints = [];
 
     if (cal.isLeapYear) {
-      if (d.isBetween(cal.leapStart, cal.leapEnd - 1.days)) {
-        saints = await _saintData(d + 1.days);
-      } else if (d == cal.leapEnd) {
+      if (date.isBetween(cal.leapStart, cal.leapEnd - 1.days)) {
+        saints = await _saintData(date + 1.days);
+      } else if (date == cal.leapEnd) {
         saints = await _saintData(DateTime(cal.year, 2, 29));
       } else {
-        saints = await _saintData(d);
+        saints = await _saintData(date);
       }
     } else {
-      saints = await _saintData(d);
-      if (d == cal.leapEnd) {
+      saints = await _saintData(date);
+      if (date == cal.leapEnd) {
         saints.addAll(await _saintData(DateTime(2000, 2, 29)));
       }
     }
@@ -68,7 +68,7 @@ class SaintTroparion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FutureBuilder<List<Troparion>>(
-      future: fetch(date),
+      future: fetch(),
       builder: (BuildContext context, AsyncSnapshot<List<Troparion>> snapshot) {
         if (snapshot.hasData) {
           final troparia = List<Troparion>.from(snapshot.data!);
@@ -83,4 +83,3 @@ class SaintTroparion extends StatelessWidget {
         return Container();
       });
 }
-

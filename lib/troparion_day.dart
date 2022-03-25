@@ -56,7 +56,7 @@ class TroparionOfDayState extends State<TroparionOfDay> {
     }
 
     List<Map<String, Object?>> data =
-    await db!.query("tropari", columns: ["title", "url", "content"], where: "code=$code");
+        await db!.query("tropari", columns: ["title", "url", "content"], where: "code=$code");
 
     for (final Map<String, Object?> row in data) {
       var rr = Map<String, Object?>.from(row);
@@ -84,24 +84,29 @@ class TroparionOfDayState extends State<TroparionOfDay> {
     if (File("${GlobalPath.documents}/tropari_day/tropari_day.sqlite").existsSync()) {
       return FutureBuilder<List<Troparion>>(
           future: fetch(),
-          builder: (BuildContext context, AsyncSnapshot<List<Troparion>> snapshot) => (snapshot
-              .hasData)
-              ? CustomListTile(
-              title: title,
-              onTap: () => TroparionView(List<Troparion>.from(snapshot.data!)).push(context))
-              : Container());
+          builder: (BuildContext context, AsyncSnapshot<List<Troparion>> snapshot) =>
+              (snapshot.hasData)
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: CustomListTile(
+                          title: title,
+                          onTap: () =>
+                              TroparionView(List<Troparion>.from(snapshot.data!)).push(context)))
+                  : Container());
     } else {
-      return CustomListTile(
-          title: title,
-          onTap: () => FileDownload("$pCloudURL/prayerbook/tropari_day.zip")
-              .show(context, canDismiss: false)
-              .then((dynamic res) => res ? fetch() : Future.value(null))
-              .then((dynamic res) {
-            if (res is List<Troparion>) {
-              setState(() {});
-              TroparionView(List<Troparion>.from(res)).push(context);
-            }
-          }));
+      return Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: CustomListTile(
+              title: title,
+              onTap: () => FileDownload("$pCloudURL/prayerbook/tropari_day.zip")
+                      .show(context, canDismiss: false)
+                      .then((dynamic res) => res ? fetch() : Future.value(null))
+                      .then((dynamic res) {
+                    if (res is List<Troparion>) {
+                      setState(() {});
+                      TroparionView(List<Troparion>.from(res)).push(context);
+                    }
+                  })));
     }
   }
 }

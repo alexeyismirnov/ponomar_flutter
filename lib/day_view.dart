@@ -21,6 +21,7 @@ import 'month_container.dart';
 import 'troparion_model.dart';
 import 'troparion_day.dart';
 import 'troparion_feast.dart';
+import 'feofan.dart';
 
 class _FeastWidget extends StatelessWidget {
   final ChurchDay d;
@@ -282,10 +283,9 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
     }
 
     if (context.languageCode == "ru") {
+      content.add(FeofanView(date));
       content.add(SaintTroparion(date));
-      content.add(space5);
       content.add(TroparionOfDay(date));
-      content.add(space5);
       content.add(TroparionOfFeast(date));
     }
 
