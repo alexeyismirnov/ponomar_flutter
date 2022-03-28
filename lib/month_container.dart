@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:after_init/after_init.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 import 'month_view.dart';
 import 'globals.dart';
+import 'church_fasting.dart';
 
 class MonthContainer extends StatefulWidget {
   final DateTime initialDate;
@@ -23,6 +25,7 @@ class _MonthContainerState extends State<MonthContainer> with AfterInitMixin<Mon
   late String title;
   late List<String> weekdays;
   late double cellWidth, containerWidth;
+  bool showInfo = false;
 
   @override
   void initState() {
@@ -73,39 +76,73 @@ class _MonthContainerState extends State<MonthContainer> with AfterInitMixin<Mon
                 children: <Widget>[
                   Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(title, style: Theme.of(context).textTheme.titleLarge)
+                        const SizedBox(width: 40),
+                        Text(showInfo ? "info".tr() : title,
+                            style: Theme.of(context).textTheme.titleLarge),
+                        showInfo
+                            ? IconButton(
+                                onPressed: () => setState(() => showInfo = false),
+                                iconSize: 30.0,
+                                icon: const Icon(Icons.close_sharp))
+                            : IconButton(
+                                onPressed: () => setState(() => showInfo = true),
+                                iconSize: 30.0,
+                                icon: const Icon(Icons.help_outline)),
                       ]),
-                  spacer,
-                  Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: weekdays
-                          .map<Widget>((d) => Container(
-                              width: cellWidth,
-                              child: AutoSizeText(d.toUpperCase(),
-                                  maxLines: 1,
-                                  minFontSize: 5,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(color: Theme.of(context).secondaryHeaderColor))))
-                          .toList()),
+                  if (!showInfo) ...[
+                    Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: weekdays
+                            .map<Widget>((d) => Container(
+                                width: cellWidth,
+                                height: 20,
+                                child: AutoSizeText(d.toUpperCase(),
+                                    maxLines: 1,
+                                    minFontSize: 5,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium!
+                                        .copyWith(color: Theme.of(context).secondaryHeaderColor))))
+                            .toList())
+                  ],
                   spacer,
                   SizedBox(
                       width: containerWidth,
                       height: cellWidth * 6,
-                      child: PageView.builder(
-                          controller: _controller,
-                          onPageChanged: (page) => updateTitle(page),
-                          itemBuilder: (BuildContext context, int index) {
-                            final currentDate =
-                                Jiffy(widget.initialDate).add(months: index - initialPage).dateTime;
-                            return Align(
-                                alignment: Alignment.topCenter, child: MonthView(currentDate));
-                          }))
+                      child: showInfo
+                          ? SingleChildScrollView(
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                                  child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: FastingModel.types
+                                          .map<Widget>((t) => Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 0, vertical: 3),
+                                              child: Row(children: [
+                                                Container(width: 30, height: 30, color: t.color),
+                                                const SizedBox(width: 10),
+                                                Expanded(
+                                                    child: Text(t.description.tr(),
+                                                        style:
+                                                            Theme.of(context).textTheme.titleLarge))
+                                              ])))
+                                          .toList())))
+                          : PageView.builder(
+                              controller: _controller,
+                              onPageChanged: (page) => updateTitle(page),
+                              itemBuilder: (BuildContext context, int index) {
+                                final currentDate = Jiffy(widget.initialDate)
+                                    .add(months: index - initialPage)
+                                    .dateTime;
+                                return Align(
+                                    alignment: Alignment.topCenter, child: MonthView(currentDate));
+                              })),
+                  if (showInfo) ...[const SizedBox(height: 20)]
                 ])));
   }
 }

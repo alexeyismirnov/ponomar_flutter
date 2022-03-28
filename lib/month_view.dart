@@ -48,7 +48,7 @@ class _MonthViewState extends State<MonthView> with AfterInitMixin<MonthView> {
   @override
   Widget build(BuildContext context) => Wrap(
       children:
-          List<Widget>.generate(startGap, (_) => Container(width: cellWidth, height: cellHeight)) +
+          List<Widget>.generate(startGap, (_) => SizedBox(width: cellWidth, height: cellHeight)) +
               List<Widget>.generate(totalDays, (i) {
                 final currentDate = DateTime(date.year, date.month, i + 1);
                 final fasting = ChurchFasting.forDate(currentDate);

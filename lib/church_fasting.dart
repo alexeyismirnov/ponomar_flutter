@@ -67,6 +67,19 @@ class FastingModel {
   FastingType type;
   String description;
 
+  static List<FastingType> get types {
+    return ChurchFasting.fastingLevel == FastingLevel.laymen
+        ? [FastingType.vegetarian, FastingType.fishAllowed, FastingType.fastFree]
+        : [
+            FastingType.noFood,
+            FastingType.xerophagy,
+            FastingType.withoutOil,
+            FastingType.withOil,
+            FastingType.fishAllowed,
+            FastingType.fastFree
+          ];
+  }
+
   FastingModel(this.type, [_description]) : description = _description ?? type.description;
 }
 
