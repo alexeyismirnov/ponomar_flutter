@@ -18,7 +18,7 @@ class CustomListTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Expanded(
-                    child: subtitle == null
+                    child: (subtitle?.length ?? 0) == 0
                         ? Text(title,
                             textAlign: TextAlign.left,
                             style: Theme.of(context).textTheme.titleLarge)

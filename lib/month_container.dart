@@ -69,8 +69,9 @@ class _MonthContainerState extends State<MonthContainer> with AfterInitMixin<Mon
     return AlertDialog(
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
         contentPadding: const EdgeInsets.all(5.0),
+        insetPadding: const EdgeInsets.all(0.0),
         content: Container(
-            width: 300.0,
+            width: containerWidth,
             padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
