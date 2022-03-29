@@ -26,7 +26,7 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
 
   @override
   void didInitState() {
-    final lang = context.languageCode;
+    final lang = context.countryCode;
 
     books = [
       [OldTestamentModel(lang), NewTestamentModel(lang)]

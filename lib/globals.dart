@@ -40,6 +40,8 @@ class JSON {
         jsonDecode(await rootBundle.loadString("assets/translations/en/reading.json")));
     bibleTrans['ru'] = Map<String, String>.from(
         jsonDecode(await rootBundle.loadString("assets/translations/ru/reading.json")));
+    bibleTrans['cn'] = Map<String, String>.from(
+        jsonDecode(await rootBundle.loadString("assets/translations/zh-CN/reading.json")));
   }
 }
 
@@ -52,7 +54,8 @@ extension DateTimeDiff on DateTime {
 }
 
 extension LocaleContext on BuildContext {
-  String get languageCode => EasyLocalization.of(this)!.locale.toString().split("_").first;
+  String get languageCode => locale.toString().split("_").first;
+  String get countryCode => locale.toString().split("_").last.toLowerCase();
 }
 
 extension HexColor on Color {
@@ -84,4 +87,3 @@ Iterable<int> getRange(int low, int high, [int step = 1]) sync* {
     yield i;
   }
 }
-

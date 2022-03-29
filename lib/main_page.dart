@@ -6,8 +6,7 @@ import 'package:jiffy/jiffy.dart';
 import 'globals.dart';
 import 'calendar_appbar.dart';
 import 'day_view.dart';
-
-// O. S. : 舊式日期
+import 'bible_model.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -36,8 +35,11 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     if (!ConfigParam.langSelected.val()) {
       ConfigParam.langSelected.set(true);
       AppLangDialog(
-        labels: const ["English", "Русский"],
+        labels: const ["English", "Русский", "简体中文"],
       ).show(context, canDismiss: false);
+    } else {
+      await OldTestamentModel(context.countryCode).prepare();
+      await NewTestamentModel(context.countryCode).prepare();
     }
 
     await Jiffy.locale(context.languageCode);

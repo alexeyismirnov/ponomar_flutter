@@ -46,9 +46,11 @@ class BibleUtil {
   List<TextSpan> getTextSpan(BuildContext context) {
     double fontSize = ConfigParam.fontSize.val();
     List<TextSpan> result = [];
+    final isPsalm =
+        (bookName == "ps" && (context.languageCode == 'en' || context.languageCode == 'ru'));
 
     for (var line in content) {
-      var verseId = (bookName == "ps") ? "\n${line.verse}. " : "${line.verse} ";
+      var verseId = isPsalm ? "\n${line.verse}. " : "${line.verse} ";
 
       result.add(TextSpan(
           text: verseId,
@@ -57,7 +59,7 @@ class BibleUtil {
               .bodyText1!
               .copyWith(color: Colors.red, fontSize: fontSize)));
 
-      if (bookName == "ps") {
+      if (isPsalm) {
         int idx = line.text.indexOf(".");
 
         result.add(TextSpan(

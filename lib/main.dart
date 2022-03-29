@@ -10,7 +10,6 @@ import 'main_page.dart';
 import 'library_page.dart';
 import 'globals.dart';
 import 'church_fasting.dart';
-import 'bible_model.dart';
 import 'saint_model.dart';
 import 'icon_model.dart';
 
@@ -25,13 +24,9 @@ Future<void> main() async {
 
   await JSON.load();
 
-  await OldTestamentModel("en").prepare();
-  await OldTestamentModel("ru").prepare();
-  await NewTestamentModel("en").prepare();
-  await NewTestamentModel("ru").prepare();
-
   await SaintModel("en").prepare();
   await SaintModel("ru").prepare();
+  await SaintModel("cn").prepare();
 
   [
     "troparion.sqlite",
@@ -52,7 +47,11 @@ Future<void> main() async {
   ]);
 
   runApp(EasyLocalization(
-      supportedLocales: const [Locale('en', ''), Locale('ru', '')],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('ru', ''),
+        Locale('zh', 'CN'),
+      ],
       path: 'ui,cal,reading,library',
       assetLoader: DirectoryAssetLoader(basePath: "assets/translations"),
       fallbackLocale: const Locale('en', ''),

@@ -70,7 +70,7 @@ class _PericopeViewState extends State<PericopeView> with AfterInitMixin<Pericop
     double fontSize = ConfigParam.fontSize.val();
 
     BibleUtil bu;
-    final lang = context.languageCode;
+    final lang = context.countryCode;
     final pericope = widget.str.trim().split(" ");
 
     final model1 = OldTestamentModel(lang);

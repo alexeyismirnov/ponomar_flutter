@@ -130,7 +130,7 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
 
   @override
   void didInitState() async {
-    saints = SaintModel(context.languageCode);
+    saints = SaintModel(context.countryCode);
 
     const itemWidth = 100;
     const padding = 10;
@@ -271,7 +271,7 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
       var title = currentReading[0];
       var subtitle = currentReading.length > 1 ? currentReading[1].trim().tr() : null;
 
-      title = JSON.bibleTrans[context.languageCode]!.entries
+      title = JSON.bibleTrans[context.countryCode]!.entries
           .fold(title, (String prev, e) => prev.replaceAll(e.key, e.value));
 
       content.add(CustomListTile(

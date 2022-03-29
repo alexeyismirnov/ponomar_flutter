@@ -40,7 +40,7 @@ class CalendarAppbar extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 AppLangDialog(
-                  labels: const ["English", "Русский"],
+                  labels: const ["English", "Русский", "简体中文"],
                 ).show(context);
               },
               child: ListTile(

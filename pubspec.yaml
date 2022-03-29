@@ -64,3 +64,4 @@ flutter:
     - assets/icons/
     - assets/translations/en/
     - assets/translations/ru/
+    - assets/translations/zh-CN/

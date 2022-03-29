@@ -41,6 +41,8 @@ class _MonthContainerState extends State<MonthContainer> with AfterInitMixin<Mon
       weekdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     } else if (context.languageCode == 'ru') {
       weekdays = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"];
+    } else if (context.languageCode == 'zh') {
+      weekdays = ["日", "一", "二", "三", "四", "五", "六"];
     }
 
     if (context.screenWidth > 500) {
