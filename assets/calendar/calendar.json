@@ -360,7 +360,7 @@
     "date" : "3 January",
     "feastType" : "polyeleos",
     "reading" : "Heb 7:26-8:2 Luke 6:17-23 # Hierarch",
-    "saint" : "St. Peter"
+    "saint" : "St. Peter, metropolitan of All Russia"
   },
   {
     "date" : "15 January",
@@ -411,10 +411,16 @@
     "saint" : "Findings of Head of St. John the Baptist"
   },
   {
+    "date" : "22 March",
+    "feastType" : "polyeleos",
+    "reading" : "Luke 21:12-19 Heb 12:1-10 Matthew 20:1-16 # Martyrs",
+    "saint" : "Holy Forty Martyrs of Sebaste"
+  },
+  {
     "date" : "6 May",
     "feastType" : "vigil",
     "reading" : "Acts 12:1-11 John 15:17-16:2 # Great Martyr",
-    "saint" : "Victory-bearer George"
+    "saint" : "Victory-bearer and Wonderworker George"
   },
   {
     "date" : "16 May",
@@ -432,7 +438,7 @@
     "date" : "22 May",
     "feastType" : "polyeleos",
     "reading" : "Heb 13:17-21 Luke 6:17-23 # Hierarch",
-    "saint" : "St. Nicholas"
+    "saint" : "St. Nicholas the Wonderworker"
   },
   {
     "date" : "24 May",
@@ -468,7 +474,7 @@
     "date" : "17 July",
     "feastType" : "polyeleos",
     "reading" : "Rom 8:28-39 John 15:17-16:2 # Passion-bearers",
-    "saint" : "Nicholas II et al."
+    "saint" : "Holy Royal Martyrs of Russia: Nicholas II et al."
   },
   {
     "date" : "21 July",
@@ -516,7 +522,7 @@
     "date" : "14 September",
     "feastType" : "polyeleos",
     "reading" : "1Tim 2:1-7 Luke 4:16-22 # New Year",
-    "saint" : "New Year"
+    "saint" : "Church New Year"
   },
   {
     "date" : "15 September",
@@ -582,12 +588,12 @@
     "date" : "18 December",
     "feastType" : "vigil",
     "reading" : "Gal 5:22-6:2 Matthew 11:27-30 # Venerable",
-    "saint" : "Venerable Sabbas"
+    "saint" : "Venerable Sabbas the Sanctified"
   },
   {
     "date" : "19 December",
     "feastType" : "vigil",
     "reading" : "Heb 13:17-21 Luke 6:17-23 # Hierarch",
-    "saint" : "St. Nicholas"
+    "saint" : "St. Nicholas the Wonderworker"
   }
 ]
