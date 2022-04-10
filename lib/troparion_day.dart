@@ -87,7 +87,7 @@ class TroparionOfDayState extends State<TroparionOfDay> {
           builder: (BuildContext context, AsyncSnapshot<List<Troparion>> snapshot) =>
               (snapshot.hasData)
                   ? Padding(
-                      padding: const EdgeInsets.only(top: 5),
+                      padding: const EdgeInsets.only(bottom: 5),
                       child: CustomListTile(
                           title: title,
                           onTap: () =>
@@ -95,7 +95,7 @@ class TroparionOfDayState extends State<TroparionOfDay> {
                   : Container());
     } else {
       return Padding(
-          padding: const EdgeInsets.only(top: 5),
+          padding: const EdgeInsets.only(bottom: 5),
           child: CustomListTile(
               title: title,
               onTap: () => FileDownload("$pCloudURL/prayerbook/tropari_day.zip")

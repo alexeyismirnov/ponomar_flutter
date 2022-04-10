@@ -74,9 +74,11 @@ class SaintTroparion extends StatelessWidget {
           final troparia = List<Troparion>.from(snapshot.data!);
 
           if (troparia.isNotEmpty) {
-            return CustomListTile(
-                title: "Тропари и кондаки святым",
-                onTap: () => TroparionView(troparia).push(context));
+            return Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: CustomListTile(
+                    title: "Тропари и кондаки святым",
+                    onTap: () => TroparionView(troparia).push(context)));
           }
         }
 

@@ -47,7 +47,6 @@ class _TroparionViewState extends State<TroparionView> {
       content.add(const SizedBox(height: 10));
       content.add(AudioPlayerView(t.url!));
       content.add(const SizedBox(height: 10));
-
     } else {
       content.add(const SizedBox(height: 20));
     }
@@ -63,11 +62,11 @@ class _TroparionViewState extends State<TroparionView> {
     return Column(children: content);
   }
 
+  Widget getContent() => Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: widget.troparia.map((t) => buildTroparion(t)).toList());
+
   @override
-  Widget build(BuildContext context) => BookPageSingle(
-      title,
-      Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: widget.troparia.map((t) => buildTroparion(t)).toList()));
+  Widget build(BuildContext context) => BookPageSingle(title, builder: () => getContent());
 }

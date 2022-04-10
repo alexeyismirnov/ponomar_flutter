@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
+typedef WidgetCallback = Widget Function();
+
 class BookPageSingle extends StatefulWidget {
   final String title;
-  final Widget content;
+  final WidgetCallback builder;
+  final double padding;
 
-  const BookPageSingle(this.title, this.content);
+  const BookPageSingle(this.title, {required this.builder, this.padding = 15});
 
   @override
   _BookPageSingleState createState() => _BookPageSingleState();
@@ -51,7 +54,8 @@ class _BookPageSingleState extends State<BookPageSingle> {
 
                                   SliverToBoxAdapter(
                                       child: Padding(
-                                          padding: const EdgeInsets.all(15), child: widget.content))
+                                          padding: EdgeInsets.all(widget.padding),
+                                          child: widget.builder()))
                                   //    Padding(padding: const EdgeInsets.all(15), child: getContent())
                                 ])))))));
   }

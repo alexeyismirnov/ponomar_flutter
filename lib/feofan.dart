@@ -28,9 +28,8 @@ class FeofanView extends StatelessWidget {
     return CustomListTile(
         title: title,
         subtitle: subtitle,
-        onTap: () => BookPageSingle(
-                title,
-                Text(content,
+        onTap: () => BookPageSingle(title,
+                builder: () => Text(content,
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: fontSize)))
             .push(context));
   }
@@ -116,7 +115,7 @@ class FeofanView extends StatelessWidget {
           final result = List<Widget>.from(snapshot.data!);
 
           if (result.isNotEmpty) {
-            return Column(children: result + <Widget>[const SizedBox(height: 10)]);
+            return Column(children: result + <Widget>[const SizedBox(height: 5)]);
           }
         }
 
