@@ -109,20 +109,20 @@ mixin BibleModel on BookModel {
   }
 
   @override
-  Future<String?> getTitle(BookPosition pos) {
+  Future<String> getTitle(BookPosition pos) {
     String? s;
     var index = pos.index;
     var chapter = pos.chapter;
 
     if (index == null || chapter == null) {
-      return Future<String?>.value(null);
+      return Future<String>.value("");
     } else if (filenames[index.section][index.index] == "ps") {
       s = "Kathisma %d".tr();
     } else {
       s = "Chapter %d".tr();
     }
 
-    return Future<String?>.value(s.format([chapter + 1]));
+    return Future<String>.value(s.format([chapter + 1]));
   }
 
   @override

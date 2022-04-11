@@ -45,7 +45,7 @@ class _MonthContainerState extends State<MonthContainer> with AfterInitMixin<Mon
       weekdays = ["日", "一", "二", "三", "四", "五", "六"];
     }
 
-    if (context.screenWidth > 500) {
+    if (context.isTablet) {
       cellWidth = 70.0;
       containerWidth = 510.0;
     } else {

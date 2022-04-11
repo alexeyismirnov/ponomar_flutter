@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
+import 'package:collection/collection.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'dart:core';
 import 'dart:async';
@@ -86,4 +88,9 @@ Iterable<int> getRange(int low, int high, [int step = 1]) sync* {
   for (int i = low; i < high; i += step) {
     yield i;
   }
+}
+
+extension SqfliteExt on Sqflite {
+  static String? firstStringValue(List<Map<String, Object?>> list) =>
+      list.firstOrNull?.values.firstOrNull.toString();
 }

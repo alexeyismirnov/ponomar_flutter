@@ -9,6 +9,7 @@ import 'custom_list_tile.dart';
 import 'book_page_single.dart';
 import 'globals.dart';
 import 'church_reading.dart';
+import 'book_cell.dart';
 
 class FeofanView extends StatelessWidget {
   static Database? db;
@@ -28,10 +29,7 @@ class FeofanView extends StatelessWidget {
     return CustomListTile(
         title: title,
         subtitle: subtitle,
-        onTap: () => BookPageSingle(title,
-                builder: () => Text(content,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: fontSize)))
-            .push(context));
+        onTap: () => BookPageSingle(title, builder: () => BookCellText(content)).push(context));
   }
 
   Future<String?> getFeofan(String id) async {

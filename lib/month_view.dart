@@ -29,7 +29,7 @@ class _MonthViewState extends State<MonthView> with AfterInitMixin<MonthView> {
 
   @override
   void didInitState() {
-    cellWidth = (context.screenWidth > 500) ? 70.0 : 40.0;
+    cellWidth = context.isTablet ? 70.0 : 40.0;
     cellHeight = cellWidth;
 
     firstDayOfWeek = DateFormat.EEEE(context.languageCode).dateSymbols.FIRSTDAYOFWEEK + 1;

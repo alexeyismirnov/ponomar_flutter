@@ -10,6 +10,7 @@ import 'bible_model.dart';
 import 'book_model.dart';
 import 'globals.dart';
 import 'book_toc.dart';
+import 'ebook_model.dart';
 
 class LibraryPage extends StatefulWidget {
   @override
@@ -21,16 +22,23 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
   late DateTime savedDate;
 
   late List<List<BookModel>> books;
-  final sections = ["Bible"];
+  List<String> sections = [];
   bool ready = false;
 
   @override
   void didInitState() {
     final lang = context.countryCode;
 
+    sections = ["Bible"];
+
     books = [
       [OldTestamentModel(lang), NewTestamentModel(lang)]
     ];
+
+    if (context.languageCode == "ru") {
+      sections.add("Разное");
+      books.add([EbookModel("synaxarion.sqlite")]);
+    }
 
     var futures = <Future>[];
     for (final model in books.expand((e) => e)) {
@@ -64,7 +72,7 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
         ]);
       },
       separatorBuilder: (context, index) => const SizedBox(),
-      sectionSeparatorBuilder: (context, section) => const SizedBox(),
+      sectionSeparatorBuilder: (context, section) => const SizedBox(height: 15),
     );
   }
 

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:group_list_view/group_list_view.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
+import 'package:ponomar/bible_model.dart';
 
 import 'calendar_appbar.dart';
 import 'book_model.dart';
 import 'globals.dart';
 import 'pericope.dart';
+import 'book_page_single.dart';
+import 'book_cell.dart';
 
 class _ChaptersView extends StatefulWidget {
   final BookPosition pos;
@@ -89,7 +92,25 @@ class _BookTOCState extends State<BookTOC> {
 
     return NotificationListener<Notification>(
         onNotification: (n) {
-          if (n is BookPositionNotification) BibleChapterView(n.pos).push(context);
+          if (n is BookPositionNotification) {
+            if (model is BibleModel) {
+              BibleChapterView(n.pos).push(context);
+            } else {
+              String title = "";
+
+              model.getTitle(n.pos).then((_title) {
+                title = _title;
+                return model.getContent(n.pos);
+              }).then((text) {
+                if (model.contentType == BookContentType.html) {
+                  BookPageSingle(title, padding: 5, builder: () => BookCellHTML(text, model))
+                      .push(context);
+                } else {
+                  BookPageSingle(title, builder: () => BookCellText(text)).push(context);
+                }
+              });
+            }
+          }
           return true;
         },
         child: GroupListView(
@@ -100,21 +121,27 @@ class _BookTOCState extends State<BookTOC> {
             return ListTileTheme(
                 contentPadding: const EdgeInsets.all(0),
                 dense: true,
-                child: ExpansionTile(
-                    childrenPadding: const EdgeInsets.all(10),
-                    expandedAlignment: Alignment.topLeft,
-                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                    trailing: const Icon(null),
-                    title: Text(items[index.section]![index.index],
-                        style: Theme.of(context).textTheme.titleLarge),
-                    children: [_ChaptersView(BookPosition.modelIndex(model, index))]));
+                child: model.hasChapters
+                    ? ExpansionTile(
+                        childrenPadding: const EdgeInsets.all(10),
+                        expandedAlignment: Alignment.topLeft,
+                        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                        trailing: const Icon(null),
+                        title: Text(items[index.section]![index.index],
+                            style: Theme.of(context).textTheme.titleLarge),
+                        children: [_ChaptersView(BookPosition.modelIndex(model, index))])
+                    : ListTile(
+                        title: Text(items[index.section]![index.index],
+                            style: Theme.of(context).textTheme.titleLarge),
+                        onTap: () => BookPositionNotification(BookPosition.modelIndex(model, index))
+                            .dispatch(context)));
           },
-          groupHeaderBuilder: (BuildContext context, int section) {
-            return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(sections[section].toUpperCase(), style: Theme.of(context).textTheme.button),
-              const Divider(thickness: 1)
-            ]);
-          },
+          groupHeaderBuilder: (BuildContext context, int section) => sections[section].isNotEmpty
+              ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(sections[section].toUpperCase(), style: Theme.of(context).textTheme.button),
+                  const Divider(thickness: 1)
+                ])
+              : Container(),
           separatorBuilder: (context, index) => const SizedBox(),
           sectionSeparatorBuilder: (context, section) => const SizedBox(height: 15),
         ));

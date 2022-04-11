@@ -26,15 +26,17 @@ abstract class BookModel {
 
   Future get initFuture;
 
-  Future prepare();
+  Future prepare() {
+    return Future.value(null);
+  }
 
   Future<List<String>> getSections();
   Future<List<String>> getItems(int section);
 
   Future<int> getNumChapters(IndexPath index);
 
-  Future<String?> getTitle(BookPosition pos) {
-    return Future<String?>.value(null);
+  Future<String> getTitle(BookPosition pos) {
+    return Future<String>.value("");
   }
 
   Future<String?> getComment(int commentId) {
