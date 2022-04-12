@@ -32,6 +32,7 @@ class BookCellHTML extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int fontSize = ConfigParam.fontSize.val().round();
+
     var text = _text;
 
     String css = """

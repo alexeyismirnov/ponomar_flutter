@@ -45,7 +45,7 @@ class _FileDownloadState extends State<FileDownload> {
   int _total = 0, _received = 0;
   final List<int> _bytes = [];
 
-  late http.StreamedResponse _response;
+  http.StreamedResponse? _response;
 
   late File file;
   late String title;
@@ -60,9 +60,12 @@ class _FileDownloadState extends State<FileDownload> {
 
   Future<void> downloadFile() async {
     _response = await client.send(http.Request('GET', Uri.parse(widget.url)));
-    _total = _response.contentLength ?? 0;
 
-    _response.stream.listen((value) {
+    if (_response == null) return;
+
+    _total = _response!.contentLength ?? 0;
+
+    _response!.stream.listen((value) {
       // print("recv $_received");
 
       setState(() {
@@ -84,8 +87,6 @@ class _FileDownloadState extends State<FileDownload> {
         final filename = path.basename(widget.url);
         final file = File("${GlobalPath.documents}/$filename");
         await file.writeAsBytes(_bytes);
-
-        // print(GlobalPath.documents);
 
         try {
           await ZipFile.extractToDirectory(
@@ -112,8 +113,7 @@ class _FileDownloadState extends State<FileDownload> {
               children: <Widget>[
                 Container(
                     padding: const EdgeInsets.only(bottom: 20.0, top: 10.0),
-                    child: Text(title,
-                        style: Theme.of(context).textTheme.button)),
+                    child: Text(title, style: Theme.of(context).textTheme.button)),
                 if (_total == 0)
                   const Center(child: CircularProgressIndicator())
                 else

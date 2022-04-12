@@ -16,7 +16,6 @@ import 'globals.dart';
 import 'pericope.dart';
 import 'saint_model.dart';
 import 'icon_model.dart';
-import 'custom_list_tile.dart';
 import 'month_container.dart';
 import 'troparion_model.dart';
 import 'troparion_day.dart';
@@ -268,19 +267,7 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
     List<Widget> content = [];
 
     for (final r in reading) {
-      final currentReading = r.split("#");
-      var title = currentReading[0];
-      var subtitle = currentReading.length > 1 ? currentReading[1].trim().tr() : null;
-
-      title = JSON.bibleTrans[context.countryCode]!.entries
-          .fold(title, (String prev, e) => prev.replaceAll(e.key, e.value));
-
-      content.add(CustomListTile(
-          title: title,
-          subtitle: subtitle,
-          onTap: () => PericopeView(currentReading[0]).push(context)));
-
-      content.add(space5);
+      content.add(ReadingView(r));
     }
 
     if (context.languageCode == "ru") {

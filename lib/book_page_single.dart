@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
+import 'font_size_dialog.dart';
+
 typedef WidgetCallback = Widget Function();
 
 class BookPageSingle extends StatefulWidget {
@@ -47,16 +49,22 @@ class _BookPageSingleState extends State<BookPageSingle> {
                                     floating: true,
                                     toolbarHeight: 50.0,
                                     pinned: false,
+                                    actions: [
+                                      IconButton(
+                                          icon: const Icon(Icons.zoom_in_outlined, size: 30.0),
+                                          onPressed: () => FontSizeDialog()
+                                              .show(context)
+                                              .then((value) => setState(() {})))
+                                    ],
                                     title: Text(widget.title,
                                         textAlign: TextAlign.left,
                                         style: Theme.of(context).textTheme.headline6),
                                   ),
-
                                   SliverToBoxAdapter(
+                                      key: ValueKey(ConfigParam.fontSize.val()),
                                       child: Padding(
                                           padding: EdgeInsets.all(widget.padding),
                                           child: widget.builder()))
-                                  //    Padding(padding: const EdgeInsets.all(15), child: getContent())
                                 ])))))));
   }
 }

@@ -18,7 +18,7 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await GlobalPath.ensureInitialized();
 
-  await ConfigParam.initSharedParams(initFontSize: 20);
+  await ConfigParam.initSharedParams(initFontSize: 22);
   ConfigParamExt.fastingLevel = ConfigParam<int>('fastingLevel', initValue: 0);
   ChurchFasting.fastingLevel = FastingLevel.values[ConfigParamExt.fastingLevel.val()];
 

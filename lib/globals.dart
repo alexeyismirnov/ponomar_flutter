@@ -80,6 +80,10 @@ class BookPositionNotification extends Notification {
   BookPositionNotification(this.pos) : super();
 }
 
+class FontSizeChangedNotification extends Notification {
+  FontSizeChangedNotification() : super();
+}
+
 extension ConfigParamExt on ConfigParam {
   static var fastingLevel;
 }

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:after_init/after_init.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_toolkit/config_param.dart';
+import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 import 'book_model.dart';
 import 'bible_model.dart';
 import 'book_page_single.dart';
 import 'globals.dart';
+import 'custom_list_tile.dart';
 
 class Range {
   final int chapter, verse;
@@ -62,7 +64,6 @@ class PericopeView extends StatefulWidget {
 
 class _PericopeViewState extends State<PericopeView> with AfterInitMixin<PericopeView> {
   bool ready = false;
-  String title = "Gospel of the day";
   List<Widget> content = [];
 
   @override
@@ -156,15 +157,44 @@ class _PericopeViewState extends State<PericopeView> with AfterInitMixin<Pericop
     setState(() => ready = true);
   }
 
-  Widget getContent() {
-    return ready
-        ? Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: content)
-        : Container();
+  @override
+  Widget build(BuildContext context) => ready
+      ? Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: content)
+      : Container();
+}
+
+class ReadingView extends StatefulWidget {
+  final String r;
+  const ReadingView(this.r);
+
+  @override
+  _ReadingViewState createState() => _ReadingViewState();
+}
+
+class _ReadingViewState extends State<ReadingView> with AfterInitMixin<ReadingView> {
+  late String title;
+  late String? subtitle;
+  late List<String> currentReading;
+
+  @override
+  void didInitState() async {
+    currentReading = widget.r.split("#");
+    title = currentReading[0];
+    subtitle = currentReading.length > 1 ? currentReading[1].trim().tr() : null;
+
+    title = JSON.bibleTrans[context.countryCode]!.entries
+        .fold(title, (String prev, e) => prev.replaceAll(e.key, e.value));
   }
 
   @override
-  Widget build(BuildContext context) => BookPageSingle(title.tr(), builder: () =>  getContent());
+  Widget build(BuildContext context) => Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: CustomListTile(
+          title: title,
+          subtitle: subtitle,
+          onTap: () => BookPageSingle("Gospel of the day".tr(),
+              builder: () => PericopeView(currentReading[0])).push(context)));
 }
