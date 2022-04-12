@@ -80,10 +80,13 @@ class _BookTOCState extends State<BookTOC> {
       List<Future> futures = [];
 
       sections.forEachIndexed((s, i) {
-        futures.add(model.getItems(i).then((_items) => items[i] = List<String>.from(_items)));
+        futures.add(model.getItems(i).then((_items) {
+          items[i] = List<String>.from(_items);
+          return Future.value(null);
+        }));
       });
 
-      Future.wait(futures);
+      return Future.wait(futures);
     }).then((_) => setState(() => ready = true));
   }
 

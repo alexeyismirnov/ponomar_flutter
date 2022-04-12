@@ -37,7 +37,11 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
 
     if (context.languageCode == "ru") {
       sections.add("Разное");
-      books.add([EbookModel("synaxarion.sqlite")]);
+      books.add([
+        EbookModel("synaxarion.sqlite"),
+        EbookModel("old_testament_overview.sqlite"),
+        EbookModel("new_testament_overview.sqlite")
+      ]);
     }
 
     var futures = <Future>[];
