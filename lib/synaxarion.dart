@@ -63,7 +63,7 @@ class SynaxarionView extends StatelessWidget {
       final model = EbookModel("synaxarion.sqlite");
       await model.initFuture;
 
-      final pos = BookPosition.index(index: IndexPath(section: 0, index: index));
+      final pos = BookPosition.index(IndexPath(section: 0, index: index));
       final title = await model.getTitle(pos);
       final text = await model.getContent(pos);
 

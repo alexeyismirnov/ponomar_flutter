@@ -44,9 +44,9 @@ class _ChaptersViewState extends State<_ChaptersView> {
         children: List<int>.generate(numChapters, (i) => i + 1)
             .map((i) => GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: () =>
-                    BookPositionNotification(BookPosition.modelIndex(pos.model, pos.index, i - 1))
-                        .dispatch(context),
+                onTap: () => BookPositionNotification(
+                        BookPosition.modelIndex(pos.model, pos.index, chapter: i - 1))
+                    .dispatch(context),
                 child: SizedBox(
                     width: 50,
                     height: 50,
@@ -65,90 +65,65 @@ class BookTOC extends StatefulWidget {
 }
 
 class _BookTOCState extends State<BookTOC> {
-  bool ready = false;
   BookModel get model => widget.model;
 
-  late List<String> sections;
-  late Map<int, List<String>> items = {};
+  List<String> get sections => model.getSections();
 
-  @override
-  void initState() {
-    super.initState();
+  Widget getContent() => NotificationListener<Notification>(
+      onNotification: (n) {
+        if (n is BookPositionNotification) {
+          if (model is BibleModel) {
+            BibleChapterView(n.pos).push(context);
+          } else {
+            String title = "";
 
-    model.getSections().then((_sections) {
-      sections = List<String>.from(_sections);
-      List<Future> futures = [];
-
-      sections.forEachIndexed((s, i) {
-        futures.add(model.getItems(i).then((_items) {
-          items[i] = List<String>.from(_items);
-          return Future.value(null);
-        }));
-      });
-
-      return Future.wait(futures);
-    }).then((_) => setState(() => ready = true));
-  }
-
-  Widget getContent() {
-    if (!ready) return Container();
-
-    return NotificationListener<Notification>(
-        onNotification: (n) {
-          if (n is BookPositionNotification) {
-            if (model is BibleModel) {
-              BibleChapterView(n.pos).push(context);
-            } else {
-              String title = "";
-
-              model.getTitle(n.pos).then((_title) {
-                title = _title;
-                return model.getContent(n.pos);
-              }).then((text) {
-                if (model.contentType == BookContentType.html) {
-                  BookPageSingle(title, padding: 5, builder: () => BookCellHTML(text, model))
-                      .push(context);
-                } else {
-                  BookPageSingle(title, builder: () => BookCellText(text)).push(context);
-                }
-              });
-            }
+            model.getTitle(n.pos).then((_title) {
+              title = _title;
+              return model.getContent(n.pos);
+            }).then((text) {
+              if (model.contentType == BookContentType.html) {
+                BookPageSingle(title, padding: 5, builder: () => BookCellHTML(text, model))
+                    .push(context);
+              } else {
+                BookPageSingle(title, builder: () => BookCellText(text)).push(context);
+              }
+            });
           }
-          return true;
+        }
+        return true;
+      },
+      child: GroupListView(
+        shrinkWrap: true,
+        sectionsCount: sections.length,
+        countOfItemInSection: (int section) => model.getItems(section).length,
+        itemBuilder: (BuildContext context, IndexPath index) {
+          final item = model.getItems(index.section)[index.index];
+
+          return ListTileTheme(
+              contentPadding: const EdgeInsets.all(0),
+              dense: true,
+              child: model.hasChapters
+                  ? ExpansionTile(
+                      childrenPadding: const EdgeInsets.all(10),
+                      expandedAlignment: Alignment.topLeft,
+                      expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                      trailing: const Icon(null),
+                      title: Text(item, style: Theme.of(context).textTheme.titleLarge),
+                      children: [_ChaptersView(BookPosition.modelIndex(model, index))])
+                  : ListTile(
+                      title: Text(item, style: Theme.of(context).textTheme.titleLarge),
+                      onTap: () => BookPositionNotification(BookPosition.modelIndex(model, index))
+                          .dispatch(context)));
         },
-        child: GroupListView(
-          shrinkWrap: true,
-          sectionsCount: sections.length,
-          countOfItemInSection: (int section) => items[section]!.length,
-          itemBuilder: (BuildContext context, IndexPath index) {
-            return ListTileTheme(
-                contentPadding: const EdgeInsets.all(0),
-                dense: true,
-                child: model.hasChapters
-                    ? ExpansionTile(
-                        childrenPadding: const EdgeInsets.all(10),
-                        expandedAlignment: Alignment.topLeft,
-                        expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                        trailing: const Icon(null),
-                        title: Text(items[index.section]![index.index],
-                            style: Theme.of(context).textTheme.titleLarge),
-                        children: [_ChaptersView(BookPosition.modelIndex(model, index))])
-                    : ListTile(
-                        title: Text(items[index.section]![index.index],
-                            style: Theme.of(context).textTheme.titleLarge),
-                        onTap: () => BookPositionNotification(BookPosition.modelIndex(model, index))
-                            .dispatch(context)));
-          },
-          groupHeaderBuilder: (BuildContext context, int section) => sections[section].isNotEmpty
-              ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(sections[section].toUpperCase(), style: Theme.of(context).textTheme.button),
-                  const Divider(thickness: 1)
-                ])
-              : Container(),
-          separatorBuilder: (context, index) => const SizedBox(),
-          sectionSeparatorBuilder: (context, section) => const SizedBox(height: 15),
-        ));
-  }
+        groupHeaderBuilder: (BuildContext context, int section) => sections[section].isNotEmpty
+            ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(sections[section].toUpperCase(), style: Theme.of(context).textTheme.button),
+                const Divider(thickness: 1)
+              ])
+            : Container(),
+        separatorBuilder: (context, index) => const SizedBox(),
+        sectionSeparatorBuilder: (context, section) => const SizedBox(height: 15),
+      ));
 
   @override
   Widget build(BuildContext context) {

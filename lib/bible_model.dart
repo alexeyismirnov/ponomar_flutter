@@ -104,8 +104,8 @@ mixin BibleModel on BookModel {
   }
 
   @override
-  Future<List<String>> getItems(int section) {
-    return Future<List<String>>.value(items[section].map((s) => s.tr()).toList());
+  List<String> getItems(int section) {
+    return items[section].map((s) => s.tr()).toList();
   }
 
   @override
@@ -175,13 +175,10 @@ class OldTestamentModel extends BookModel with BibleModel {
   OldTestamentModel(this.lang);
 
   @override
-  Future<List<String>> getSections() {
-    return Future<List<String>>.value([
-      "Five Books of Moses",
-      "Historical books",
-      "Wisdom books",
-      "Prophets books"
-    ].map((s) => s.tr()).toList());
+  List<String> getSections() {
+    return ["Five Books of Moses", "Historical books", "Wisdom books", "Prophets books"]
+        .map((s) => s.tr())
+        .toList();
   }
 }
 
@@ -219,12 +216,9 @@ class NewTestamentModel extends BookModel with BibleModel {
   NewTestamentModel(this.lang);
 
   @override
-  Future<List<String>> getSections() {
-    return Future<List<String>>.value([
-      "Four Gospels and Acts",
-      "Catholic Epistles",
-      "Epistles of Paul",
-      "Apocalypse"
-    ].map((s) => s.tr()).toList());
+  List<String> getSections() {
+    return ["Four Gospels and Acts", "Catholic Epistles", "Epistles of Paul", "Apocalypse"]
+        .map((s) => s.tr())
+        .toList();
   }
 }

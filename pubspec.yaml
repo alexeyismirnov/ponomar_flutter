@@ -29,6 +29,8 @@ dependencies:
   flutter_archive: ^4.2.0
   audioplayers: ^0.20.1
   flutter_html: ^2.2.1
+  page_view_indicators: ^2.0.0
+  dots_indicator: ^2.1.0
   flutter_toolkit:
     path: /Users/alexey/workspace/flutter_toolkit
 

@@ -30,6 +30,8 @@ class EbookModel extends BookModel {
   late Future initFuture;
 
   late Database db;
+  late List<String> sections;
+  late Map<int, List<String>> items = {};
 
   EbookModel(String filename) {
     initFuture = loadBook(filename);
@@ -45,17 +47,31 @@ class EbookModel extends BookModel {
 
     contentType = BookContentType.values[Sqflite.firstIntValue(
         await db.query("data", columns: ["value"], where: "key='contentType'"))!];
+
+    List<Map<String, Object?>> querySections =
+        await db.query("sections", columns: ["title"], orderBy: "id");
+
+    sections = querySections.map<String>((e) => e["title"] as String).toList();
+
+    sections.forEachIndexed((s, i) async {
+      List<Map<String, Object?>> queryItems = await db.query("content",
+          columns: ["title"], where: "section=?", whereArgs: [i], orderBy: "item");
+
+      items[i] = queryItems.map<String>((e) => e["title"] as String).toList();
+    });
   }
 
   Future<String?> loadString(String key) async =>
       SqfliteExt.firstStringValue(await db.query("data", columns: ["value"], where: "key='$key'"));
 
   @override
-  Future<List<String>> getSections() async {
-    List<Map<String, Object?>> result =
-        await db.query("sections", columns: ["title"], orderBy: "id");
+  List<String> getSections() {
+    return sections;
+  }
 
-    return result.map<String>((e) => e["title"] as String).toList();
+  @override
+  List<String> getItems(int section) {
+    return items[section]!;
   }
 
   @override
@@ -72,18 +88,44 @@ class EbookModel extends BookModel {
       whereArgs: [pos.index!.section, pos.index!.index]));
 
   @override
-  Future<List<String>> getItems(int section) async {
-    List<Map<String, Object?>> result = await db.query("content",
-        columns: ["title"], where: "section=?", whereArgs: [section], orderBy: "item");
-
-    return result.map<String>((e) => e["title"] as String).toList();
-  }
-
-  @override
   Future<String?> getComment(int commentId) async => SqfliteExt.firstStringValue(
       await db.query("comments", columns: ["text"], where: "id=?", whereArgs: [commentId]));
 
   @override
   Future<int> getNumChapters(IndexPath index) async =>
       Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(DISTINCT title) FROM content'))!;
+
+  @override
+  BookPosition? getNextSection(BookPosition pos) {
+    final index = pos.index!;
+    final sections = getSections();
+    final items = getItems(index.section);
+
+    if (index.index + 1 == items.length) {
+      if (index.section + 1 == sections.length) {
+        return null;
+      } else {
+        return BookPosition.index(IndexPath(section: index.section + 1, index: 0));
+      }
+    } else {
+      return BookPosition.index(IndexPath(section: index.section, index: index.index + 1));
+    }
+  }
+
+  @override
+  BookPosition? getPrevSection(BookPosition pos) {
+    final index = pos.index!;
+
+    if (index.index == 0) {
+      if (index.section == 0) {
+        return null;
+      } else {
+        final items = getItems(index.section - 1);
+
+        return BookPosition.index(IndexPath(section: index.section - 1, index: items.length - 1));
+      }
+    } else {
+      return BookPosition.index(IndexPath(section: index.section, index: index.index - 1));
+    }
+  }
 }

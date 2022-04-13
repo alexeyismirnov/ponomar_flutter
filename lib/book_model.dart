@@ -9,10 +9,14 @@ class BookPosition {
   String? location;
   dynamic data;
 
-  BookPosition.modelIndex(this.model, this.index, [this.chapter = 0]);
+  BookPosition.modelIndex(this.model, this.index, {this.chapter = 0});
   BookPosition.location(this.model, this.location);
   BookPosition.data(this.model, this.data);
-  BookPosition.index({this.index, this.chapter = 0});
+  BookPosition.index(this.index, {this.chapter = 0});
+
+  @override
+  bool operator ==(covariant BookPosition other) =>
+      other.index == index && other.chapter == chapter;
 }
 
 abstract class BookModel {
@@ -30,8 +34,8 @@ abstract class BookModel {
     return Future.value(null);
   }
 
-  Future<List<String>> getSections();
-  Future<List<String>> getItems(int section);
+  List<String> getSections();
+  List<String> getItems(int section);
 
   Future<int> getNumChapters(IndexPath index);
 

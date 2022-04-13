@@ -218,6 +218,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.1"
+  dots_indicator:
+    dependency: "direct main"
+    description:
+      name: dots_indicator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   easy_localization:
     dependency: "direct main"
     description:
@@ -560,6 +567,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  page_view_indicators:
+    dependency: "direct main"
+    description:
+      name: page_view_indicators
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   path:
     dependency: "direct main"
     description:
