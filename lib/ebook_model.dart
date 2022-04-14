@@ -105,10 +105,11 @@ class EbookModel extends BookModel {
       if (index.section + 1 == sections.length) {
         return null;
       } else {
-        return BookPosition.index(IndexPath(section: index.section + 1, index: 0));
+        return BookPosition.modelIndex(this, IndexPath(section: index.section + 1, index: 0));
       }
     } else {
-      return BookPosition.index(IndexPath(section: index.section, index: index.index + 1));
+      return BookPosition.modelIndex(
+          this, IndexPath(section: index.section, index: index.index + 1));
     }
   }
 
@@ -122,10 +123,12 @@ class EbookModel extends BookModel {
       } else {
         final items = getItems(index.section - 1);
 
-        return BookPosition.index(IndexPath(section: index.section - 1, index: items.length - 1));
+        return BookPosition.modelIndex(
+            this, IndexPath(section: index.section - 1, index: items.length - 1));
       }
     } else {
-      return BookPosition.index(IndexPath(section: index.section, index: index.index - 1));
+      return BookPosition.modelIndex(
+          this, IndexPath(section: index.section, index: index.index - 1));
     }
   }
 }

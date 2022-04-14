@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:after_init/after_init.dart';
 import 'package:group_list_view/group_list_view.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
+import 'package:ponomar/custom_list_tile.dart';
 
 import 'calendar_appbar.dart';
 import 'bible_model.dart';
@@ -61,13 +62,13 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
       sectionsCount: sections.length,
       countOfItemInSection: (int section) => books[section].length,
       itemBuilder: (BuildContext context, IndexPath index) {
-        return GestureDetector(
-            onTap: () => BookTOC(books[index.section][index.index]).push(context),
-            child: ListTile(
-                dense: true,
-                contentPadding: const EdgeInsets.all(0),
-                title: Text(books[index.section][index.index].title,
-                    style: Theme.of(context).textTheme.titleLarge)));
+        return CustomListTile(
+          padding: 10,
+          reversed: true,
+          onTap: () => BookTOC(books[index.section][index.index]).push(context),
+          title: books[index.section][index.index].title,
+          subtitle: books[index.section][index.index].author ?? "",
+        );
       },
       groupHeaderBuilder: (BuildContext context, int section) {
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

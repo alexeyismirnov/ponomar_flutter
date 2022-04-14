@@ -1,4 +1,5 @@
 import 'package:group_list_view/group_list_view.dart';
+import 'package:quiver/core.dart';
 
 enum BookContentType { text, html }
 
@@ -16,7 +17,12 @@ class BookPosition {
 
   @override
   bool operator ==(covariant BookPosition other) =>
-      other.index == index && other.chapter == chapter;
+      other.index!.section == index!.section &&
+      other.index!.index == index!.index &&
+      other.chapter == chapter;
+
+  @override
+  int get hashCode => hash3(index!.section.hashCode, index!.index.hashCode, chapter.hashCode);
 }
 
 abstract class BookModel {

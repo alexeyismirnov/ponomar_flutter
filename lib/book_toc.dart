@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:group_list_view/group_list_view.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
-import 'package:ponomar/bible_model.dart';
 
 import 'calendar_appbar.dart';
 import 'book_model.dart';
 import 'globals.dart';
-import 'pericope.dart';
-import 'book_page_single.dart';
-import 'book_cell.dart';
+import 'book_page_multiple.dart';
 
 class _ChaptersView extends StatefulWidget {
   final BookPosition pos;
@@ -71,25 +68,7 @@ class _BookTOCState extends State<BookTOC> {
 
   Widget getContent() => NotificationListener<Notification>(
       onNotification: (n) {
-        if (n is BookPositionNotification) {
-          if (model is BibleModel) {
-            BibleChapterView(n.pos).push(context);
-          } else {
-            String title = "";
-
-            model.getTitle(n.pos).then((_title) {
-              title = _title;
-              return model.getContent(n.pos);
-            }).then((text) {
-              if (model.contentType == BookContentType.html) {
-                BookPageSingle(title, padding: 5, builder: () => BookCellHTML(text, model))
-                    .push(context);
-              } else {
-                BookPageSingle(title, builder: () => BookCellText(text)).push(context);
-              }
-            });
-          }
-        }
+        if (n is BookPositionNotification) BookPageMultiple(n.pos).push(context);
         return true;
       },
       child: GroupListView(

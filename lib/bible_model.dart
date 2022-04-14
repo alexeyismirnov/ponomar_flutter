@@ -86,6 +86,7 @@ class BibleUtil {
 mixin BibleModel on BookModel {
   List<List<String>> get items;
   List<List<String>> get filenames;
+  Map<IndexPath, int> numChaptersCache = {};
 
   @override
   Future prepare() async {
@@ -99,8 +100,12 @@ mixin BibleModel on BookModel {
     final bookName = filenames[index.section][index.index];
     var db = await DB.open(bookName + "_$lang.sqlite");
 
-    return Sqflite.firstIntValue(
-        await db.rawQuery('SELECT COUNT(DISTINCT chapter) FROM scripture'))!;
+    int result =
+        Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(DISTINCT chapter) FROM scripture'))!;
+
+    numChaptersCache[index] = result;
+
+    return result;
   }
 
   @override
@@ -138,6 +143,25 @@ mixin BibleModel on BookModel {
 
     var result = await BibleUtil.fetch(bookName, lang, "chapter=${chapter + 1}");
     return result;
+  }
+
+  @override
+  BookPosition? getNextSection(BookPosition pos) {
+    final index = pos.index!;
+    final chapter = pos.chapter!;
+    final numChapters = numChaptersCache[index] ?? 0;
+
+    return (chapter < numChapters - 1)
+        ? BookPosition.modelIndex(this, index, chapter: chapter + 1)
+        : null;
+  }
+
+  @override
+  BookPosition? getPrevSection(BookPosition pos) {
+    final index = pos.index!;
+    final chapter = pos.chapter!;
+
+    return (chapter > 0) ? BookPosition.modelIndex(this, index, chapter: chapter - 1) : null;
   }
 }
 
