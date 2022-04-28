@@ -31,13 +31,15 @@ Future<void> main() async {
   [
     "troparion.sqlite",
     "feofan.sqlite",
+    "prayerbook.sqlite",
+    "vigil.sqlite",
     "liturgy.sqlite",
     "new_testament_overview.sqlite",
     "old_testament_overview.sqlite",
     "synaxarion.sqlite",
     "typika.sqlite",
-    "vigil.sqlite",
-    "zvezdinsky.sqlite"
+    "zvezdinsky.sqlite",
+    "zerna.sqlite"
   ].forEach((f) async => await DB.prepare(basename: "assets/books", filename: f));
 
   await IconModel.prepare();
