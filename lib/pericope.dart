@@ -18,7 +18,8 @@ class Range {
 
 class BibleChapterView extends StatefulWidget {
   final BookPosition pos;
-  const BibleChapterView(this.pos);
+  final bool safeBottom;
+  const BibleChapterView(this.pos, {required this.safeBottom});
 
   @override
   _BibleChapterViewState createState() => _BibleChapterViewState();
@@ -51,7 +52,8 @@ class _BibleChapterViewState extends State<BibleChapterView> {
       ready ? RichText(text: TextSpan(children: content.getTextSpan(context))) : Container();
 
   @override
-  Widget build(BuildContext context) => BookPageSingle(title, builder: () => getContent());
+  Widget build(BuildContext context) =>
+      BookPageSingle(title, builder: () => getContent(), safeBottom: widget.safeBottom);
 }
 
 class PericopeView extends StatefulWidget {

@@ -80,16 +80,19 @@ class _BookPageMultipleState extends State<BookPageMultiple> with SingleTickerPr
                         if (!snapshot.hasData) return Container();
 
                         if (model is BibleModel) {
-                          return BibleChapterView(bookPos[id]);
+                          return BibleChapterView(bookPos[id], safeBottom: totalChapters == 1);
                         } else {
                           String title = snapshot.data![0];
                           var text = snapshot.data![1];
 
                           if (model.contentType == BookContentType.html) {
                             return BookPageSingle(title,
-                                builder: () => BookCellHTML(text, model), padding: 5);
+                                builder: () => BookCellHTML(text, model),
+                                padding: 5,
+                                safeBottom: totalChapters == 1);
                           } else {
-                            return BookPageSingle(title, builder: () => BookCellText(text));
+                            return BookPageSingle(title,
+                                builder: () => BookCellText(text), safeBottom: totalChapters == 1);
                           }
                         }
                       })).toList())),

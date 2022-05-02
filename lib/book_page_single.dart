@@ -9,8 +9,10 @@ class BookPageSingle extends StatefulWidget {
   final String title;
   final WidgetCallback builder;
   final double padding;
+  final bool safeBottom;
 
-  const BookPageSingle(this.title, {required this.builder, this.padding = 15});
+  const BookPageSingle(this.title,
+      {required this.builder, this.padding = 15, this.safeBottom = true});
 
   @override
   _BookPageSingleState createState() => _BookPageSingleState();
@@ -39,7 +41,7 @@ class _BookPageSingleState extends State<BookPageSingle> {
                         decoration: AppTheme.bg_decor_2() ??
                             BoxDecoration(color: Theme.of(context).canvasColor),
                         child: SafeArea(
-                            bottom: true,
+                            bottom:  widget.safeBottom,
                             child: CustomScrollView(
                                 controller: _scrollController,
                                 physics: const ClampingScrollPhysics(),

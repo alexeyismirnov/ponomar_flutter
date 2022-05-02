@@ -34,7 +34,7 @@ class BibleUtil {
     var db = await DB.open(bookName + "_$lang.sqlite");
 
     List<Map<String, Object?>> result =
-        await db.query("scripture", columns: ["verse", "text"], where: whereExpr);
+        await db.query("scripture", columns: ["verse", "text"], where: whereExpr, orderBy: "verse");
 
     return BibleUtil.fromMap(bookName, result);
   }
