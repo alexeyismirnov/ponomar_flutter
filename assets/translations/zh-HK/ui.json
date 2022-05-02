@@ -1,0 +1,21 @@
+{
+  "title": "正教日曆",
+  "paper": "紙",
+  "bright": "光亮",
+  "dark": "黑暗",
+  "language": "語言",
+  "bg_color": "背景",
+  "homepage": "主頁",
+  "library": "電子書庫",
+  "old_style": "（舊式日期）",
+  "fasting_level": "禁食型",
+  "laymen_fasting": "外行齋戒",
+  "monastic_fasting": "修道院的禁食",
+  "Gospel of the day": "每日經課",
+  "Memory of saints": "本日記念之聖人",
+  "downloading": "正在下載...",
+  "CANCEL": "取消",
+  "extracting": "解壓...",
+  "info": "說明",
+  "font_size": "字體大小"
+}

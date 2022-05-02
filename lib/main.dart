@@ -27,6 +27,7 @@ Future<void> main() async {
   await SaintModel("en").prepare();
   await SaintModel("ru").prepare();
   await SaintModel("cn").prepare();
+  await SaintModel("hk").prepare();
 
   [
     "troparion.sqlite",
@@ -53,6 +54,7 @@ Future<void> main() async {
         Locale('en', ''),
         Locale('ru', ''),
         Locale('zh', 'CN'),
+        Locale('zh', 'HK'),
       ],
       path: 'ui,cal,reading,library',
       assetLoader: DirectoryAssetLoader(basePath: "assets/translations"),

@@ -44,6 +44,8 @@ class JSON {
         jsonDecode(await rootBundle.loadString("assets/translations/ru/reading.json")));
     bibleTrans['cn'] = Map<String, String>.from(
         jsonDecode(await rootBundle.loadString("assets/translations/zh-CN/reading.json")));
+    bibleTrans['hk'] = Map<String, String>.from(
+        jsonDecode(await rootBundle.loadString("assets/translations/zh-HK/reading.json")));
   }
 }
 
