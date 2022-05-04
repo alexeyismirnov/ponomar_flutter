@@ -9,9 +9,60 @@ import 'globals.dart';
 import 'church_fasting.dart';
 import 'church_calendar.dart';
 
+class WeekdaysView extends StatefulWidget {
+  final bool short;
+  WeekdaysView({this.short = false});
+
+  @override
+  _WeekdaysViewState createState() => _WeekdaysViewState();
+}
+
+class _WeekdaysViewState extends State<WeekdaysView> with AfterInitMixin<WeekdaysView> {
+  late List<String> weekdays;
+  late double cellWidth;
+
+  @override
+  void didInitState() {
+    if (context.languageCode == 'en') {
+      weekdays = widget.short
+          ? ["S", "M", "T", "W", "T", "F", "S"]
+          : ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+    } else if (context.languageCode == 'ru') {
+      weekdays = widget.short
+          ? ["П", "В", "С", "Ч", "П", "С", "В"]
+          : ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"];
+    } else if (context.languageCode == 'zh') {
+      weekdays = ["日", "一", "二", "三", "四", "五", "六"];
+    }
+
+    cellWidth = (context.isTablet) ? 70.0 : 40.0;
+  }
+
+  @override
+  Widget build(BuildContext context) => Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: weekdays
+          .map<Widget>((d) => SizedBox(
+              width: cellWidth,
+              height: 30,
+              child: AutoSizeText(d.toUpperCase(),
+                  maxLines: 1,
+                  minFontSize: 5,
+                  textAlign: TextAlign.center,
+                  style: widget.short
+                      ? Theme.of(context).textTheme.titleLarge!
+                      : Theme.of(context)
+                          .textTheme
+                          .labelMedium!
+                          .copyWith(color: Theme.of(context).secondaryHeaderColor))))
+          .toList());
+}
+
 class MonthView extends StatefulWidget {
   final DateTime date;
-  const MonthView(this.date);
+  final bool highlightToday;
+  const MonthView(this.date, {this.highlightToday = true});
 
   @override
   _MonthViewState createState() => _MonthViewState();
@@ -25,7 +76,6 @@ class _MonthViewState extends State<MonthView> with AfterInitMixin<MonthView> {
   late int firstDayOfWeek;
   late int startGap;
   late int totalDays;
-
 
   @override
   void didInitState() {
@@ -84,7 +134,7 @@ class _MonthViewState extends State<MonthView> with AfterInitMixin<MonthView> {
 
                 Widget wrapper;
 
-                if (currentDate == today) {
+                if (currentDate == today && widget.highlightToday) {
                   wrapper = Container(
                       width: cellWidth,
                       height: cellHeight,

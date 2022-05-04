@@ -17,5 +17,9 @@
   "CANCEL": "取消",
   "extracting": "解压...",
   "info": "说明",
-  "font_size": "字体大小"
+  "font_size": "字体大小",
+  "calendar": "正教日历",
+  "today": "今天",
+  "monthly": "月历",
+  "yearly": "年历"
 }

@@ -15,5 +15,9 @@
   "CANCEL": "CANCEL",
   "extracting": "Extracting...",
   "info": "Info",
-  "font_size": "Font size"
+  "font_size": "Font size",
+  "calendar": "Calendar",
+  "today": "Today",
+  "monthly": "Monthly",
+  "yearly": "Yearly"
 }

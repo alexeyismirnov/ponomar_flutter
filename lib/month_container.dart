@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:after_init/after_init.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 import 'month_view.dart';
-import 'globals.dart';
 import 'church_fasting.dart';
 
 class MonthContainer extends StatefulWidget {
@@ -23,7 +21,6 @@ class _MonthContainerState extends State<MonthContainer> with AfterInitMixin<Mon
   late PageController _controller;
 
   late String title;
-  late List<String> weekdays;
   late double cellWidth, containerWidth;
   bool showInfo = false;
 
@@ -37,14 +34,6 @@ class _MonthContainerState extends State<MonthContainer> with AfterInitMixin<Mon
 
   @override
   void didInitState() {
-    if (context.languageCode == 'en') {
-      weekdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-    } else if (context.languageCode == 'ru') {
-      weekdays = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"];
-    } else if (context.languageCode == 'zh') {
-      weekdays = ["日", "一", "二", "三", "四", "五", "六"];
-    }
-
     if (context.isTablet) {
       cellWidth = 70.0;
       containerWidth = 510.0;
@@ -94,24 +83,7 @@ class _MonthContainerState extends State<MonthContainer> with AfterInitMixin<Mon
                                 iconSize: 30.0,
                                 icon: const Icon(Icons.help_outline)),
                       ]),
-                  if (!showInfo) ...[
-                    Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: weekdays
-                            .map<Widget>((d) => Container(
-                                width: cellWidth,
-                                height: 20,
-                                child: AutoSizeText(d.toUpperCase(),
-                                    maxLines: 1,
-                                    minFontSize: 5,
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium!
-                                        .copyWith(color: Theme.of(context).secondaryHeaderColor))))
-                            .toList())
-                  ],
+                  if (!showInfo) ...[WeekdaysView()],
                   spacer,
                   SizedBox(
                       width: containerWidth,

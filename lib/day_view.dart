@@ -16,12 +16,12 @@ import 'globals.dart';
 import 'pericope.dart';
 import 'saint_model.dart';
 import 'icon_model.dart';
-import 'month_container.dart';
 import 'troparion_model.dart';
 import 'troparion_day.dart';
 import 'troparion_feast.dart';
 import 'feofan.dart';
 import 'synaxarion.dart';
+import 'calendar_selector.dart';
 
 class _FeastWidget extends StatelessWidget {
   final ChurchDay d;
@@ -174,7 +174,7 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
                   ]))
             ]),
         onTap: () {
-          MonthContainer(date).show(context).then((newDate) {
+          CalendarSelector(date).show(context).then((newDate) {
             if (newDate != null) {
               DateChangedNotification(newDate).dispatch(context);
             }
