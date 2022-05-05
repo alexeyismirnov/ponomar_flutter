@@ -21,5 +21,7 @@
   "calendar": "Календарь",
   "today": "На сегодня",
   "monthly": "На месяц",
-  "yearly": "На год"
+  "yearly": "На год",
+  "year_calendar": "Календарь на %d г."
+
 }

@@ -19,5 +19,6 @@
   "calendar": "Calendar",
   "today": "Today",
   "monthly": "Monthly",
-  "yearly": "Yearly"
+  "yearly": "Yearly",
+  "year_calendar": "Year %d Calendar"
 }

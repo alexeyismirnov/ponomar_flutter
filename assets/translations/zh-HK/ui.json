@@ -21,5 +21,7 @@
   "calendar": "正教日曆",
   "today": "今天",
   "monthly": "月曆",
-  "yearly": "年曆"
+  "yearly": "年曆",
+  "year_calendar": "%d年正教日曆"
+
 }
