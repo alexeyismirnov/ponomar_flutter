@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ponomar/globals.dart';
 import 'package:supercharged/supercharged.dart';
 import 'dart:ui';
 
 import 'church_calendar.dart';
+import 'saint_model.dart';
+import 'church_day.dart';
+import 'globals.dart';
 
 enum FastingLevel { laymen, monastic }
 
@@ -96,143 +98,179 @@ class ChurchFasting {
 
   static Map<int, ChurchFasting> models = {};
 
-  static FastingModel forDate(DateTime date) {
+  static Future<FastingModel> forDate(DateTime date, String lang) {
     if (!models.containsKey(date.year)) {
       models[date.year] = ChurchFasting(date);
     }
 
     return ChurchFasting.fastingLevel == FastingLevel.laymen
-        ? models[date.year]!.getFastingLaymen(date)
-        : models[date.year]!.getFastingMonastic(date);
+        ? models[date.year]!.getFastingLaymen(date, lang)
+        : models[date.year]!.getFastingMonastic(date, lang);
   }
 
-  FastingModel getFastingLaymen(DateTime date) {
+  Future<FastingModel> getFastingLaymen(DateTime date, String lang) async {
     if (date == cal.d("meetingOfLord")) {
-      return meetingOfLord(date, monastic: false);
+      return Future.value(meetingOfLord(date, monastic: false));
     } else if (date == cal.d("theophany")) {
-      return FastingModel(FT.noFast);
+      return Future.value(FastingModel(FT.noFast));
     } else if (date == cal.d("nativityOfTheotokos") ||
         date == cal.d("peterAndPaul") ||
         date == cal.d("dormition") ||
         date == cal.d("veilOfTheotokos")) {
-      return _isWedFri(date) ? FastingModel(FT.fishAllowed) : FastingModel(FT.noFast);
+      return Future.value(_isWedFri(date) ? FastingModel(FT.fishAllowed) : FastingModel(FT.noFast));
     } else if (date == cal.d("nativityOfJohn") ||
         date == cal.d("transfiguration") ||
         date == cal.d("entryIntoTemple") ||
         date == cal.d("palmSunday") ||
         date == stNicholas) {
-      return FastingModel(FT.fishAllowed);
+      return Future.value(FastingModel(FT.fishAllowed));
     } else if (date == cal.d("eveOfTheophany") ||
         date == cal.d("beheadingOfJohn") ||
         date == cal.d("exaltationOfCross")) {
-      return FastingModel(FT.vegetarian, "fast_day");
+      return Future.value(FastingModel(FT.vegetarian, "fast_day"));
     } else if (date == cal.startOfYear) {
       return _isSatSun(date)
-          ? FastingModel(FT.fishAllowed, "nativity_fast")
-          : FastingModel(FT.vegetarian, "nativity_fast");
+          ? Future.value(FastingModel(FT.fishAllowed, "nativity_fast"))
+          : Future.value(FastingModel(FT.vegetarian, "nativity_fast"));
     } else if (date.isBetween(cal.startOfYear + 1.days, cal.d("nativityOfGod") - 1.days)) {
-      return FastingModel(FT.vegetarian, "nativity_fast");
+      return Future.value(FastingModel(FT.vegetarian, "nativity_fast"));
     } else if (date.isBetween(cal.d("nativityOfGod"), cal.d("eveOfTheophany") - 1.days)) {
-      return FastingModel(FT.fastFree, "svyatki");
+      return Future.value(FastingModel(FT.fastFree, "svyatki"));
     } else if (date.isBetween(
         cal.d("sundayOfPublicianAndPharisee") + 1.days, cal.d("sundayOfProdigalSon"))) {
-      return FastingModel(FT.fastFree);
+      return Future.value(FastingModel(FT.fastFree));
     } else if (date.isBetween(
         cal.d("sundayOfDreadJudgement") + 1.days, cal.greatLentStart - 1.days)) {
-      return FastingModel(FT.cheesefare);
+      return Future.value(FastingModel(FT.cheesefare));
     } else if (date.isBetween(cal.greatLentStart, cal.d("palmSunday") - 1.days)) {
       return (date == cal.d("annunciation"))
-          ? FastingModel(FT.fishAllowed)
-          : FastingModel(FT.vegetarian, "great_lent");
+          ? Future.value(FastingModel(FT.fishAllowed))
+          : Future.value(FastingModel(FT.vegetarian, "great_lent"));
     } else if (date.isBetween(cal.d("palmSunday") + 1.days, cal.pascha - 1.days)) {
-      return FastingModel(FT.vegetarian);
+      return Future.value(FastingModel(FT.vegetarian));
     } else if (date.isBetween(cal.pascha + 1.days, cal.pascha + 7.days)) {
-      return FastingModel(FT.fastFree);
+      return Future.value(FastingModel(FT.fastFree));
     } else if (date.isBetween(cal.pentecost + 1.days, cal.pentecost + 7.days)) {
-      return FastingModel(FT.fastFree);
+      return Future.value(FastingModel(FT.fastFree));
     } else if (date.isBetween(cal.d("beginningOfApostlesFast"), cal.d("peterAndPaul") - 1.days)) {
       return _isMonWedFri(date)
-          ? FastingModel(FT.vegetarian, "apostles_fast")
-          : FastingModel(FT.fishAllowed, "apostles_fast");
+          ? Future.value(FastingModel(FT.vegetarian, "apostles_fast"))
+          : Future.value(FastingModel(FT.fishAllowed, "apostles_fast"));
     } else if (date.isBetween(cal.d("beginningOfDormitionFast"), cal.d("dormition") - 1.days)) {
-      return FastingModel(FT.vegetarian, "dormition_fast");
+      return Future.value(FastingModel(FT.vegetarian, "dormition_fast"));
     } else if (date.isBetween(cal.d("beginningOfNativityFast"), stNicholas - 1.days)) {
       return _isMonWedFri(date)
-          ? FastingModel(FT.vegetarian, "nativity_fast")
-          : FastingModel(FT.fishAllowed, "nativity_fast");
+          ? Future.value(FastingModel(FT.vegetarian, "nativity_fast"))
+          : Future.value(FastingModel(FT.fishAllowed, "nativity_fast"));
     } else if (date.isBetween(stNicholas, cal.endOfYear)) {
       return _isSatSun(date)
-          ? FastingModel(FT.fishAllowed, "nativity_fast")
-          : FastingModel(FT.vegetarian, "nativity_fast");
+          ? Future.value(FastingModel(FT.fishAllowed, "nativity_fast"))
+          : Future.value(FastingModel(FT.vegetarian, "nativity_fast"));
     } else if (date.isBetween(cal.d("nativityOfGod"), cal.pentecost + 7.days)) {
-      return _isWedFri(date) ? FastingModel(FT.fishAllowed) : FastingModel(FT.noFast);
+      return _isWedFri(date)
+          ? Future.value(FastingModel(FT.fishAllowed))
+          : Future.value(FastingModel(FT.noFast));
     } else {
-      return _isWedFri(date) ? FastingModel(FT.vegetarian) : FastingModel(FT.noFast);
+      if (_isWedFri(date)) {
+        final saints = await SaintModel(lang).fetch(date);
+        saints.sort((a, b) => b.type.index - a.type.index);
+
+        switch (saints[0].type) {
+          case FeastType.vigil:
+          case FeastType.polyeleos:
+            return Future.value(FastingModel(FT.fishAllowed));
+          default:
+            return Future.value(FastingModel(FT.vegetarian));
+        }
+      } else {
+        return Future.value(FastingModel(FT.noFast));
+      }
     }
   }
 
-  FastingModel getFastingMonastic(DateTime date) {
+  Future<FastingModel> getFastingMonastic(DateTime date, String lang) async {
     final palmSunday = cal.d("palmSunday");
 
     if (date == cal.d("meetingOfLord")) {
-      return meetingOfLord(date, monastic: true);
+      return Future.value(meetingOfLord(date, monastic: true));
     } else if (date == cal.d("theophany")) {
-      return FastingModel(FT.noFastMonastic);
+      return Future.value(FastingModel(FT.noFastMonastic));
     } else if (date == cal.d("nativityOfTheotokos") ||
         date == cal.d("peterAndPaul") ||
         date == cal.d("dormition") ||
         date == cal.d("veilOfTheotokos")) {
-      return _isMonWedFri(date) ? FastingModel(FT.fishAllowed) : FastingModel(FT.noFastMonastic);
+      return _isMonWedFri(date)
+          ? Future.value(FastingModel(FT.fishAllowed))
+          : Future.value(FastingModel(FT.noFastMonastic));
     } else if (date == cal.d("nativityOfJohn") ||
         date == cal.d("transfiguration") ||
         date == cal.d("entryIntoTemple") ||
         date == cal.d("palmSunday") ||
         date == stNicholas) {
-      return FastingModel(FT.fishAllowed);
+      return Future.value(FastingModel(FT.fishAllowed));
     } else if (date == cal.d("eveOfTheophany")) {
-      return FastingModel(FT.xerophagy, "fast_day");
+      return Future.value(FastingModel(FT.xerophagy, "fast_day"));
     } else if (date == cal.d("beheadingOfJohn") || date == cal.d("exaltationOfCross")) {
-      return FastingModel(FT.withOil, "fast_day");
+      return Future.value(FastingModel(FT.withOil, "fast_day"));
     } else if (date == cal.startOfYear) {
-      return _isTueThurs(date) ? FastingModel(FT.withOil) : monasticApostolesFast(date);
+      return _isTueThurs(date)
+          ? Future.value(FastingModel(FT.withOil))
+          : Future.value(monasticApostolesFast(date));
     } else if (date.isBetween(cal.startOfYear + 1.days, cal.d("nativityOfGod") - 1.days)) {
-      return monasticGreatLent(date);
+      return Future.value(monasticGreatLent(date));
     } else if (date.isBetween(cal.d("nativityOfGod"), cal.d("eveOfTheophany") - 1.days)) {
-      return FastingModel(FT.fastFree, "svyatki");
+      return Future.value(FastingModel(FT.fastFree, "svyatki"));
     } else if (date.isBetween(
         cal.d("sundayOfPublicianAndPharisee") + 1.days, cal.d("sundayOfProdigalSon"))) {
-      return FastingModel(FT.fastFree);
+      return Future.value(FastingModel(FT.fastFree));
     } else if (date.isBetween(
         cal.d("sundayOfDreadJudgement") + 1.days, cal.greatLentStart - 1.days)) {
-      return FastingModel(FT.cheesefare);
+      return Future.value(FastingModel(FT.cheesefare));
     } else if (date == cal.greatLentStart) {
-      return FastingModel(FT.noFood);
+      return Future.value(FastingModel(FT.noFood));
     } else if (date.isBetween(cal.greatLentStart + 1.days, cal.greatLentStart + 4.days)) {
-      return FastingModel(FT.xerophagy);
+      return Future.value(FastingModel(FT.xerophagy));
     } else if (date.isBetween(cal.greatLentStart + 5.days, palmSunday - 1.days)) {
       return (date == cal.d("annunciation"))
-          ? FastingModel(FT.fishAllowed)
-          : monasticGreatLent(date);
+          ? Future.value(FastingModel(FT.fishAllowed))
+          : Future.value(monasticGreatLent(date));
     } else if (date.isBetween(palmSunday + 1.days, palmSunday + 4.days)) {
-      return FastingModel(FT.xerophagy);
+      return Future.value(FastingModel(FT.xerophagy));
     } else if (date == palmSunday + 5.days) {
-      return FastingModel(FT.noFood);
+      return Future.value(FastingModel(FT.noFood));
     } else if (date == palmSunday + 6.days) {
-      return FastingModel(FT.withOil);
+      return Future.value(FastingModel(FT.withOil));
     } else if (date.isBetween(cal.pascha + 1.days, cal.pascha + 7.days)) {
-      return FastingModel(FT.fastFree);
+      return Future.value(FastingModel(FT.fastFree));
     } else if (date.isBetween(cal.pentecost + 1.days, cal.pentecost + 7.days)) {
-      return FastingModel(FT.fastFree);
+      return Future.value(FastingModel(FT.fastFree));
     } else if (date.isBetween(cal.d("beginningOfApostlesFast"), cal.d("peterAndPaul") - 1.days)) {
-      return monasticApostolesFast(date);
+      return Future.value(monasticApostolesFast(date));
     } else if (date.isBetween(cal.d("beginningOfDormitionFast"), cal.d("dormition") - 1.days)) {
-      return monasticGreatLent(date);
+      return Future.value(monasticGreatLent(date));
     } else if (date.isBetween(cal.d("beginningOfNativityFast"), stNicholas - 1.days)) {
-      return monasticApostolesFast(date);
+      return Future.value(monasticApostolesFast(date));
     } else if (date.isBetween(stNicholas, cal.endOfYear)) {
-      return _isTueThurs(date) ? FastingModel(FT.withOil) : monasticApostolesFast(date);
+      return _isTueThurs(date)
+          ? Future.value(FastingModel(FT.withOil))
+          : Future.value(monasticApostolesFast(date));
     } else {
-      return _isMonWedFri(date) ? FastingModel(FT.xerophagy) : FastingModel(FT.noFastMonastic);
+      if (_isMonWedFri(date)) {
+        final saints = await SaintModel(lang).fetch(date);
+        saints.sort((a, b) => b.type.index - a.type.index);
+
+        switch (saints[0].type) {
+          case FeastType.vigil:
+            return Future.value(FastingModel(FT.fishAllowed));
+          case FeastType.doxology:
+          case FeastType.polyeleos:
+            return Future.value(FastingModel(FT.withOil));
+          default:
+            return Future.value(FastingModel(FT.xerophagy));
+        }
+      } else {
+        return Future.value(FastingModel(FT.noFastMonastic));
+      }
     }
   }
 

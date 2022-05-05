@@ -99,67 +99,74 @@ class _MonthViewState extends State<MonthView> with AfterInitMixin<MonthView> {
   Widget build(BuildContext context) => Wrap(
       children:
           List<Widget>.generate(startGap, (_) => SizedBox(width: cellWidth, height: cellHeight)) +
-              List<Widget>.generate(totalDays, (i) {
-                final currentDate = DateTime(date.year, date.month, i + 1);
-                final fasting = ChurchFasting.forDate(currentDate);
+              List<Widget>.generate(
+                  totalDays,
+                  (i) => FutureBuilder<FastingModel>(
+                      future: ChurchFasting.forDate(
+                          DateTime(date.year, date.month, i + 1), context.countryCode),
+                      builder: (BuildContext context, AsyncSnapshot<FastingModel> snapshot) {
+                        if (!snapshot.hasData) return Container();
 
-                Color? textColor;
-                FontWeight fontWeight;
+                        final fasting = snapshot.data!;
+                        final currentDate = DateTime(date.year, date.month, i + 1);
 
-                if (Cal.getGreatFeast(currentDate).isNotEmpty) {
-                  fontWeight = FontWeight.bold;
-                  textColor = Colors.red;
-                } else {
-                  fontWeight = FontWeight.normal;
+                        Color? textColor;
+                        FontWeight fontWeight;
 
-                  textColor = fasting.type == FastingType.noFast ||
-                          fasting.type == FastingType.noFastMonastic
-                      ? Theme.of(context).textTheme.titleLarge!.color
-                      : Colors.black;
-                }
+                        if (Cal.getGreatFeast(currentDate).isNotEmpty) {
+                          fontWeight = FontWeight.bold;
+                          textColor = Colors.red;
+                        } else {
+                          fontWeight = FontWeight.normal;
 
-                if (currentDate == today) {
-                  textColor = Colors.white;
-                }
+                          textColor = fasting.type == FastingType.noFast ||
+                                  fasting.type == FastingType.noFastMonastic
+                              ? Theme.of(context).textTheme.titleLarge!.color
+                              : Colors.black;
+                        }
 
-                Widget content = Center(
-                    child: AutoSizeText("${i + 1}",
-                        maxLines: 1,
-                        minFontSize: 5,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontWeight: fontWeight, color: textColor)));
+                        if (currentDate == today) {
+                          textColor = Colors.white;
+                        }
 
-                Widget wrapper;
+                        Widget content = Center(
+                            child: AutoSizeText("${i + 1}",
+                                maxLines: 1,
+                                minFontSize: 5,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(fontWeight: fontWeight, color: textColor)));
 
-                if (currentDate == today && widget.highlightToday) {
-                  wrapper = Container(
-                      width: cellWidth,
-                      height: cellHeight,
-                      color: fasting.type.color,
-                      child: Container(
-                          width: cellWidth,
-                          height: cellHeight,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.red,
-                          ),
-                          child: content));
-                } else {
-                  wrapper = Container(
-                      width: cellWidth,
-                      height: cellHeight,
-                      color: fasting.type.color,
-                      child: content);
-                }
+                        Widget wrapper;
 
-                return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      Navigator.pop(context, currentDate);
-                    },
-                    child: wrapper);
-              }));
+                        if (currentDate == today && widget.highlightToday) {
+                          wrapper = Container(
+                              width: cellWidth,
+                              height: cellHeight,
+                              color: fasting.type.color,
+                              child: Container(
+                                  width: cellWidth,
+                                  height: cellHeight,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.red,
+                                  ),
+                                  child: content));
+                        } else {
+                          wrapper = Container(
+                              width: cellWidth,
+                              height: cellHeight,
+                              color: fasting.type.color,
+                              child: content);
+                        }
+
+                        return GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              Navigator.pop(context, currentDate);
+                            },
+                            child: wrapper);
+                      })));
 }

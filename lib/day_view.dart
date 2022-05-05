@@ -206,16 +206,22 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
             feastWidgets);
   }
 
-  Widget getFasting() {
-    final fasting = ChurchFasting.forDate(date);
-
-    return Row(children: [
-      SvgPicture.asset("assets/images/${fasting.type.icon}", height: 30),
-      const SizedBox(width: 10),
-      Expanded(
-          child: Text(fasting.description.tr(), style: Theme.of(context).textTheme.titleMedium))
-    ]);
-  }
+  Widget getFasting() => FutureBuilder<FastingModel>(
+      future: ChurchFasting.forDate(date, context.countryCode),
+      builder: (BuildContext context, AsyncSnapshot<FastingModel> snapshot) {
+        if (snapshot.hasData) {
+          final fasting = snapshot.data!;
+          return Row(children: [
+            SvgPicture.asset("assets/images/${fasting.type.icon}", height: 30),
+            const SizedBox(width: 10),
+            Expanded(
+                child:
+                    Text(fasting.description.tr(), style: Theme.of(context).textTheme.titleMedium))
+          ]);
+        } else {
+          return Container();
+        }
+      });
 
   Widget getIcons() => FutureBuilder<List<SaintIcon>>(
       future: IconModel.fetch(date),
