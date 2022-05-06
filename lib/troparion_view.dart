@@ -8,7 +8,9 @@ import 'audio_player.dart';
 
 class TroparionView extends StatefulWidget {
   final List<Troparion> troparia;
-  const TroparionView(this.troparia);
+  final bool showActions;
+
+  const TroparionView(this.troparia, {this.showActions = true});
 
   @override
   _TroparionViewState createState() => _TroparionViewState();
@@ -16,16 +18,10 @@ class TroparionView extends StatefulWidget {
 
 class _TroparionViewState extends State<TroparionView> {
   String title = "Тропари и кондаки";
-  late double fontSize;
-
-  @override
-  void initState() {
-    super.initState();
-
-    fontSize = ConfigParam.fontSize.val();
-  }
 
   Widget buildTroparion(Troparion t) {
+    final fontSize = ConfigParam.fontSize.val();
+
     List<Widget> content = [];
 
     final glas = t.glas ?? "";
@@ -68,5 +64,6 @@ class _TroparionViewState extends State<TroparionView> {
       children: widget.troparia.map((t) => buildTroparion(t)).toList());
 
   @override
-  Widget build(BuildContext context) => BookPageSingle(title, builder: () => getContent());
+  Widget build(BuildContext context) =>
+      BookPageSingle(title, builder: () => getContent(), showActions: widget.showActions);
 }

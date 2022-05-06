@@ -87,15 +87,16 @@ class TroparionOfFeastState extends State<TroparionOfFeast> {
     if (File("${GlobalPath.documents}/tropari/tropari.sqlite").existsSync()) {
       return FutureBuilder<List<Troparion>>(
           future: fetch(),
-          builder: (BuildContext context, AsyncSnapshot<List<Troparion>> snapshot) =>
-              (snapshot.hasData)
-                  ? Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: CustomListTile(
-                          title: title,
-                          onTap: () =>
-                              TroparionView(List<Troparion>.from(snapshot.data!)).push(context)))
-                  : Container());
+          builder: (BuildContext context, AsyncSnapshot<List<Troparion>> snapshot) => (snapshot
+                  .hasData)
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: CustomListTile(
+                      title: title,
+                      onTap: () =>
+                          TroparionView(List<Troparion>.from(snapshot.data!), showActions: false)
+                              .push(context)))
+              : Container());
     } else {
       return Padding(
           padding: const EdgeInsets.only(bottom: 5),
@@ -107,7 +108,7 @@ class TroparionOfFeastState extends State<TroparionOfFeast> {
                       .then((dynamic res) {
                     if (res is List<Troparion>) {
                       setState(() {});
-                      TroparionView(List<Troparion>.from(res)).push(context);
+                      TroparionView(List<Troparion>.from(res), showActions: false).push(context);
                     }
                   })));
     }

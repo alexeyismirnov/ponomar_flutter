@@ -125,7 +125,7 @@ class _MonthViewState extends State<MonthView> with AfterInitMixin<MonthView> {
                               : Colors.black;
                         }
 
-                        if (currentDate == today) {
+                        if (currentDate == today && widget.highlightToday) {
                           textColor = Colors.white;
                         }
 

@@ -10,9 +10,10 @@ class BookPageSingle extends StatefulWidget {
   final WidgetCallback builder;
   final double padding;
   final bool safeBottom;
+  final bool showActions;
 
   const BookPageSingle(this.title,
-      {required this.builder, this.padding = 15, this.safeBottom = true});
+      {required this.builder, this.padding = 15, this.safeBottom = true, this.showActions = true});
 
   @override
   _BookPageSingleState createState() => _BookPageSingleState();
@@ -41,7 +42,7 @@ class _BookPageSingleState extends State<BookPageSingle> {
                         decoration: AppTheme.bg_decor_2() ??
                             BoxDecoration(color: Theme.of(context).canvasColor),
                         child: SafeArea(
-                            bottom:  widget.safeBottom,
+                            bottom: widget.safeBottom,
                             child: CustomScrollView(
                                 controller: _scrollController,
                                 physics: const ClampingScrollPhysics(),
@@ -51,13 +52,16 @@ class _BookPageSingleState extends State<BookPageSingle> {
                                     floating: true,
                                     toolbarHeight: 50.0,
                                     pinned: false,
-                                    actions: [
-                                      IconButton(
-                                          icon: const Icon(Icons.zoom_in_outlined, size: 30.0),
-                                          onPressed: () => FontSizeDialog()
-                                              .show(context)
-                                              .then((value) => setState(() {})))
-                                    ],
+                                    actions: widget.showActions
+                                        ? [
+                                            IconButton(
+                                                icon:
+                                                    const Icon(Icons.zoom_in_outlined, size: 30.0),
+                                                onPressed: () => FontSizeDialog()
+                                                    .show(context)
+                                                    .then((value) => setState(() {})))
+                                          ]
+                                        : [],
                                     title: Text(widget.title,
                                         textAlign: TextAlign.left,
                                         style: Theme.of(context).textTheme.headline6),
