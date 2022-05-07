@@ -22,6 +22,7 @@ import 'troparion_feast.dart';
 import 'feofan.dart';
 import 'synaxarion.dart';
 import 'calendar_selector.dart';
+import 'book_cell.dart';
 
 class _FeastWidget extends StatelessWidget {
   final ChurchDay d;
@@ -211,13 +212,31 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
       builder: (BuildContext context, AsyncSnapshot<FastingModel> snapshot) {
         if (snapshot.hasData) {
           final fasting = snapshot.data!;
-          return Row(children: [
-            SvgPicture.asset("assets/images/${fasting.type.icon}", height: 30),
-            const SizedBox(width: 10),
-            Expanded(
-                child:
-                    Text(fasting.description.tr(), style: Theme.of(context).textTheme.titleMedium))
-          ]);
+
+          List<InlineSpan> spans = [
+            TextSpan(
+                text: fasting.description.tr() + "  ",
+                style: Theme.of(context).textTheme.titleMedium)
+          ];
+
+          String? comment = JSON.fastingComments[context.countryCode]![fasting.description];
+
+          if (comment != null) {
+            spans.add(const WidgetSpan(
+              child: Icon(Icons.article_outlined, size: 25.0, color: Colors.red),
+            ));
+          }
+
+          return GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                if (comment != null) PopupComment(comment).show(context);
+              },
+              child: Row(children: [
+                SvgPicture.asset("assets/images/${fasting.type.icon}", height: 30),
+                const SizedBox(width: 10),
+                Expanded(child: RichText(text: TextSpan(children: spans)))
+              ]));
         } else {
           return Container();
         }

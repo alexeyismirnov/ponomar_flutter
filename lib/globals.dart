@@ -24,6 +24,7 @@ class JSON {
   static late String NewTestamentItems, NewTestamentFilenames;
 
   static Map<String, Map<String, String>> bibleTrans = {};
+  static Map<String, Map<String, String>> fastingComments = {};
 
   static Future load() async {
     calendar = await rootBundle.loadString("assets/calendar/calendar.json");
@@ -46,6 +47,15 @@ class JSON {
         jsonDecode(await rootBundle.loadString("assets/translations/zh-CN/reading.json")));
     bibleTrans['hk'] = Map<String, String>.from(
         jsonDecode(await rootBundle.loadString("assets/translations/zh-HK/reading.json")));
+
+    fastingComments['en'] = Map<String, String>.from(
+        jsonDecode(await rootBundle.loadString("assets/translations/en/fasting.json")));
+    fastingComments['ru'] = Map<String, String>.from(
+        jsonDecode(await rootBundle.loadString("assets/translations/ru/fasting.json")));
+    fastingComments['cn'] = Map<String, String>.from(
+        jsonDecode(await rootBundle.loadString("assets/translations/zh-CN/fasting.json")));
+    fastingComments['hk'] = Map<String, String>.from(
+        jsonDecode(await rootBundle.loadString("assets/translations/zh-HK/fasting.json")));
   }
 }
 

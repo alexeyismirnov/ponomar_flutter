@@ -6,6 +6,30 @@ import 'package:html/dom.dart' as dom;
 
 import 'book_model.dart';
 
+class PopupComment extends StatelessWidget {
+  final String text;
+
+  const PopupComment(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    double dialogW = context.isTablet ? 500 : 280;
+    double dialogH = 300;
+
+    return AlertDialog(
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        contentPadding: const EdgeInsets.all(10.0),
+        insetPadding: const EdgeInsets.all(0.0),
+        content: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => Navigator.pop(context),
+            child: ConstrainedBox(
+                constraints:
+                    BoxConstraints(maxWidth: dialogW, minWidth: dialogW, maxHeight: dialogH),
+                child: SingleChildScrollView(child: BookCellText(text)))));
+  }
+}
+
 class BookCellText extends StatelessWidget {
   final String text;
 
@@ -55,25 +79,9 @@ class BookCellHTML extends StatelessWidget {
           final match = RegExp(r'comment://(\d+)').firstMatch(url!)?.group(1);
           if (match != null) {
             final commentId = int.parse(match);
-
-            double dialogW = context.isTablet ? 500 : 280;
-            double dialogH = 300;
-
             final text = await model.getComment(commentId);
 
-            AlertDialog(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    contentPadding: const EdgeInsets.all(10.0),
-                    insetPadding: const EdgeInsets.all(0.0),
-                    content: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () => Navigator.pop(context),
-                        child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                                maxWidth: dialogW, minWidth: dialogW, maxHeight: dialogH),
-                            child: SingleChildScrollView(child: BookCellText(text!)))))
-                .show(context);
+            PopupComment(text!).show(context);
           }
         });
   }
