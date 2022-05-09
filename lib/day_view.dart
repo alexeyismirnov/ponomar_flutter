@@ -23,6 +23,7 @@ import 'feofan.dart';
 import 'synaxarion.dart';
 import 'calendar_selector.dart';
 import 'book_cell.dart';
+import 'great_lent_short.dart';
 
 class _FeastWidget extends StatelessWidget {
   final ChurchDay d;
@@ -356,6 +357,8 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
                     space10,
                     getIcons()
                   ])),
+
+          GreatLentShortView(date: date),
           space10,
           getReading(),
           space10,

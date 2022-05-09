@@ -40,7 +40,8 @@ Future<void> main() async {
     "synaxarion.sqlite",
     "typika.sqlite",
     "zvezdinsky.sqlite",
-    "zerna.sqlite"
+    "zerna.sqlite",
+    "great_lent.db"
   ].forEach((f) async => await DB.prepare(basename: "assets/books", filename: f));
 
   await IconModel.prepare();

@@ -32,6 +32,9 @@ dependencies:
   page_view_indicators: ^2.0.0
   dots_indicator: ^2.1.0
   share_plus: ^4.0.4
+  flutter_markdown: ^0.6.1
+  html: ^0.15.0
+  html2md: ^1.2.6
   flutter_toolkit:
     path: /Users/alexey/workspace/flutter_toolkit
 
