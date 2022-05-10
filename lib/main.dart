@@ -12,6 +12,7 @@ import 'globals.dart';
 import 'church_fasting.dart';
 import 'saint_model.dart';
 import 'icon_model.dart';
+import 'church_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,5 +70,11 @@ Future<void> main() async {
             ),
             title: 'library',
             content: LibraryPage()),
+        AnimatedTab(
+            icon: const ImageIcon(
+              AssetImage('assets/images/cross.png'),
+            ),
+            title: 'about_us',
+            content: ChurchPage()),
       ]))));
 }

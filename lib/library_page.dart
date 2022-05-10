@@ -4,8 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:after_init/after_init.dart';
 import 'package:group_list_view/group_list_view.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
-import 'package:ponomar/custom_list_tile.dart';
 
+import 'custom_list_tile.dart';
 import 'calendar_appbar.dart';
 import 'bible_model.dart';
 import 'book_model.dart';

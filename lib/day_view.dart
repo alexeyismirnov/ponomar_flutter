@@ -24,6 +24,7 @@ import 'synaxarion.dart';
 import 'calendar_selector.dart';
 import 'book_cell.dart';
 import 'great_lent_short.dart';
+import 'card_view.dart';
 
 class _FeastWidget extends StatelessWidget {
   final ChurchDay d;
@@ -65,35 +66,6 @@ class _FeastWidget extends StatelessWidget {
       }
     }
   }
-}
-
-class CardWithTitle extends StatelessWidget {
-  final String title;
-  final Widget content;
-
-  const CardWithTitle({Key? key, required this.title, required this.content}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => Card(
-      elevation: 10.0,
-      child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: (title.isEmpty)
-              ? content
-              : Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      child: Row(children: [
-                        Flexible(
-                            fit: FlexFit.tight,
-                            child: AutoSizeText(title.tr().toUpperCase(),
-                                maxLines: 1,
-                                minFontSize: 5,
-                                style: Theme.of(context).textTheme.button)),
-                      ])),
-                  const Divider(color: Colors.black),
-                  content
-                ])));
 }
 
 class DayView extends StatefulWidget {
@@ -357,7 +329,6 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
                     space10,
                     getIcons()
                   ])),
-
           GreatLentShortView(date: date),
           space10,
           getReading(),

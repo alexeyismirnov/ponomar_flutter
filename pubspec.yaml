@@ -35,6 +35,7 @@ dependencies:
   flutter_markdown: ^0.6.1
   html: ^0.15.0
   html2md: ^1.2.6
+  store_redirect: ^2.0.0
   flutter_toolkit:
     path: /Users/alexey/workspace/flutter_toolkit
 
