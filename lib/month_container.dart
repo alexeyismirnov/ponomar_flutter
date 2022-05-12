@@ -7,6 +7,7 @@ import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 import 'month_view.dart';
 import 'church_fasting.dart';
+import 'globals.dart';
 
 class MonthContainer extends StatefulWidget {
   final DateTime initialDate;
@@ -83,7 +84,7 @@ class _MonthContainerState extends State<MonthContainer> with AfterInitMixin<Mon
                                 iconSize: 30.0,
                                 icon: const Icon(Icons.help_outline)),
                       ]),
-                  if (!showInfo) ...[WeekdaysView()],
+                  if (!showInfo) ...[WeekdaysView(lang: context.languageCode)],
                   spacer,
                   SizedBox(
                       width: containerWidth,
@@ -115,7 +116,8 @@ class _MonthContainerState extends State<MonthContainer> with AfterInitMixin<Mon
                                     .add(months: index - initialPage)
                                     .dateTime;
                                 return Align(
-                                    alignment: Alignment.topCenter, child: MonthView(currentDate));
+                                    alignment: Alignment.topCenter,
+                                    child: MonthView(currentDate, lang: context.languageCode));
                               })),
                   if (showInfo) ...[const SizedBox(height: 20)]
                 ])));

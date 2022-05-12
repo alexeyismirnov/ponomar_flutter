@@ -36,6 +36,7 @@ dependencies:
   html: ^0.15.0
   html2md: ^1.2.6
   store_redirect: ^2.0.0
+  screenshot: ^1.2.3
   flutter_toolkit:
     path: /Users/alexey/workspace/flutter_toolkit
 

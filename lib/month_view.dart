@@ -11,7 +11,10 @@ import 'church_calendar.dart';
 
 class WeekdaysView extends StatefulWidget {
   final bool short;
-  WeekdaysView({this.short = false});
+  final bool sharing;
+  final String lang;
+
+  WeekdaysView({required this.lang, this.short = false, this.sharing = false});
 
   @override
   _WeekdaysViewState createState() => _WeekdaysViewState();
@@ -23,46 +26,55 @@ class _WeekdaysViewState extends State<WeekdaysView> with AfterInitMixin<Weekday
 
   @override
   void didInitState() {
-    if (context.languageCode == 'en') {
+    if (widget.lang == 'en') {
       weekdays = widget.short
           ? ["S", "M", "T", "W", "T", "F", "S"]
           : ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-    } else if (context.languageCode == 'ru') {
+    } else if (widget.lang == 'ru') {
       weekdays = widget.short
           ? ["П", "В", "С", "Ч", "П", "С", "В"]
           : ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"];
-    } else if (context.languageCode == 'zh') {
+    } else if (widget.lang == 'zh') {
       weekdays = ["日", "一", "二", "三", "四", "五", "六"];
     }
 
-    cellWidth = (context.isTablet) ? 70.0 : 40.0;
+    final isTablet = widget.sharing ? false : context.isTablet;
+    cellWidth = isTablet ? 70.0 : 40.0;
   }
 
   @override
-  Widget build(BuildContext context) => Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: weekdays
-          .map<Widget>((d) => SizedBox(
-              width: cellWidth,
-              height: 30,
-              child: AutoSizeText(d.toUpperCase(),
-                  maxLines: 1,
-                  minFontSize: 5,
-                  textAlign: TextAlign.center,
-                  style: widget.short
-                      ? Theme.of(context).textTheme.titleLarge!
-                      : Theme.of(context)
-                          .textTheme
-                          .labelMedium!
-                          .copyWith(color: Theme.of(context).secondaryHeaderColor))))
-          .toList());
+  Widget build(BuildContext context) {
+    Color textColor =
+        widget.sharing ? Colors.black : Theme.of(context).textTheme.titleLarge!.color!;
+
+    return Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: weekdays
+            .map<Widget>((d) => SizedBox(
+                width: cellWidth,
+                height: 30,
+                child: AutoSizeText(d.toUpperCase(),
+                    maxLines: 1,
+                    minFontSize: 5,
+                    textAlign: TextAlign.center,
+                    style: widget.short
+                        ? Theme.of(context).textTheme.titleLarge!.copyWith(color: textColor)
+                        : Theme.of(context)
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(color: Theme.of(context).secondaryHeaderColor))))
+            .toList());
+  }
 }
 
 class MonthView extends StatefulWidget {
   final DateTime date;
   final bool highlightToday;
-  const MonthView(this.date, {this.highlightToday = true});
+  final bool sharing;
+  final String lang;
+
+  const MonthView(this.date, {required this.lang, this.highlightToday = true, this.sharing = false});
 
   @override
   _MonthViewState createState() => _MonthViewState();
@@ -79,10 +91,11 @@ class _MonthViewState extends State<MonthView> with AfterInitMixin<MonthView> {
 
   @override
   void didInitState() {
-    cellWidth = context.isTablet ? 70.0 : 40.0;
+    final isTablet = widget.sharing ? false : context.isTablet;
+    cellWidth = isTablet ? 70.0 : 40.0;
     cellHeight = cellWidth;
 
-    firstDayOfWeek = DateFormat.EEEE(context.languageCode).dateSymbols.FIRSTDAYOFWEEK + 1;
+    firstDayOfWeek = DateFormat.EEEE(widget.lang).dateSymbols.FIRSTDAYOFWEEK + 1;
 
     final monthStart = DateTime(date.year, date.month, 1);
     startGap = (monthStart.weekday < firstDayOfWeek)
@@ -107,6 +120,10 @@ class _MonthViewState extends State<MonthView> with AfterInitMixin<MonthView> {
                       builder: (BuildContext context, AsyncSnapshot<FastingModel> snapshot) {
                         if (!snapshot.hasData) return Container();
 
+                        Color themeColor = widget.sharing
+                            ? Colors.black
+                            : Theme.of(context).textTheme.titleLarge!.color!;
+
                         final fasting = snapshot.data!;
                         final currentDate = DateTime(date.year, date.month, i + 1);
 
@@ -121,7 +138,7 @@ class _MonthViewState extends State<MonthView> with AfterInitMixin<MonthView> {
 
                           textColor = fasting.type == FastingType.noFast ||
                                   fasting.type == FastingType.noFastMonastic
-                              ? Theme.of(context).textTheme.titleLarge!.color
+                              ? themeColor
                               : Colors.black;
                         }
 
