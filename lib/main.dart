@@ -30,6 +30,8 @@ Future<void> main() async {
   await SaintModel("cn").prepare();
   await SaintModel("hk").prepare();
 
+  await rateMyApp.init();
+
   [
     "troparion.sqlite",
     "feofan.sqlite",

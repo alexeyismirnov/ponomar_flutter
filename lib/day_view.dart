@@ -239,11 +239,18 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
                   ...newItems
                       .map<Widget>((s) => Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                          child: Image.asset(
-                            'assets/icons/${s.id}.jpg',
-                            height: 110.0,
-                            fit: BoxFit.contain,
-                          )))
+                          child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                if (context.languageCode == 'ru') {
+                                  PopupComment(s.name).show(context);
+                                }
+                              },
+                              child: Image.asset(
+                                'assets/icons/${s.id}.jpg',
+                                height: 110.0,
+                                fit: BoxFit.contain,
+                              ))))
                       .toList(),
                   if (!pageNotFull) ...[const Spacer()],
                 ]);

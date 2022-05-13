@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:collection/collection.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 
 import 'dart:core';
 import 'dart:async';
@@ -110,3 +111,11 @@ extension SqfliteExt on Sqflite {
   static String? firstStringValue(List<Map<String, Object?>> list) =>
       list.firstOrNull?.values.firstOrNull.toString();
 }
+
+RateMyApp rateMyApp = RateMyApp(
+  preferencesPrefix: 'rate_orthodox_calendar',
+  minDays: 3,
+  minLaunches: 5,
+  remindDays: 5,
+  remindLaunches: 5,
+);

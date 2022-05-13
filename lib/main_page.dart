@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_toolkit/flutter_toolkit.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:jiffy/jiffy.dart';
 
 import 'globals.dart';
@@ -70,6 +71,10 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   }
 
   void setDate(DateTime d) {
+    if (rateMyApp.shouldOpenDialog) {
+      rateMyApp.showRateDialog(context, title: "title".tr(), message: "please_rate".tr());
+    }
+
     setState(() {
       date = DateTime(d.year, d.month, d.day);
       if (_controller.hasClients) {
