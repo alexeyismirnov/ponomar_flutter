@@ -27,5 +27,18 @@
   "church_info": "Saint Apostles Peter and Paul Orthodox Church of Hong Kong was opened in 1934. The first rector of the church was Archpriest Dmitry Uspensky. The parish existed until his death in 1970. In the summer of 2003, Fr. Dionisy Pozdnyaev arrived to Hong Kong, and regular church services were resumed.\n",
   "app_info": "Please check out our new mobile app: “Orthodox Church in Hong Kong”. With this app, you can find out service schedule, check latest news, and send a prayer note.\n",
   "install_church_app": "Install app “Orthodox Church in Hong Kong”",
-  "please_rate": "Please rate this mobile app"
+  "please_rate": "Please rate this mobile app",
+  "please_make_donation": "Please make a donation for our church. You can do this through a mobile payment, bank transfer, crypto currency, or PayPal. God bless!",
+  "other_donations": "Other ways to donate",
+  "copied_to_clipboard": "Copied to clipboard",
+  "bank_account": "Bank account",
+  "paypal": "Paypal e-mail",
+  "alipay": "Alipay phone number",
+  "wechat": "WeChat",
+  "bitcoin": "Bitcoin wallet",
+  "tng": "TNG Wallet",
+  "donate": "Donate",
+  "donate_button": "Donate {}",
+  "donate_thanks": "Thanks for your donation!",
+  "network_error": "Network error"
 }
