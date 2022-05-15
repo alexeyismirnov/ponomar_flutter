@@ -40,6 +40,7 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
       sections.add("Молитвослов");
       books.add([
         EbookModel("prayerbook.sqlite"),
+        EbookModel("canons.sqlite"),
       ]);
 
       sections.add("Богослужение");

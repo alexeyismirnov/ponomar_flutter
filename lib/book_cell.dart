@@ -65,6 +65,7 @@ class BookCellHTML extends StatelessWidget {
         a { text-decoration: none; }
         .rubric { color: red; font-size: 90%; }
         .title { font-size: 110%; font-weight:bold; text-align: center  }
+        .refrain { font-style: italic }
         .author { color: red; font-size: 110%; font-weight:bold; }
         </style>
         """;

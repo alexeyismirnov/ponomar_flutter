@@ -36,6 +36,7 @@ Future<void> main() async {
     "troparion.sqlite",
     "feofan.sqlite",
     "prayerbook.sqlite",
+    "canons.sqlite",
     "vigil.sqlite",
     "liturgy.sqlite",
     "new_testament_overview.sqlite",
