@@ -13,11 +13,14 @@ import 'church_fasting.dart';
 import 'saint_model.dart';
 import 'icon_model.dart';
 import 'church_page.dart';
+import 'firebase_config.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await GlobalPath.ensureInitialized();
+
+  await FirebaseConfig.setup();
 
   await ConfigParam.initSharedParams(initFontSize: 22);
   ConfigParamExt.fastingLevel = ConfigParam<int>('fastingLevel', initValue: 0);

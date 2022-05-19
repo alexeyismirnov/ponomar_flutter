@@ -8,6 +8,7 @@ import 'globals.dart';
 import 'calendar_appbar.dart';
 import 'day_view.dart';
 import 'bible_model.dart';
+import 'firebase_config.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -41,6 +42,8 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     } else {
       await OldTestamentModel(context.countryCode).prepare();
       await NewTestamentModel(context.countryCode).prepare();
+
+      await FirebaseConfig.requestPermissions();
     }
 
     await Jiffy.locale(context.languageCode);

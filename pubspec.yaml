@@ -41,6 +41,7 @@ dependencies:
   rate_my_app: ^1.1.0+1
   launch_review: ^3.0.1
   fluttertoast: ^8.0.9
+  flutter_local_notifications: ^9.5.3+1
   flutter_toolkit:
     path: /Users/alexey/workspace/flutter_toolkit
 

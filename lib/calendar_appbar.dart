@@ -6,6 +6,7 @@ import 'package:launch_review/launch_review.dart';
 
 import 'globals.dart';
 import 'church_fasting.dart';
+import 'firebase_config.dart';
 
 class FastingLevelDialog extends StatelessWidget {
   final labels = ['laymen_fasting', 'monastic_fasting'];
@@ -64,7 +65,17 @@ class CalendarAppbar extends StatelessWidget {
               },
               child: ListTile(
                   leading: const Icon(Icons.restaurant_menu_outlined, size: 30.0),
-                  title: const Text('fasting_level').tr())))
+                  title: const Text('fasting_level').tr()))),
+
+      PopupMenuItem(
+          child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+                FirebaseConfig.show("qq", "body description");
+              },
+              child: const ListTile(
+                  leading: Icon(Icons.list, size: 30.0),
+                  title: Text('notification'))))
     ];
 
     return PopupMenuButton(
