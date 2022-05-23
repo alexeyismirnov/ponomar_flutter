@@ -40,5 +40,7 @@
   "donate": "Donate",
   "donate_button": "Donate {}",
   "donate_thanks": "Thanks for your donation!",
-  "network_error": "Network error"
+  "network_error": "Network error",
+  "from_till": "From %s till %s — %s",
+  "memory_of": "Memory of %s"
 }

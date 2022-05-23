@@ -354,7 +354,7 @@
     "date" : "2 January",
     "feastType" : "polyeleos",
     "reading" : "Heb 4:14-5:6 Matthew 5:14-19 # Righteous",
-    "saint" : "John of Kronstadt"
+    "saint" : "St. John of Kronstadt"
   },
   {
     "date" : "3 January",
@@ -366,7 +366,7 @@
     "date" : "15 January",
     "feastType" : "polyeleos",
     "reading" : "Gal 5:22-6:2 Luke 6:17-23 # Venerable",
-    "saint" : "Seraphim of Sarov"
+    "saint" : "Venerable Seraphim of Sarov"
   },
   {
     "date" : "23 January",
@@ -378,13 +378,13 @@
     "date" : "30 January",
     "feastType" : "vigil",
     "reading" : "Heb 13:17-21 Luke 6:17-23 # Venerable",
-    "saint" : "Anthony the Great"
+    "saint" : "St. Anthony the Great"
   },
   {
     "date" : "2 February",
     "feastType" : "vigil",
     "reading" : "Heb 13:17-21 Luke 6:17-23 # Venerable",
-    "saint" : "Euthymius the Great"
+    "saint" : "St. Euthymius the Great"
   },
   {
     "date" : "6 February",
@@ -408,7 +408,7 @@
     "date" : "9 March",
     "feastType" : "polyeleos",
     "reading" : "2Cor 4:6-15 Matthew 11:2-15 # Forerunner",
-    "saint" : "Findings of Head of St. John the Baptist"
+    "saint" : "Finding of Head of St. John the Baptist"
   },
   {
     "date" : "22 March",
@@ -420,19 +420,19 @@
     "date" : "6 May",
     "feastType" : "vigil",
     "reading" : "Acts 12:1-11 John 15:17-16:2 # Great Martyr",
-    "saint" : "Victory-bearer and Wonderworker George"
+    "saint" : "St. Victory-bearer and Wonderworker George"
   },
   {
     "date" : "16 May",
     "feastType" : "polyeleos",
     "reading" : "Heb 13:7-16 Matthew 11:27-30 # Venerable",
-    "saint" : "Theodosius of the Kiev Caves Monastery"
+    "saint" : "St. Theodosius of the Kiev Caves Monastery"
   },
   {
     "date" : "21 May",
     "feastType" : "vigil",
     "reading" : "1John 1:1-7 John 19:25-27,21:24-25 # Apostle",
-    "saint" : "Apostle John"
+    "saint" : "St. Apostle John"
   },
   {
     "date" : "22 May",
@@ -444,13 +444,13 @@
     "date" : "24 May",
     "feastType" : "vigil",
     "reading" : "Heb 7:26-8:2 Matthew 5:14-19 # Equals-to-the Apostles",
-    "saint" : "Methodius and Cyril"
+    "saint" : "Sts. Methodius and Cyril"
   },
   {
     "date" : "1 June",
     "feastType" : "polyeleos",
     "reading" : "Gal 5:22-6:2 Luke 6:17-23 # Right-believing",
-    "saint" : "Demetrius Donskoy"
+    "saint" : "St. Demetrius Donskoy"
   },
   {
     "date" : "3 June",
@@ -462,7 +462,7 @@
     "date" : "7 June",
     "feastType" : "polyeleos",
     "reading" : "2Cor 4:6-15 Matthew 11:2-15 # Forerunner",
-    "saint" : "Findings of Head of St. John the Baptist"
+    "saint" : "Finding of Head of St. John the Baptist"
   },
   {
     "date" : "6 July",
@@ -486,13 +486,13 @@
     "date" : "28 July",
     "feastType" : "vigil",
     "reading" : "Gal 1:11-19 John 10:1-9 # Equal-to-the Apostles",
-    "saint" : "Great Prince Vladimir"
+    "saint" : "St. Great Prince Vladimir"
   },
   {
     "date" : "1 August",
     "feastType" : "vigil",
     "reading" : "Gal 5:22-6:2 Luke 6:17-23 # Venerable",
-    "saint" : "Seraphim of Sarov"
+    "saint" : "Venerable Seraphim of Sarov"
   },
   {
     "date" : "2 August",
@@ -504,13 +504,13 @@
     "date" : "6 August",
     "feastType" : "polyeleos",
     "reading" : "Rom 8:28-39 John 15:17-16:2 # Passion-bearers",
-    "saint" : "Boris and Gleb"
+    "saint" : "Sts. Boris and Gleb"
   },
   {
     "date" : "15 August",
     "feastType" : "polyeleos",
     "reading" : "Gal 5:22-6:2 Matthew 11:27-30 # Fool-for-Christ",
-    "saint" : "Basil, fool-for-Christ"
+    "saint" : "St. Basil, fool-for-Christ"
   },
   {
     "date" : "8 September",
@@ -528,19 +528,19 @@
     "date" : "15 September",
     "feastType" : "polyeleos",
     "reading" : "Gal 5:22-6:2 Luke 6:17-23 # Venerables",
-    "saint" : "Anthony and Theodosius of the Kiev Caves"
+    "saint" : "Sts. Anthony and Theodosius of the Kiev Caves"
   },
   {
     "date" : "8 October",
     "feastType" : "polyeleos",
     "reading" : "Gal 5:22-6:2 Luke 6:17-23 # Venerable",
-    "saint" : "Sergius of Radonezh"
+    "saint" : "Venerable Sergius of Radonezh"
   },
   {
     "date" : "9 October",
     "feastType" : "vigil",
     "reading" : "1John 4:12-19 John 19:25-27,21:24-25 # Apostle",
-    "saint" : "Apostle John"
+    "saint" : "St. Apostle John"
   },
   {
     "date" : "26 October",
@@ -576,7 +576,7 @@
     "date" : "6 December",
     "feastType" : "polyeleos",
     "reading" : "Gal 5:22-6:2 Matthew 11:27-30 # Right-believing",
-    "saint" : "Alexander Nevsky"
+    "saint" : "St. Alexander Nevsky"
   },
   {
     "date" : "10 December",

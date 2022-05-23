@@ -9,6 +9,7 @@ import 'calendar_appbar.dart';
 import 'day_view.dart';
 import 'bible_model.dart';
 import 'firebase_config.dart';
+import 'feast_notifications.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -33,6 +34,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     Future.delayed(Duration.zero, () => postInit());
   }
 
+
   void postInit() async {
     if (!ConfigParam.langSelected.val()) {
       ConfigParam.langSelected.set(true);
@@ -44,6 +46,13 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       await NewTestamentModel(context.countryCode).prepare();
 
       await FirebaseConfig.requestPermissions();
+
+      final year = DateTime.now().year;
+      if (!ConfigParamExt.notifications.val().contains("$year")) {
+        ConfigParamExt.notifications.set(["$year"]);
+
+        FeastNotifications(date, context.languageCode).setup();
+      }
     }
 
     await Jiffy.locale(context.languageCode);

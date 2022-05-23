@@ -42,5 +42,7 @@
   "donate": "捐献",
   "donate_button": "捐赠 {}",
   "donate_thanks": "感谢您的捐款！",
-  "network_error": "网络错误"
+  "network_error": "网络错误",
+  "from_till": "从%s至%s — %s",
+  "memory_of": ""
 }

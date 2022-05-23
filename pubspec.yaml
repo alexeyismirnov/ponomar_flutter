@@ -42,6 +42,7 @@ dependencies:
   launch_review: ^3.0.1
   fluttertoast: ^8.0.9
   flutter_local_notifications: ^9.5.3+1
+  flutter_native_timezone: ^2.0.0
   flutter_toolkit:
     path: /Users/alexey/workspace/flutter_toolkit
 

@@ -99,6 +99,7 @@ class FontSizeChangedNotification extends Notification {
 
 extension ConfigParamExt on ConfigParam {
   static var fastingLevel;
+  static late ConfigParam<List<String>> notifications;
 }
 
 Iterable<int> getRange(int low, int high, [int step = 1]) sync* {

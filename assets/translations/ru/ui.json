@@ -42,6 +42,7 @@
   "donate": "Помочь",
   "donate_button": "Пожертвовать {}",
   "donate_thanks": "Благодарим за пожертвование!",
-  "network_error": "Ошибка сети"
-
+  "network_error": "Ошибка сети",
+  "from_till": "С %s по %s — %s",
+  "memory_of": "%s"
 }

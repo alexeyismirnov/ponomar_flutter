@@ -39,11 +39,15 @@ class CalendarAppbar extends StatelessWidget {
     List<PopupMenuEntry> contextMenu = [
       PopupMenuItem(
           child: GestureDetector(
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
+
+                ConfigParamExt.notifications.set([]);
+                await FirebaseConfig.cancel();
+
                 AppLangDialog(
                   labels: const ["English", "Русский", "简体中文", "繁體中文"],
-                ).show(context);
+                ).show(context, canDismiss: false);
               },
               child: ListTile(
                   leading: const Icon(Icons.translate, size: 30.0),
@@ -65,17 +69,7 @@ class CalendarAppbar extends StatelessWidget {
               },
               child: ListTile(
                   leading: const Icon(Icons.restaurant_menu_outlined, size: 30.0),
-                  title: const Text('fasting_level').tr()))),
-
-      PopupMenuItem(
-          child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-                FirebaseConfig.show("qq", "body description");
-              },
-              child: const ListTile(
-                  leading: Icon(Icons.list, size: 30.0),
-                  title: Text('notification'))))
+                  title: const Text('fasting_level').tr())))
     ];
 
     return PopupMenuButton(

@@ -25,6 +25,7 @@ Future<void> main() async {
   await ConfigParam.initSharedParams(initFontSize: 22);
   ConfigParamExt.fastingLevel = ConfigParam<int>('fastingLevel', initValue: 0);
   ChurchFasting.fastingLevel = FastingLevel.values[ConfigParamExt.fastingLevel.val()];
+  ConfigParamExt.notifications = ConfigParam<List<String>>('notifications', initValue: []);
 
   await JSON.load();
 
