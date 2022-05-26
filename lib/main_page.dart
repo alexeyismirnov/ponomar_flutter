@@ -34,25 +34,17 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     Future.delayed(Duration.zero, () => postInit());
   }
 
-
   void postInit() async {
-    if (!ConfigParam.langSelected.val()) {
-      ConfigParam.langSelected.set(true);
-      AppLangDialog(
-        labels: const ["English", "Русский", "简体中文", "繁體中文"],
-      ).show(context, canDismiss: false);
-    } else {
-      await OldTestamentModel(context.countryCode).prepare();
-      await NewTestamentModel(context.countryCode).prepare();
+    await OldTestamentModel(context.countryCode).prepare();
+    await NewTestamentModel(context.countryCode).prepare();
 
-      await FirebaseConfig.requestPermissions();
+    await FirebaseConfig.requestPermissions();
 
-      final year = DateTime.now().year;
-      if (!ConfigParamExt.notifications.val().contains("$year")) {
-        ConfigParamExt.notifications.set(["$year"]);
+    final year = DateTime.now().year;
+    if (!ConfigParamExt.notifications.val().contains("$year")) {
+      ConfigParamExt.notifications.set(["$year"]);
 
-        FeastNotifications(date, context.languageCode).setup();
-      }
+      FeastNotifications(date, context.languageCode).setup();
     }
 
     await Jiffy.locale(context.languageCode);

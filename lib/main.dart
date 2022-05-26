@@ -29,10 +29,7 @@ Future<void> main() async {
 
   await JSON.load();
 
-  await SaintModel("en").prepare();
   await SaintModel("ru").prepare();
-  await SaintModel("cn").prepare();
-  await SaintModel("hk").prepare();
 
   await rateMyApp.init();
 
@@ -60,15 +57,12 @@ Future<void> main() async {
 
   runApp(EasyLocalization(
       supportedLocales: const [
-        Locale('en', ''),
-        Locale('ru', ''),
-        Locale('zh', 'CN'),
-        Locale('zh', 'HK'),
+        Locale('ru', '')
       ],
       path: 'ui,cal,reading,library',
       assetLoader: DirectoryAssetLoader(basePath: "assets/translations"),
-      fallbackLocale: const Locale('en', ''),
-      startLocale: const Locale('en', ''),
+      fallbackLocale: const Locale('ru', ''),
+      startLocale: const Locale('ru', ''),
       child: RestartWidget(ContainerPage(tabs: [
         AnimatedTab(icon: const Icon(Icons.home), title: 'homepage', content: MainPage()),
         AnimatedTab(

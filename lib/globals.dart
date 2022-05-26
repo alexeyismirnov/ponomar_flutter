@@ -40,23 +40,11 @@ class JSON {
     NewTestamentItems = await rootBundle.loadString("assets/bible/NewTestamentItems.json");
     NewTestamentFilenames = await rootBundle.loadString("assets/bible/NewTestamentFilenames.json");
 
-    bibleTrans['en'] = Map<String, String>.from(
-        jsonDecode(await rootBundle.loadString("assets/translations/en/reading.json")));
     bibleTrans['ru'] = Map<String, String>.from(
         jsonDecode(await rootBundle.loadString("assets/translations/ru/reading.json")));
-    bibleTrans['cn'] = Map<String, String>.from(
-        jsonDecode(await rootBundle.loadString("assets/translations/zh-CN/reading.json")));
-    bibleTrans['hk'] = Map<String, String>.from(
-        jsonDecode(await rootBundle.loadString("assets/translations/zh-HK/reading.json")));
 
-    fastingComments['en'] = Map<String, String>.from(
-        jsonDecode(await rootBundle.loadString("assets/translations/en/fasting.json")));
     fastingComments['ru'] = Map<String, String>.from(
         jsonDecode(await rootBundle.loadString("assets/translations/ru/fasting.json")));
-    fastingComments['cn'] = Map<String, String>.from(
-        jsonDecode(await rootBundle.loadString("assets/translations/zh-CN/fasting.json")));
-    fastingComments['hk'] = Map<String, String>.from(
-        jsonDecode(await rootBundle.loadString("assets/translations/zh-HK/fasting.json")));
   }
 }
 
