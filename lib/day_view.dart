@@ -24,7 +24,6 @@ import 'synaxarion.dart';
 import 'calendar_selector.dart';
 import 'book_cell.dart';
 import 'great_lent_short.dart';
-import 'card_view.dart';
 import 'zerna.dart';
 
 class _FeastWidget extends StatelessWidget {

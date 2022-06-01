@@ -7,7 +7,6 @@ import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 import 'dart:async';
 
-import 'card_view.dart';
 import 'donations_other.dart';
 
 class ChurchPage extends StatefulWidget {

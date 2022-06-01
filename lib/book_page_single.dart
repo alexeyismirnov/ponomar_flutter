@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
-import 'font_size_dialog.dart';
-
 typedef WidgetCallback = Widget Function();
 
 class BookPageSingle extends StatefulWidget {
