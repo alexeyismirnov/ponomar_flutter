@@ -1,64 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:after_init/after_init.dart';
-import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:quiver/time.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-import 'globals.dart';
-import 'church_fasting.dart';
-import 'church_calendar.dart';
+import 'month_config.dart';
 
-class WeekdaysView extends StatefulWidget {
-  final bool short;
-  final bool sharing;
-  final String lang;
-
-  WeekdaysView({required this.lang, this.short = false, this.sharing = false});
-
+class WeekdaysView extends StatelessWidget {
   @override
-  _WeekdaysViewState createState() => _WeekdaysViewState();
-}
+  Widget build(BuildContext context) {
+    var config = MonthViewConfig.of(context)!;
+    var weekdays = <String>[];
 
-class _WeekdaysViewState extends State<WeekdaysView> with AfterInitMixin<WeekdaysView> {
-  late List<String> weekdays;
-  late double cellWidth;
-
-  @override
-  void didInitState() {
-    if (widget.lang == 'en') {
-      weekdays = widget.short
+    if (config.lang == 'en') {
+      weekdays = config.shortLabels
           ? ["S", "M", "T", "W", "T", "F", "S"]
           : ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-    } else if (widget.lang == 'ru') {
-      weekdays = widget.short
+    } else if (config.lang == 'ru') {
+      weekdays = config.shortLabels
           ? ["П", "В", "С", "Ч", "П", "С", "В"]
           : ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"];
-    } else if (widget.lang == 'zh') {
+    } else if (config.lang == 'zh') {
       weekdays = ["日", "一", "二", "三", "四", "五", "六"];
     }
 
-    final isTablet = widget.sharing ? false : context.isTablet;
-    cellWidth = isTablet ? 70.0 : 40.0;
-  }
-
-  @override
-  Widget build(BuildContext context) {
     Color textColor =
-        widget.sharing ? Colors.black : Theme.of(context).textTheme.titleLarge!.color!;
+        config.sharing ? Colors.black : Theme.of(context).textTheme.titleLarge!.color!;
 
     return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: weekdays
             .map<Widget>((d) => SizedBox(
-                width: cellWidth,
+                width: config.cellWidth,
                 height: 30,
                 child: AutoSizeText(d.toUpperCase(),
                     maxLines: 1,
                     minFontSize: 5,
                     textAlign: TextAlign.center,
-                    style: widget.short
+                    style: config.shortLabels
                         ? Theme.of(context).textTheme.titleLarge!.copyWith(color: textColor)
                         : Theme.of(context)
                             .textTheme
@@ -68,122 +47,39 @@ class _WeekdaysViewState extends State<WeekdaysView> with AfterInitMixin<Weekday
   }
 }
 
+typedef MonthCellCallback = Widget Function(DateTime date);
+
 class MonthView extends StatefulWidget {
   final DateTime date;
-  final bool highlightToday;
-  final bool sharing;
-  final String lang;
+  final MonthCellCallback cellBuilder;
 
-  const MonthView(this.date, {required this.lang, this.highlightToday = true, this.sharing = false});
+  const MonthView(this.date, {required this.cellBuilder});
 
   @override
-  _MonthViewState createState() => _MonthViewState();
+  MonthViewState createState() => MonthViewState();
 }
 
-class _MonthViewState extends State<MonthView> with AfterInitMixin<MonthView> {
+class MonthViewState extends State<MonthView> {
   DateTime get date => widget.date;
-  late DateTime today;
-
-  late double cellWidth, cellHeight;
-  late int firstDayOfWeek;
-  late int startGap;
-  late int totalDays;
+  MonthCellCallback get cellBuilder => widget.cellBuilder;
 
   @override
-  void didInitState() {
-    final isTablet = widget.sharing ? false : context.isTablet;
-    cellWidth = isTablet ? 70.0 : 40.0;
-    cellHeight = cellWidth;
+  Widget build(BuildContext context) {
+    final config = MonthViewConfig.of(context)!;
 
-    firstDayOfWeek = DateFormat.EEEE(widget.lang).dateSymbols.FIRSTDAYOFWEEK + 1;
+    final firstDayOfWeek = DateFormat.EEEE(config.lang).dateSymbols.FIRSTDAYOFWEEK + 1;
 
     final monthStart = DateTime(date.year, date.month, 1);
-    startGap = (monthStart.weekday < firstDayOfWeek)
+    final startGap = (monthStart.weekday < firstDayOfWeek)
         ? 7 - (firstDayOfWeek - monthStart.weekday)
         : monthStart.weekday - firstDayOfWeek;
 
-    totalDays = daysInMonth(date.year, date.month);
+    final totalDays = daysInMonth(date.year, date.month);
 
-    final now = DateTime.now();
-    today = DateTime(now.year, now.month, now.day);
+    return Wrap(
+        children: List<Widget>.generate(
+                startGap, (_) => SizedBox(width: config.cellWidth, height: config.cellHeight)) +
+            List<Widget>.generate(
+                totalDays, (i) => cellBuilder(DateTime(date.year, date.month, i + 1))));
   }
-
-  @override
-  Widget build(BuildContext context) => Wrap(
-      children:
-          List<Widget>.generate(startGap, (_) => SizedBox(width: cellWidth, height: cellHeight)) +
-              List<Widget>.generate(
-                  totalDays,
-                  (i) => FutureBuilder<FastingModel>(
-                      future: ChurchFasting.forDate(
-                          DateTime(date.year, date.month, i + 1), context.countryCode),
-                      builder: (BuildContext context, AsyncSnapshot<FastingModel> snapshot) {
-                        if (!snapshot.hasData) return Container();
-
-                        Color themeColor = widget.sharing
-                            ? Colors.black
-                            : Theme.of(context).textTheme.titleLarge!.color!;
-
-                        final fasting = snapshot.data!;
-                        final currentDate = DateTime(date.year, date.month, i + 1);
-
-                        Color? textColor;
-                        FontWeight fontWeight;
-
-                        if (Cal.getGreatFeast(currentDate).isNotEmpty) {
-                          fontWeight = FontWeight.bold;
-                          textColor = Colors.red;
-                        } else {
-                          fontWeight = FontWeight.normal;
-
-                          textColor = fasting.type == FastingType.noFast ||
-                                  fasting.type == FastingType.noFastMonastic
-                              ? themeColor
-                              : Colors.black;
-                        }
-
-                        if (currentDate == today && widget.highlightToday) {
-                          textColor = Colors.white;
-                        }
-
-                        Widget content = Center(
-                            child: AutoSizeText("${i + 1}",
-                                maxLines: 1,
-                                minFontSize: 5,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .copyWith(fontWeight: fontWeight, color: textColor)));
-
-                        Widget wrapper;
-
-                        if (currentDate == today && widget.highlightToday) {
-                          wrapper = Container(
-                              width: cellWidth,
-                              height: cellHeight,
-                              color: fasting.type.color,
-                              child: Container(
-                                  width: cellWidth,
-                                  height: cellHeight,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.red,
-                                  ),
-                                  child: content));
-                        } else {
-                          wrapper = Container(
-                              width: cellWidth,
-                              height: cellHeight,
-                              color: fasting.type.color,
-                              child: content);
-                        }
-
-                        return GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              Navigator.pop(context, currentDate);
-                            },
-                            child: wrapper);
-                      })));
 }
