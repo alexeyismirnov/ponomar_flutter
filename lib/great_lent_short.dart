@@ -9,7 +9,6 @@ import 'story_model.dart';
 import 'great_lent_full.dart';
 import 'church_calendar.dart';
 import 'globals.dart';
-import 'card_view.dart';
 
 enum GreatLentDayMode { short, long, popup }
 
