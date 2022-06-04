@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
-import 'month_container.dart';
+import 'month_info_container.dart';
 import 'month_config.dart';
 import 'year_calendar.dart';
 import 'globals.dart';
@@ -33,7 +33,7 @@ class CalendarSelector extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(5.0),
                   insetPadding: const EdgeInsets.all(0.0),
                   content:
-                      MonthViewConfig(lang: context.languageCode, child: MonthContainer(date)));
+                      MonthViewConfig(lang: context.languageCode, child: MonthInfoContainer(date)));
 
               dialog.show(context).then((date) => Navigator.pop(context, date));
             }),

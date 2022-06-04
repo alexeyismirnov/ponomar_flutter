@@ -9,15 +9,15 @@ import 'month_view.dart';
 import 'month_config.dart';
 import 'month_cell.dart';
 
-class MonthContainer extends StatefulWidget {
+class MonthInfoContainer extends StatefulWidget {
   final DateTime initialDate;
-  const MonthContainer(this.initialDate);
+  const MonthInfoContainer(this.initialDate);
 
   @override
-  _MonthContainerState createState() => _MonthContainerState();
+  _MonthInfoContainerState createState() => _MonthInfoContainerState();
 }
 
-class _MonthContainerState extends State<MonthContainer> {
+class _MonthInfoContainerState extends State<MonthInfoContainer> {
   static const initialPage = 100000;
   late PageController _controller;
 
