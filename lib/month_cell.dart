@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 import 'globals.dart';
 import 'church_fasting.dart';
 import 'church_calendar.dart';
-import 'month_config.dart';
 
 class MonthViewCell extends StatelessWidget {
   final DateTime date;

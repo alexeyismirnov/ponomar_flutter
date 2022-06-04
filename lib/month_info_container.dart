@@ -5,8 +5,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 import 'church_fasting.dart';
-import 'month_view.dart';
-import 'month_config.dart';
 import 'month_cell.dart';
 
 class MonthInfoContainer extends StatefulWidget {

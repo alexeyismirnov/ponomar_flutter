@@ -14,9 +14,7 @@ import 'dart:typed_data';
 
 import 'globals.dart';
 import 'church_fasting.dart';
-import 'month_view.dart';
 import 'month_cell.dart';
-import 'month_config.dart';
 
 class YearMonthView extends StatefulWidget {
   final int year;
