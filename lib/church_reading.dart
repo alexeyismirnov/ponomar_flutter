@@ -45,6 +45,7 @@ class ChurchReading {
     readingsLent = List<String>.from(json.decode(JSON.readingsLent));
 
     generateRR();
+
     generateTransfers();
   }
 
@@ -142,8 +143,9 @@ class ChurchReading {
 
   generateRR() {
     for (final d in (cal.startOfYear).rangeTo(cal.endOfYear)) {
-      final r = getRegularReading(d);
-      if (r != null) rr[d] = [r];
+      final date = DateTime(d.year, d.month, d.day);
+      final r = getRegularReading(date);
+      if (r != null) rr[date] = [r];
     }
   }
 
@@ -171,6 +173,7 @@ class ChurchReading {
 
       if (feast.type == FeastType.great) {
         final newDate = transferGreatFeast(date);
+
         final oldReading = rr[date]!;
 
         if (oldReading.isNotEmpty && newDate != null) {
