@@ -8,23 +8,107 @@ import 'package:flutter/rendering.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:screenshot/screenshot.dart';
 
-import 'month_view.dart';
-import 'globals.dart';
-import 'church_fasting.dart';
-
 import 'dart:io';
 import 'dart:core';
 import 'dart:typed_data';
 
-class YearCalendarView extends StatefulWidget {
-  final DateTime date;
-  const YearCalendarView(this.date);
+import 'globals.dart';
+import 'church_fasting.dart';
+import 'month_cell.dart';
+
+class YearMonthView extends StatefulWidget {
+  final int year;
+  const YearMonthView(this.year);
 
   @override
-  _YearCalendarViewState createState() => _YearCalendarViewState();
+  _YearMonthViewState createState() => _YearMonthViewState();
 }
 
-class _YearCalendarViewState extends State<YearCalendarView> {
+class _YearMonthViewState extends State<YearMonthView> {
+  @override
+  Widget buildMonth(BuildContext context, DateTime date) {
+    final config = MonthViewConfig.of(context)!;
+
+    Color textColor =
+        config.sharing ? Colors.black : Theme.of(context).textTheme.headlineMedium!.color!;
+
+    return FittedBox(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Text(DateFormat("LLLL").format(date).capitalize(),
+          style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: textColor)),
+      const SizedBox(height: 10),
+      SizedBox(width: config.containerWidth, child: WeekdaysView()),
+      ConstrainedBox(
+          constraints: BoxConstraints(
+              maxWidth: config.containerWidth,
+              minWidth: config.containerWidth,
+              maxHeight: config.cellWidth * 6),
+          child: Align(
+              alignment: Alignment.topCenter,
+              child: MonthView(date, cellBuilder: (date) => MonthViewCell(date))))
+    ]));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final config = MonthViewConfig.of(context)!;
+
+    Color textColor = config.sharing ? Colors.black : Theme.of(context).textTheme.subtitle1!.color!;
+
+    return SingleChildScrollView(
+        child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            child: Column(mainAxisSize: MainAxisSize.max, children: [
+              GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 3,
+                  childAspectRatio: 1.0,
+                  children: List<int>.generate(12, (i) => i)
+                      .map<Widget>((i) => buildMonth(context, DateTime(widget.year, i + 1, 1)))
+                      .toList()),
+              const SizedBox(height: 20),
+              GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    mainAxisExtent: 50, // here set custom Height You Want
+                  ),
+                  itemCount: FastingModel.types.length,
+                  itemBuilder: (BuildContext context, int i) {
+                    final t = FastingModel.types[i];
+
+                    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Container(width: 20, height: 20, color: t.color),
+                      const SizedBox(width: 10),
+                      Expanded(
+                          child: AutoSizeText(t.description.tr(),
+                              maxLines: 2,
+                              minFontSize: 5,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(color: textColor)))
+                    ]);
+                  })
+            ])));
+  }
+}
+
+class YearContainer extends StatefulWidget {
+  final DateTime date;
+  const YearContainer(this.date);
+
+  @override
+  _YearContainerState createState() => _YearContainerState();
+}
+
+class _YearContainerState extends State<YearContainer> {
   static const initialPage = 100000;
   late int initialYear;
 
@@ -72,8 +156,14 @@ class _YearCalendarViewState extends State<YearCalendarView> {
                     assetLoader: DirectoryAssetLoader(basePath: "assets/translations"),
                     fallbackLocale: const Locale('en', ''),
                     startLocale: const Locale('en', ''),
-                    child: Container(
-                        color: Colors.white, child: buildItem(currentPage, sharing: true)))));
+                    child: MonthViewConfig(
+                        lang: context.languageCode,
+                        sharing: true,
+                        shortLabels: true,
+                        highlightToday: false,
+                        child: Container(
+                            color: Colors.white,
+                            child: YearMonthView(currentPage - initialPage + initialYear))))));
 
                 final file = File(path);
                 await file.writeAsBytes(pngBytes, flush: true);
@@ -87,86 +177,6 @@ class _YearCalendarViewState extends State<YearCalendarView> {
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headline6),
       );
-
-  Widget getMonthView(DateTime d, {required bool sharing}) {
-    Color textColor = sharing ? Colors.black : Theme.of(context).textTheme.headlineMedium!.color!;
-
-    late double cellWidth, containerWidth;
-
-    if (!sharing && context.isTablet) {
-      cellWidth = 70.0;
-      containerWidth = 510.0;
-    } else {
-      cellWidth = 40.0;
-      containerWidth = 300.0;
-    }
-
-    return FittedBox(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      Text(DateFormat("LLLL").format(d).capitalize(),
-          style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: textColor)),
-      const SizedBox(height: 10),
-      SizedBox(
-          width: containerWidth,
-          child: WeekdaysView(lang: context.languageCode, short: true, sharing: sharing)),
-      ConstrainedBox(
-          constraints: BoxConstraints(
-              maxWidth: containerWidth, minWidth: containerWidth, maxHeight: cellWidth * 6),
-          child: Align(
-              alignment: Alignment.topCenter,
-              child: MonthView(d,
-                  lang: context.languageCode, highlightToday: false, sharing: sharing)))
-    ]));
-  }
-
-  Widget buildItem(int index, {required bool sharing}) {
-    Color textColor = sharing ? Colors.black : Theme.of(context).textTheme.subtitle1!.color!;
-
-    return SingleChildScrollView(
-        child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-            child: Column(mainAxisSize: MainAxisSize.max, children: [
-              GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 3,
-                  childAspectRatio: 1.0,
-                  children: List<int>.generate(12, (i) => i)
-                      .map<Widget>((i) => getMonthView(
-                          DateTime(index - initialPage + initialYear, i + 1, 1),
-                          sharing: sharing))
-                      .toList()),
-              const SizedBox(height: 20),
-              GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    mainAxisExtent: 50, // here set custom Height You Want
-                  ),
-                  itemCount: FastingModel.types.length,
-                  itemBuilder: (BuildContext context, int i) {
-                    final t = FastingModel.types[i];
-
-                    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Container(width: 20, height: 20, color: t.color),
-                      const SizedBox(width: 10),
-                      Expanded(
-                          child: AutoSizeText(t.description.tr(),
-                              maxLines: 2,
-                              minFontSize: 5,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(color: textColor)))
-                    ]);
-                  })
-            ])));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -183,6 +193,6 @@ class _YearCalendarViewState extends State<YearCalendarView> {
                         controller: _controller,
                         onPageChanged: (page) => updateTitle(page),
                         itemBuilder: (BuildContext context, int index) =>
-                            buildItem(index, sharing: false))))));
+                            YearMonthView(index - initialPage + initialYear))))));
   }
 }

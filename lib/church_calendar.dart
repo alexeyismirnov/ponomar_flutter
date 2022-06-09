@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:intl/intl.dart';
 import 'package:supercharged/supercharged.dart';

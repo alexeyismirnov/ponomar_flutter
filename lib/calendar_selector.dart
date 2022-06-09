@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
-import 'month_container.dart';
+import 'month_info_container.dart';
 import 'year_calendar.dart';
+import 'globals.dart';
 
 class CalendarSelector extends StatelessWidget {
   final DateTime date;
@@ -25,14 +26,29 @@ class CalendarSelector extends StatelessWidget {
             title: Text('monthly'.tr(),
                 textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
             onTap: () {
-              MonthContainer(date).show(context).then((date) => Navigator.pop(context, date));
+              var dialog = AlertDialog(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  contentPadding: const EdgeInsets.all(5.0),
+                  insetPadding: const EdgeInsets.all(0.0),
+                  content:
+                      MonthViewConfig(lang: context.languageCode, child: MonthInfoContainer(date)));
+
+              dialog.show(context).then((date) => Navigator.pop(context, date));
             }),
         ListTile(
             dense: true,
             title: Text('yearly'.tr(),
                 textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
             onTap: () {
-              YearCalendarView(date).push(context).then((date) => Navigator.pop(context, date));
+              MonthViewConfig(
+                      lang: context.languageCode,
+                      sharing: false,
+                      shortLabels: true,
+                      highlightToday: false,
+                      child: YearContainer(date))
+                  .push(context)
+                  .then((date) => Navigator.pop(context, date));
             })
       ]);
 }
