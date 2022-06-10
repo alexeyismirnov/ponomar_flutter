@@ -31,8 +31,9 @@ class CalendarSelector extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   contentPadding: const EdgeInsets.all(5.0),
                   insetPadding: const EdgeInsets.all(0.0),
-                  content:
-                      MonthViewConfig(lang: context.languageCode, child: MonthInfoContainer(date)));
+                  content: MonthViewConfig(
+                      lang: context.languageCode,
+                      child: MonthInfoContainer(DateTime.utc(date.year, date.month, 1))));
 
               dialog.show(context).then((date) => Navigator.pop(context, date));
             }),
