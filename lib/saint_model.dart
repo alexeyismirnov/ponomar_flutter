@@ -30,14 +30,14 @@ class SaintModel {
       if (d.isBetween(cal.leapStart, cal.leapEnd - 1.days)) {
         saints = await _saintData(d + 1.days);
       } else if (d == cal.leapEnd) {
-        saints = await _saintData(DateTime(cal.year, 2, 29));
+        saints = await _saintData(DateTime.utc(cal.year, 2, 29));
       } else {
         saints = await _saintData(d);
       }
     } else {
       saints = await _saintData(d);
       if (d == cal.leapEnd) {
-        saints.addAll(await _saintData(DateTime(2000, 2, 29)));
+        saints.addAll(await _saintData(DateTime.utc(2000, 2, 29)));
       }
     }
 

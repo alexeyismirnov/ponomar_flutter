@@ -17,7 +17,7 @@ class LukeSpringParams {
     PAPSunday = cal.d("sundayOfPublicianAndPharisee");
     pentecostPrevYear = Cal.paschaDay(cal.year - 1) + 50.days;
 
-    var exaltationPrevYear = DateTime(cal.year - 1, 9, 27);
+    var exaltationPrevYear = DateTime.utc(cal.year - 1, 9, 27);
     var exaltationPrevYearWeekday = exaltationPrevYear.weekday;
 
     sundayAfterExaltationPrevYear = exaltationPrevYear + (8 - exaltationPrevYearWeekday).days;
@@ -143,7 +143,7 @@ class ChurchReading {
 
   generateRR() {
     for (final d in (cal.startOfYear).rangeTo(cal.endOfYear)) {
-      final date = DateTime(d.year, d.month, d.day);
+      final date = DateTime.utc(d.year, d.month, d.day);
       final r = getRegularReading(date);
       if (r != null) rr[date] = [r];
     }
@@ -152,11 +152,11 @@ class ChurchReading {
   generateTransfers() {
     var formatter = DateFormat.EEEE("en");
 
-    rr[DateTime(cal.year, 1, 6)] = [];
-    rr[DateTime(cal.year, 1, 7)] = [];
-    rr[DateTime(cal.year, 1, 14)] = [];
-    rr[DateTime(cal.year, 1, 18)] = [];
-    rr[DateTime(cal.year, 1, 19)] = [];
+    rr[DateTime.utc(cal.year, 1, 6)] = [];
+    rr[DateTime.utc(cal.year, 1, 7)] = [];
+    rr[DateTime.utc(cal.year, 1, 14)] = [];
+    rr[DateTime.utc(cal.year, 1, 18)] = [];
+    rr[DateTime.utc(cal.year, 1, 19)] = [];
 
     for (final feast in cal.getAllReadings()) {
       final date = feast.date!;

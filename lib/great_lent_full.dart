@@ -44,7 +44,7 @@ class _GreatLentFullViewState extends State<GreatLentFullView>
 
   @override
   void didInitState() {
-    cal = Cal.fromDate(DateTime(widget.year, 1, 1));
+    cal = Cal.fromDate(DateTime.utc(widget.year, 1, 1));
     model = StoryModel("great_lent.db");
 
     model.initFuture.then((_) {
