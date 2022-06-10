@@ -18,7 +18,7 @@ class ZernaView extends StatelessWidget {
     final model = EbookModel("zerna.sqlite");
     await model.initFuture;
 
-    final startDate = DateTime(date.year, 1, 1);
+    final startDate = DateTime.utc(date.year, 1, 1);
     final numChapters = await model.getNumChapters(IndexPath(section: 0, index: 0));
 
     final index = (startDate >> date) % numChapters;

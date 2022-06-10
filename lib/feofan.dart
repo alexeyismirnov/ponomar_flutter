@@ -52,11 +52,11 @@ class FeofanView extends StatelessWidget {
 
     if (date == cal.d("meetingOfLord")) {
       return [getListTile(context, (await getFeofan("33"))!)];
-    } else if (date == DateTime(cal.year, 9, 21) || date == DateTime(cal.year, 10, 14)) {
+    } else if (date == DateTime.utc(cal.year, 9, 21) || date == DateTime.utc(cal.year, 10, 14)) {
       return [];
-    } else if (date == DateTime(cal.year, 12, 4)) {
+    } else if (date == DateTime.utc(cal.year, 12, 4)) {
       return [getListTile(context, (await getFeofan("325"))!)];
-    } else if (date == DateTime(cal.year, 8, 19)) {
+    } else if (date == DateTime.utc(cal.year, 8, 19)) {
       return [getListTile(context, (await getFeofan("218"))!)];
     } else if (date == cal.greatLentStart - 3.days) {
       return [getListTile(context, (await getFeofan("36"))!)];

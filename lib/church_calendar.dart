@@ -31,15 +31,15 @@ class ChurchCalendar {
     year = d.year;
     JSON.dateParser = dateParser;
 
-    startOfYear = DateTime(year, 1, 1);
-    endOfYear = DateTime(year, 12, 31);
+    startOfYear = DateTime.utc(year, 1, 1);
+    endOfYear = DateTime.utc(year, 12, 31);
 
     pascha = paschaDay(year);
     greatLentStart = pascha - 48.days;
     pentecost = pascha + 49.days;
 
-    leapStart = DateTime(year, 2, 29);
-    leapEnd = DateTime(year, 3, 13);
+    leapStart = DateTime.utc(year, 2, 29);
+    leapEnd = DateTime.utc(year, 3, 13);
     isLeapYear = (year % 400) == 0 || ((year % 4 == 0) && (year % 100 != 0));
 
     initDays();
@@ -52,7 +52,7 @@ class ChurchCalendar {
   DateTime? dateParser(String date) {
     if (date != null) {
       var dd = DateFormat("d MMMM", "en").parse(date);
-      return DateTime(year, dd.month, dd.day);
+      return DateTime.utc(year, dd.month, dd.day);
     } else {
       return null;
     }
@@ -130,14 +130,14 @@ class ChurchCalendar {
             reading: "Heb 11:9-10,17-23,32-40 Matthew 1:1-25 # Sunday before the Nativity");
 
     // EXALTATION SAT & SUN
-    var exaltation = DateTime(year, 9, 27);
+    var exaltation = DateTime.utc(year, 9, 27);
     day("sundayAfterExaltation").date = nearestSundayAfter(exaltation);
     day("saturdayAfterExaltation").date = nearestSaturdayAfter(exaltation);
     day("sundayBeforeExaltation").date = nearestSundayBefore(exaltation);
     day("saturdayBeforeExaltation").date = nearestSaturdayBefore(exaltation);
 
     // NATIVITY SAT & SUN
-    var nativity = DateTime(year, 1, 7);
+    var nativity = DateTime.utc(year, 1, 7);
     day("sundayAfterNativity").date = nearestSundayAfter(nativity);
     day("saturdayAfterNativity").date = nearestSaturdayAfter(nativity);
 
@@ -150,7 +150,7 @@ class ChurchCalendar {
       day("josephBetrothed").date = nearestSundayAfter(nativity);
     }
 
-    var nativityNextYear = DateTime(year + 1, 1, 7);
+    var nativityNextYear = DateTime.utc(year + 1, 1, 7);
     var nativitySunNextYear = nearestSundayBefore(nativityNextYear);
 
     days.add(saturdayBeforeNativity(nearestSaturdayBefore(nativityNextYear)));
@@ -159,7 +159,7 @@ class ChurchCalendar {
     day("sundayOfForefathers").date = nativitySunNextYear - 7.days;
 
     // THEOPHANY SAT & SUN
-    var theophany = DateTime(year, 1, 19);
+    var theophany = DateTime.utc(year, 1, 19);
     day("sundayAfterTheophany").date = nearestSundayAfter(theophany);
     day("saturdayAfterTheophany").date = nearestSaturdayAfter(theophany);
     day("sundayBeforeTheophany").date = nearestSundayBefore(theophany);
@@ -167,12 +167,12 @@ class ChurchCalendar {
   }
 
   void initMisc() {
-    var demetrius = DateTime(year, 11, 8);
+    var demetrius = DateTime.utc(year, 11, 8);
     day("demetriusSaturday").date = nearestSaturdayBefore(demetrius);
 
-    day("newMartyrsConfessorsOfRussia").date = nearestSunday(DateTime(year, 2, 7));
-    day("holyFathersSixCouncils").date = nearestSunday(DateTime(year, 7, 29));
-    day("holyFathersSeventhCouncil").date = nearestSunday(DateTime(year, 10, 24));
+    day("newMartyrsConfessorsOfRussia").date = nearestSunday(DateTime.utc(year, 2, 7));
+    day("holyFathersSixCouncils").date = nearestSunday(DateTime.utc(year, 7, 29));
+    day("holyFathersSeventhCouncil").date = nearestSunday(DateTime.utc(year, 10, 24));
 
     // SYNAXIS
     days.add(ChurchDay("synaxisKievCavesSaints", FeastType.none, date: greatLentStart + 13.days));
@@ -180,11 +180,11 @@ class ChurchCalendar {
     days.add(ChurchDay("synaxisMountAthosSaints", FeastType.none, date: pentecost + 14.days));
 
     days.add(ChurchDay("synaxisMoscowSaints", FeastType.none,
-        date: nearestSundayBefore(DateTime(year, 9, 8))));
+        date: nearestSundayBefore(DateTime.utc(year, 9, 8))));
     days.add(ChurchDay("synaxisNizhnyNovgorodSaints", FeastType.none,
-        date: nearestSundayAfter(DateTime(year, 9, 7))));
+        date: nearestSundayAfter(DateTime.utc(year, 9, 7))));
 
-    var synaxisTheotokos = DateTime(year, 1, 8);
+    var synaxisTheotokos = DateTime.utc(year, 1, 8);
 
     if (synaxisTheotokos.weekday == DateTime.monday) {
       days.add(ChurchDay("", FeastType.doxology,
@@ -307,7 +307,7 @@ class ChurchCalendar {
     final a = (19 * (year % 19) + 15) % 30;
     final b = (2 * (year % 4) + 4 * (year % 7) + 6 * a + 6) % 7;
 
-    return ((a + b > 10) ? DateTime(year, 4, a + b - 9) : DateTime(year, 3, 22 + a + b)) + 13.days;
+    return ((a + b > 10) ? DateTime.utc(year, 4, a + b - 9) : DateTime.utc(year, 3, 22 + a + b)) + 13.days;
   }
 
   static DateTime nearestSundayBefore(DateTime d) => d - d.weekday.days;

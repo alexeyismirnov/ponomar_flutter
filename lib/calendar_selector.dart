@@ -19,7 +19,7 @@ class CalendarSelector extends StatelessWidget {
                 textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
             onTap: () {
               final d = DateTime.now();
-              Navigator.pop(context, DateTime(d.year, d.month, d.day));
+              Navigator.pop(context, DateTime.utc(d.year, d.month, d.day));
             }),
         ListTile(
             dense: true,

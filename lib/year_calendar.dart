@@ -67,7 +67,7 @@ class _YearMonthViewState extends State<YearMonthView> {
                   crossAxisCount: 3,
                   childAspectRatio: 1.0,
                   children: List<int>.generate(12, (i) => i)
-                      .map<Widget>((i) => buildMonth(context, DateTime(widget.year, i + 1, 1)))
+                      .map<Widget>((i) => buildMonth(context, DateTime.utc(widget.year, i + 1, 1)))
                       .toList()),
               const SizedBox(height: 20),
               GridView.builder(

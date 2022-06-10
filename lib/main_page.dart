@@ -72,7 +72,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       case AppLifecycleState.resumed:
         final dt = DateTime.now();
 
-        if (date != DateTime(dt.year, dt.month, dt.day)) {
+        if (date != DateTime.utc(dt.year, dt.month, dt.day)) {
           setDate(dt);
         }
 
@@ -88,7 +88,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     }
 
     setState(() {
-      date = DateTime(d.year, d.month, d.day);
+      date = DateTime.utc(d.year, d.month, d.day);
       if (_controller.hasClients) {
         initialPage = _controller.page!.round();
       }

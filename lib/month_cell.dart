@@ -15,7 +15,7 @@ class MonthViewCell extends StatelessWidget {
     var config = MonthViewConfig.of(context)!;
 
     final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
+    final today = DateTime.utc(now.year, now.month, now.day);
 
     return FutureBuilder<FastingModel>(
         future: ChurchFasting.forDate(date, context.countryCode),

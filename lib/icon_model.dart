@@ -59,14 +59,14 @@ class IconModel {
       if (d.isBetween(cal.leapStart, cal.leapEnd - 1.days)) {
         saints.addAll(await _addSaints(d + 1.days));
       } else if (d == cal.leapEnd) {
-        saints.addAll(await _addSaints(DateTime(cal.year, 2, 29)));
+        saints.addAll(await _addSaints(DateTime.utc(cal.year, 2, 29)));
       } else {
         saints.addAll(await _addSaints(d));
       }
     } else {
       saints.addAll(await _addSaints(d));
       if (d == cal.leapEnd) {
-        saints.addAll(await _addSaints(DateTime(2000, 2, 29)));
+        saints.addAll(await _addSaints(DateTime.utc(2000, 2, 29)));
       }
     }
 

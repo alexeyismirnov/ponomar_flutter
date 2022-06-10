@@ -93,7 +93,7 @@ class ChurchFasting {
 
   ChurchFasting(DateTime d) {
     cal = Cal.fromDate(d);
-    stNicholas = DateTime(cal.year, 12, 19);
+    stNicholas = DateTime.utc(cal.year, 12, 19);
   }
 
   static Map<int, ChurchFasting> models = {};
