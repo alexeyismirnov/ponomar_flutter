@@ -95,12 +95,12 @@ class _MonthInfoContainerState extends State<MonthInfoContainer> {
                           controller: _controller,
                           onPageChanged: (page) => updateTitle(page),
                           itemBuilder: (BuildContext context, int index) {
-                            final currentDate =
+                            final cd =
                                 Jiffy(widget.initialDate).add(months: index - initialPage).dateTime;
 
                             return Align(
                                 alignment: Alignment.topCenter,
-                                child: MonthView(currentDate,
+                                child: MonthView(DateTime.utc(cd.year, cd.month, cd.day),
                                     cellBuilder: (date) => MonthViewCell(date)));
                           })),
               if (showInfo) ...[const SizedBox(height: 20)]
