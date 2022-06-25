@@ -42,7 +42,7 @@ class CalendarAppbar extends StatelessWidget {
               onTap: () async {
                 Navigator.pop(context);
 
-                ConfigParamExt.notifications.set([]);
+                ConfigParamExt.notifications.set(<String>[]);
                 await FirebaseConfig.cancel();
 
                 AppLangDialog(

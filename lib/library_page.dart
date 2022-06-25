@@ -36,7 +36,10 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
       [OldTestamentModel(lang), NewTestamentModel(lang)]
     ];
 
-    if (context.languageCode == "ru") {
+    if (context.languageCode == "en") {
+      sections.add("other".tr());
+      books.add([EbookModel("synaxarion_en.sqlite")]);
+    } else if (context.languageCode == "ru") {
       sections.add("Молитвослов");
       books.add([
         EbookModel("prayerbook.sqlite"),
@@ -49,9 +52,9 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
         EbookModel("liturgy.sqlite"),
       ]);
 
-      sections.add("Разное");
+      sections.add("other".tr());
       books.add([
-        EbookModel("synaxarion.sqlite"),
+        EbookModel("synaxarion_ru.sqlite"),
         EbookModel("old_testament_overview.sqlite"),
         EbookModel("new_testament_overview.sqlite"),
         EbookModel("zerna.sqlite"),

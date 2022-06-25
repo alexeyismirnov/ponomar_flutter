@@ -10,6 +10,7 @@ import 'custom_list_tile.dart';
 import 'book_page_single.dart';
 import 'book_cell.dart';
 import 'ebook_model.dart';
+import 'globals.dart';
 
 class SynaxarionView extends StatelessWidget {
   final DateTime date;
@@ -60,7 +61,7 @@ class SynaxarionView extends StatelessWidget {
     if (index == -1) {
       return null;
     } else {
-      final model = EbookModel("synaxarion.sqlite");
+      final model = EbookModel("synaxarion_${context.languageCode}.sqlite");
       await model.initFuture;
 
       final pos = BookPosition.index(IndexPath(section: 0, index: index));
