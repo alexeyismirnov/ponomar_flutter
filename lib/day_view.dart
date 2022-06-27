@@ -5,7 +5,6 @@ import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:after_init/after_init.dart';
 
-import 'dart:developer';
 import 'dart:math';
 
 import 'church_day.dart';
