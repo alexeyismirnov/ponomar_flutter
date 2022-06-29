@@ -274,9 +274,7 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
       content.add(ReadingView(r));
     }
 
-    if (context.languageCode == "en") {
-      content.add(SynaxarionView(date));
-    } else if (context.languageCode == "ru") {
+    if (context.languageCode == "ru") {
       content.add(FeofanView(date));
       content.add(SynaxarionView(date));
 
@@ -288,6 +286,8 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
       content.add(SaintTroparion(date));
       content.add(TroparionOfDay(date));
       content.add(TroparionOfFeast(date));
+    } else {
+      content.add(SynaxarionView(date));
     }
 
     return CardWithTitle(

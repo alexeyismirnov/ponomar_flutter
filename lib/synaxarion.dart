@@ -5,6 +5,7 @@ import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:supercharged/supercharged.dart';
 import 'package:group_list_view/group_list_view.dart';
 import 'package:after_init/after_init.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'church_calendar.dart';
 import 'custom_list_tile.dart';
@@ -12,6 +13,9 @@ import 'book_page_single.dart';
 import 'book_cell.dart';
 import 'ebook_model.dart';
 import 'globals.dart';
+
+// https://www.imoph.org/Theology_en/Synaxarion.html
+// https://покров.укр/category/knygy/synyskar/
 
 class SynaxarionView extends StatefulWidget {
   final DateTime date;
@@ -49,6 +53,7 @@ class SynaxarionViewState extends State<SynaxarionView> with AfterInitMixin<Syna
       cal.greatLentStart + 27.days,
       cal.greatLentStart + 31.days,
       cal.greatLentStart + 33.days,
+      cal.greatLentStart + 34.days,
       cal.pascha - 8.days,
       cal.pascha - 7.days,
       cal.pascha - 6.days,
@@ -86,7 +91,7 @@ class SynaxarionViewState extends State<SynaxarionView> with AfterInitMixin<Syna
     if (index == -1) {
       return null;
     } else {
-      final model = EbookModel("synaxarion_${context.languageCode}.sqlite");
+      final model = EbookModel("synaxarion_${context.countryCode}.sqlite");
       await model.initFuture;
 
       final pos = BookPosition.index(IndexPath(section: 0, index: index));
@@ -97,6 +102,8 @@ class SynaxarionViewState extends State<SynaxarionView> with AfterInitMixin<Syna
 
       return CustomListTile(
           title: title,
+          subtitle: "synaxarion_annotation".tr(),
+          reversed: true,
           onTap: () => BookPageSingle(title, padding: 5, builder: () => content).push(context));
     }
   }

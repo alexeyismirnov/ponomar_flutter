@@ -43,5 +43,6 @@
   "network_error": "Network error",
   "from_till": "From %s till %s — %s",
   "memory_of": "Memory of %s",
-  "other": "Other"
+  "other": "Other",
+  "synaxarion_annotation": "Synaxaria of the Triodion and Pentecostarion"
 }

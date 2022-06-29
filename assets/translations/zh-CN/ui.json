@@ -45,5 +45,6 @@
   "network_error": "网络错误",
   "from_till": "从%s至%s — %s",
   "memory_of": "",
-  "other": "其他"
+  "other": "其他",
+  "synaxarion_annotation": "大斋期集会书"
 }

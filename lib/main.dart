@@ -47,6 +47,7 @@ Future<void> main() async {
     "old_testament_overview.sqlite",
     "synaxarion_en.sqlite",
     "synaxarion_ru.sqlite",
+    "synaxarion_hk.sqlite",
     "typika.sqlite",
     "zvezdinsky.sqlite",
     "zerna.sqlite",
