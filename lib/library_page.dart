@@ -39,14 +39,14 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
     if (lang == "ru") {
       sections.add("Молитвослов");
       books.add([
-        EbookModel("prayerbook.sqlite"),
+        EbookModel("prayerbook_$lang.sqlite"),
         EbookModel("canons.sqlite"),
       ]);
 
-      sections.add("Богослужение");
+      sections.add("liturgical-books".tr());
       books.add([
-        EbookModel("vigil.sqlite"),
-        EbookModel("liturgy.sqlite"),
+        EbookModel("vigil_$lang.sqlite"),
+        EbookModel("liturgy_$lang.sqlite"),
       ]);
 
       sections.add("other".tr());
@@ -58,8 +58,14 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
         EbookModel("zvezdinsky.sqlite"),
       ]);
     } else {
+      sections.add("liturgical-books".tr());
+      books.add([
+        EbookModel("vigil_$lang.sqlite"),
+        EbookModel("liturgy_$lang.sqlite"),
+      ]);
+
       sections.add("other".tr());
-      books.add([EbookModel("synaxarion_$lang.sqlite")]);
+      books.add([EbookModel("prayerbook_$lang.sqlite"), EbookModel("synaxarion_$lang.sqlite")]);
     }
 
     var futures = <Future>[];

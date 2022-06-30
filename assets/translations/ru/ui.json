@@ -46,5 +46,6 @@
   "from_till": "С %s по %s — %s",
   "memory_of": "%s",
   "other": "Разное",
-  "synaxarion_annotation": ""
+  "synaxarion_annotation": "",
+  "liturgical-books": "Богослужение"
 }

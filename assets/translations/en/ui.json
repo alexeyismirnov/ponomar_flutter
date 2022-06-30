@@ -44,5 +44,6 @@
   "from_till": "From %s till %s — %s",
   "memory_of": "Memory of %s",
   "other": "Other",
-  "synaxarion_annotation": "Synaxaria of the Triodion and Pentecostarion"
+  "synaxarion_annotation": "Synaxaria of the Triodion and Pentecostarion",
+  "liturgical-books": "Liturgical books"
 }
