@@ -43,7 +43,7 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
         EbookModel("canons.sqlite"),
       ]);
 
-      sections.add("liturgical-books".tr());
+      sections.add("liturgical_books".tr());
       books.add([
         EbookModel("vigil_$lang.sqlite"),
         EbookModel("liturgy_$lang.sqlite"),
@@ -58,7 +58,7 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
         EbookModel("zvezdinsky.sqlite"),
       ]);
     } else {
-      sections.add("liturgical-books".tr());
+      sections.add("liturgical_books".tr());
       books.add([
         EbookModel("vigil_$lang.sqlite"),
         EbookModel("liturgy_$lang.sqlite"),
