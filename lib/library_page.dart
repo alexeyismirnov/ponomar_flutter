@@ -12,6 +12,7 @@ import 'book_model.dart';
 import 'globals.dart';
 import 'book_toc.dart';
 import 'ebook_model.dart';
+import 'typika_model.dart';
 
 class LibraryPage extends StatefulWidget {
   @override
@@ -64,8 +65,15 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
         EbookModel("liturgy_$lang.sqlite"),
       ]);
 
+      final today = DateTime.now();
+      final today_utc = DateTime.utc(today.year, today.month, today.day);
+
       sections.add("other".tr());
-      books.add([EbookModel("prayerbook_$lang.sqlite"), EbookModel("synaxarion_$lang.sqlite")]);
+      books.add([
+        EbookModel("prayerbook_$lang.sqlite"),
+        EbookModel("synaxarion_$lang.sqlite"),
+        TypikaModel(lang, today_utc)
+      ]);
     }
 
     var futures = <Future>[];
@@ -88,7 +96,32 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
         return CustomListTile(
           padding: 10,
           reversed: true,
-          onTap: () => BookTOC(books[index.section][index.index]).push(context),
+          onTap: () {
+            final model = books[index.section][index.index];
+            if (model.dateIterator != null) {
+              final df = DateFormat.yMMMMd(context.languageCode);
+
+              AlertDialog(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                      contentPadding: const EdgeInsets.all(5.0),
+                      content: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                  maxWidth: context.screenWidth * 0.5,
+                                  minWidth: context.screenWidth * 0.5,
+                                  maxHeight: 200),
+                              child: ListView.builder(
+                                  itemBuilder: (BuildContext _, int i) => ListTile(
+                                      dense: true,
+                                      title: Text(df.format(model.dateIterator!.elementAt(i)),
+                                          style: Theme.of(context).textTheme.titleMedium))))))
+                  .show(context);
+            } else {
+              BookTOC(model).push(context);
+            }
+          },
           title: books[index.section][index.index].title,
           subtitle: books[index.section][index.index].author ?? "",
         );

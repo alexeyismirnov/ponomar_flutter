@@ -51,13 +51,13 @@ class EbookModel extends BookModel {
     List<Map<String, Object?>> querySections =
         await db.query("sections", columns: ["title"], orderBy: "id");
 
-    sections = querySections.map<String>((e) => e["title"] as String).toList();
+    sections = List<String>.from(querySections.map<String>((e) => e["title"] as String));
 
     sections.forEachIndexed((s, i) async {
       List<Map<String, Object?>> queryItems = await db.query("content",
           columns: ["title"], where: "section=?", whereArgs: [i], orderBy: "item");
 
-      items[i] = queryItems.map<String>((e) => e["title"] as String).toList();
+      items[i] = List<String>.from(queryItems.map<String>((e) => e["title"] as String));
     });
   }
 

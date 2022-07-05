@@ -35,6 +35,7 @@ abstract class BookModel {
   bool get hasChapters;
 
   Future get initFuture;
+  Iterable<DateTime>? get dateIterator => null;
 
   Future prepare() {
     return Future.value(null);
@@ -43,7 +44,9 @@ abstract class BookModel {
   List<String> getSections();
   List<String> getItems(int section);
 
-  Future<int> getNumChapters(IndexPath index);
+  Future<int> getNumChapters(IndexPath index) {
+    return Future<int>.value(0);
+  }
 
   Future<String> getTitle(BookPosition pos) {
     return Future<String>.value("");

@@ -58,7 +58,10 @@ Future<void> main() async {
     "synaxarion_ru.sqlite",
     "synaxarion_cn.sqlite",
     "synaxarion_hk.sqlite",
-    "typika.sqlite",
+    "typika_en.sqlite",
+    "typika_ru.sqlite",
+    "typika_cn.sqlite",
+    "typika_hk.sqlite",
     "zvezdinsky.sqlite",
     "zerna.sqlite",
     "great_lent.db"
