@@ -1,4 +1,5 @@
 import 'package:group_list_view/group_list_view.dart';
+import 'package:ponomar/church_reading.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:supercharged/supercharged.dart';
@@ -8,6 +9,8 @@ import 'dart:async';
 import 'book_model.dart';
 import 'globals.dart';
 import 'church_calendar.dart';
+import 'church_reading.dart';
+import 'pericope_model.dart';
 
 class TypikaDateIterator implements Iterator<DateTime> {
   TypikaDateIterator(this.startDate) : currentDate = startDate - 1.days;
@@ -20,7 +23,10 @@ class TypikaDateIterator implements Iterator<DateTime> {
 
   @override
   bool moveNext() {
-    currentDate = ChurchCalendar.nearestSundayAfter(currentDate);
+    do {
+      currentDate = ChurchCalendar.nearestSundayAfter(currentDate);
+    } while (Cal.getGreatFeast(currentDate).isNotEmpty);
+
     return true;
   }
 }
@@ -58,9 +64,15 @@ class TypikaModel extends BookModel {
   @override
   late Iterable<DateTime>? dateIterator;
 
+  @override
+  set date(DateTime? d) {
+    if (d != null) initFuture = setDate(d);
+  }
+
   DateTime startDate;
   late ChurchCalendar cal;
   late int tone;
+  late String reading;
 
   late Database db;
   late List<String> data;
@@ -74,7 +86,6 @@ class TypikaModel extends BookModel {
   Future loadBook() async {
     db = await DB.open("typika_$lang.sqlite");
 
-    cal = Cal.fromDate(startDate);
     dateIterator = TypikaDate(startDate);
 
     code = "typika_$lang";
@@ -87,19 +98,23 @@ class TypikaModel extends BookModel {
   }
 
   Future setDate(DateTime date) async {
+    cal = Cal.fromDate(date);
     tone = cal.getTone(date)!;
 
     List<Map<String, Object?>> queryFragments =
         await db.query("fragments", columns: ["text"], where: "glas=$tone", orderBy: "id");
 
-    fragments = List<String>.from(queryFragments.map<String>((e) => e["title"] as String));
+    fragments = List<String>.from(queryFragments.map<String>((e) => e["text"] as String));
 
     List<Map<String, Object?>> queryProkimen =
         await db.query("prokimen", columns: ["text"], where: "glas=$tone", orderBy: "id");
 
-    prokimen = List<String>.from(queryProkimen.map<String>((e) => e["title"] as String));
+    prokimen = List<String>.from(queryProkimen.map<String>((e) => e["text"] as String));
+
     prokimen.addAll(prokimen[0].split("/"));
     prokimen[0] = prokimen[0].replaceAll("/", " ");
+
+    reading = ChurchReading.forDate(date).last;
   }
 
   Future<String?> loadString(String key) async =>
@@ -117,7 +132,28 @@ class TypikaModel extends BookModel {
   @override
   Future getContent(BookPosition pos) async {
     var content = SqfliteExt.firstStringValue(await db.query("content",
-        columns: ["text"], where: "section=?", whereArgs: [pos.index!.index + 1]));
+        columns: ["text"], where: "section=?", whereArgs: [pos.index!.index + 1])) as String;
+
+    content = content.replaceAll("GLAS", "$tone");
+
+    fragments.forEachIndexed((s, i) async {
+      content = content.replaceAll("FRAGMENT${i + 1}!", s);
+    });
+
+    prokimen.forEachIndexed((s, i) async {
+      content = content.replaceAll("PROKIMEN${i + 1}", s);
+    });
+
+    final pericope = PericopeModel(lang, reading);
+    await pericope.initFuture;
+
+    pericope.title.forEachIndexed((s, i) async {
+      content = content.replaceAll("TITLE${i + 1}", s);
+    });
+
+    pericope.content.forEachIndexed((s, i) async {
+      content = content.replaceAll("READING${i + 1}", s);
+    });
 
     return content;
   }

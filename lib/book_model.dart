@@ -36,6 +36,7 @@ abstract class BookModel {
 
   Future get initFuture;
   Iterable<DateTime>? get dateIterator => null;
+  DateTime? date;
 
   Future prepare() {
     return Future.value(null);

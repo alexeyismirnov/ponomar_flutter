@@ -11,10 +11,6 @@ import 'book_page_single.dart';
 import 'globals.dart';
 import 'custom_list_tile.dart';
 
-class Range {
-  final int chapter, verse;
-  Range(this.chapter, this.verse);
-}
 
 class BibleChapterView extends StatefulWidget {
   final BookPosition pos;
@@ -110,17 +106,17 @@ class _PericopeViewState extends State<PericopeView> with AfterInitMixin<Pericop
       final arr2 = pericope[i + 1].split(",");
 
       for (final segment in arr2) {
-        List<Range> range = [];
+        List<BibleRange> range = [];
         final arr3 = segment.split("-");
 
         for (final offset in arr3) {
           final arr4 = offset.split(":");
 
           if (arr4.length == 1) {
-            range.add(Range(chapter, int.parse(arr4[0])));
+            range.add(BibleRange(chapter, int.parse(arr4[0])));
           } else {
             chapter = int.parse(arr4[0]);
-            range.add(Range(chapter, int.parse(arr4[1])));
+            range.add(BibleRange(chapter, int.parse(arr4[1])));
           }
         }
 

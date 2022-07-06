@@ -12,7 +12,7 @@ import 'church_calendar.dart';
 import 'church_fasting.dart';
 import 'church_reading.dart';
 import 'globals.dart';
-import 'pericope.dart';
+import 'pericope_view.dart';
 import 'saint_model.dart';
 import 'icon_model.dart';
 import 'troparion_model.dart';

@@ -96,12 +96,12 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
         return CustomListTile(
           padding: 10,
           reversed: true,
-          onTap: () {
+          onTap: () async {
             final model = books[index.section][index.index];
             if (model.dateIterator != null) {
               final df = DateFormat.yMMMMd(context.languageCode);
 
-              AlertDialog(
+              final serviceDate = await AlertDialog(
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0))),
                       contentPadding: const EdgeInsets.all(5.0),
@@ -115,9 +115,16 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
                               child: ListView.builder(
                                   itemBuilder: (BuildContext _, int i) => ListTile(
                                       dense: true,
+                                      onTap: () =>
+                                          Navigator.pop(context, model.dateIterator!.elementAt(i)),
                                       title: Text(df.format(model.dateIterator!.elementAt(i)),
                                           style: Theme.of(context).textTheme.titleMedium))))))
                   .show(context);
+
+              if (serviceDate != null) {
+                model.date = serviceDate;
+                Future.wait([model.initFuture]).then((_) => BookTOC(model).push(context));
+              }
             } else {
               BookTOC(model).push(context);
             }
