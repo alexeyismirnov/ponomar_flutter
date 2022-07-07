@@ -37,44 +37,18 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
       [OldTestamentModel(lang), NewTestamentModel(lang)]
     ];
 
-    if (lang == "ru") {
-      sections.add("Молитвослов");
-      books.add([
-        EbookModel("prayerbook_$lang.sqlite"),
-        EbookModel("canons.sqlite"),
-      ]);
+    final today = DateTime.now();
+    final today_utc = DateTime.utc(today.year, today.month, today.day);
 
-      sections.add("liturgical_books".tr());
-      books.add([
-        EbookModel("vigil_$lang.sqlite"),
-        EbookModel("liturgy_$lang.sqlite"),
-      ]);
+    sections.add("liturgical_books".tr());
+    books.add([
+      EbookModel("vigil_$lang.sqlite"),
+      EbookModel("liturgy_$lang.sqlite"),
+      TypikaModel(lang, today_utc)
+    ]);
 
-      sections.add("other".tr());
-      books.add([
-        EbookModel("synaxarion_ru.sqlite"),
-        EbookModel("old_testament_overview.sqlite"),
-        EbookModel("new_testament_overview.sqlite"),
-        EbookModel("zerna.sqlite"),
-        EbookModel("zvezdinsky.sqlite"),
-      ]);
-    } else {
-      final today = DateTime.now();
-      final today_utc = DateTime.utc(today.year, today.month, today.day);
-
-      sections.add("liturgical_books".tr());
-      books.add([
-        EbookModel("vigil_$lang.sqlite"),
-        EbookModel("liturgy_$lang.sqlite"),
-        TypikaModel(lang, today_utc)
-      ]);
-
-      sections.add("other".tr());
-      books.add([
-        EbookModel("prayerbook_$lang.sqlite"),
-        EbookModel("synaxarion_$lang.sqlite")
-      ]);
-    }
+    sections.add("other".tr());
+    books.add([EbookModel("prayerbook_$lang.sqlite"), EbookModel("synaxarion_$lang.sqlite")]);
 
     var futures = <Future>[];
     for (final model in books.expand((e) => e)) {

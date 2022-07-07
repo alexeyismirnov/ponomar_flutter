@@ -46,7 +46,7 @@ class CalendarAppbar extends StatelessWidget {
                 await FirebaseConfig.cancel();
 
                 AppLangDialog(
-                  labels: const ["English", "Русский", "简体中文", "繁體中文"],
+                  labels: const ["English", "简体中文", "繁體中文"],
                 ).show(context, canDismiss: false);
               },
               child: ListTile(
