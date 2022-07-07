@@ -59,20 +59,20 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
         EbookModel("zvezdinsky.sqlite"),
       ]);
     } else {
+      final today = DateTime.now();
+      final today_utc = DateTime.utc(today.year, today.month, today.day);
+
       sections.add("liturgical_books".tr());
       books.add([
         EbookModel("vigil_$lang.sqlite"),
         EbookModel("liturgy_$lang.sqlite"),
+        TypikaModel(lang, today_utc)
       ]);
-
-      final today = DateTime.now();
-      final today_utc = DateTime.utc(today.year, today.month, today.day);
 
       sections.add("other".tr());
       books.add([
         EbookModel("prayerbook_$lang.sqlite"),
-        EbookModel("synaxarion_$lang.sqlite"),
-        TypikaModel(lang, today_utc)
+        EbookModel("synaxarion_$lang.sqlite")
       ]);
     }
 
