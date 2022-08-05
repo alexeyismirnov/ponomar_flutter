@@ -43,7 +43,9 @@ dependencies:
   fluttertoast: ^8.0.9
   flutter_local_notifications: ^9.5.3+1
   flutter_native_timezone: ^2.0.0
-  rxdart: ^0.18.1
+  rxdart: ^0.27.5
+  firebase_core: ^1.20.0
+  firebase_analytics: ^9.3.0
   flutter_toolkit:
     path: /Users/alexey/workspace/flutter_toolkit
 

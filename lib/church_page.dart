@@ -121,7 +121,7 @@ class _ChurchPageState extends State<ChurchPage> {
       const SizedBox(height: 10),
       SimpleCard(
           title: "install_church_app".tr(),
-          image: "church_icon.jpg",
+          image: "assets/images/church_icon.jpg",
           onTap: () =>
               StoreRedirect.redirect(androidAppId: "com.rlc.church", iOSAppId: "1566259967")),
       const SizedBox(height: 20),
