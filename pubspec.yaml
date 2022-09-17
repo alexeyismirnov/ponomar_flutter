@@ -26,7 +26,7 @@ dependencies:
   group_list_view: ^1.1.1
   jiffy: ^5.0.0
   quiver: ^3.0.1+1
-  flutter_archive: ^4.2.0
+  flutter_archive: ^5.0.0
   audioplayers: ^0.20.1
   flutter_html: ^2.2.1
   page_view_indicators: ^2.0.0
@@ -43,7 +43,9 @@ dependencies:
   fluttertoast: ^8.0.9
   flutter_local_notifications: ^9.5.3+1
   flutter_native_timezone: ^2.0.0
-  rxdart: ^0.18.1
+  rxdart: ^0.27.5
+  firebase_core: ^1.20.0
+  firebase_analytics: ^9.3.0
   flutter_toolkit:
     path: /Users/alexey/workspace/flutter_toolkit
 
