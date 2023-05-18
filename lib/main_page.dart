@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:jiffy/jiffy.dart';
 
@@ -29,7 +28,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     _controller = PageController(initialPage: initialPage);
     setDate(DateTime.now());
 
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
     Future.delayed(Duration.zero, () => postInit());
   }
@@ -47,12 +46,12 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       FeastNotifications(date, context.languageCode).setup();
     }
 
-    await Jiffy.locale(context.languageCode);
+    await Jiffy.setLocale(context.languageCode);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

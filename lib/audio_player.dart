@@ -20,7 +20,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
   void initState() {
     super.initState();
 
-    player.onAudioPositionChanged.listen((Duration duration) {
+    player.onPositionChanged.listen((Duration duration) {
       if (mounted) {
         setState(() {
           currentTime = duration;
@@ -36,7 +36,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
       }
     });
 
-    player.onPlayerCompletion.listen((event) {
+    player.onPlayerComplete.listen((event) {
       player.stop();
 
       if (mounted) {
@@ -60,7 +60,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
         IconButton(
             icon: Icon(
               isPlaying ? Icons.pause_circle_outlined : Icons.play_circle_outlined,
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
               size: 35,
             ),
             onPressed: () async {
@@ -72,7 +72,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                 });
               } else {
                 if (currentTime == null) {
-                  await player.play(widget.url, isLocal: true);
+                  await player.play(DeviceFileSource(widget.url));
                 } else {
                   player.resume();
                 }

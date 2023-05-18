@@ -42,7 +42,10 @@ class ChurchDay {
   @JsonKey(name: 'saint')
   String? comment;
 
-  factory ChurchDay.fromJson(Map<String, dynamic> json) => _$ChurchDayFromJson(json);
+  factory ChurchDay.fromJson(Map<String, dynamic> json) {
+    print(json);
+    return _$ChurchDayFromJson(json);
+  }
 
   ChurchDay(this.name, this.type, {this.date, this.reading, this.comment});
 

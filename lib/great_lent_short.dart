@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:after_init/after_init.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 import 'dart:math';
@@ -22,8 +21,7 @@ class GreatLentShortView extends StatefulWidget {
   _GreatLentShortViewState createState() => _GreatLentShortViewState();
 }
 
-class _GreatLentShortViewState extends State<GreatLentShortView>
-    with AfterInitMixin<GreatLentShortView> {
+class _GreatLentShortViewState extends State<GreatLentShortView> {
   late String image;
   late String header, title, description, footer;
   late DateFormat df;
@@ -64,7 +62,9 @@ class _GreatLentShortViewState extends State<GreatLentShortView>
   }
 
   @override
-  void didInitState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     if (!isAvailable) return;
 
     df = DateFormat.MMMMd(context.languageCode);
@@ -104,12 +104,12 @@ class _GreatLentShortViewState extends State<GreatLentShortView>
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(df.format(widget.date),
-              textAlign: TextAlign.center, style: Theme.of(context).textTheme.subtitle1),
+              textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 10),
-          Text(title, style: Theme.of(context).textTheme.headline6),
+          Text(title, style: Theme.of(context).textTheme.titleLarge),
           if (header.length + footer.length > 0) ...[
             const SizedBox(height: 10),
-            Text("$hh$footer", style: Theme.of(context).textTheme.subtitle1),
+            Text("$hh$footer", style: Theme.of(context).textTheme.titleMedium),
           ],
         ]);
 
@@ -146,13 +146,13 @@ class _GreatLentShortViewState extends State<GreatLentShortView>
             : MainAxisAlignment.spaceAround,
         children: [
           if (header.isNotEmpty) ...[
-            Text(header, style: Theme.of(context).textTheme.subtitle1),
+            Text(header, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 10),
           ],
-          Text(title, style: Theme.of(context).textTheme.headline6),
+          Text(title, style: Theme.of(context).textTheme.titleLarge),
           if (footer.isNotEmpty) ...[
             const SizedBox(height: 10),
-            Text(footer.toUpperCase(), style: Theme.of(context).textTheme.button)
+            Text(footer.toUpperCase(), style: Theme.of(context).textTheme.labelLarge)
           ]
         ]);
 
@@ -166,7 +166,7 @@ class _GreatLentShortViewState extends State<GreatLentShortView>
       const SizedBox(height: 10),
       const SizedBox(width: 250, child: Divider(color: Colors.black)),
       const SizedBox(height: 10),
-      Text(description, textAlign: TextAlign.center, style: Theme.of(context).textTheme.subtitle1),
+      Text(description, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
       const SizedBox(height: 10),
     ]);
 

@@ -3,9 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:after_init/after_init.dart';
 
-import 'dart:developer';
 import 'dart:math';
 
 import 'church_day.dart';
@@ -79,7 +77,7 @@ class DayView extends StatefulWidget {
   _DayViewState createState() => _DayViewState();
 }
 
-class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
+class _DayViewState extends State<DayView>  {
   DateTime get date => widget.date;
   DateTime get dateOld => widget.dateOld;
 
@@ -103,7 +101,9 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
   }
 
   @override
-  void didInitState() async {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     saints = SaintModel(context.countryCode);
 
     const itemWidth = 100;
@@ -144,7 +144,7 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
                         textAlign: TextAlign.left,
                         maxLines: 1,
                         minFontSize: 5,
-                        style: Theme.of(context).textTheme.subtitle1),
+                        style: Theme.of(context).textTheme.titleMedium),
                   ]))
             ]),
         onTap: () {
@@ -313,7 +313,6 @@ class _DayViewState extends State<DayView> with AfterInitMixin<DayView> {
                       .toList()));
 
           // log(snapshot.data.toString());
-
         } else {
           return Container();
         }

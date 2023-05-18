@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:after_init/after_init.dart';
 import 'package:group_list_view/group_list_view.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
@@ -18,7 +17,7 @@ class LibraryPage extends StatefulWidget {
   _LibraryPageState createState() => _LibraryPageState();
 }
 
-class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPage> {
+class _LibraryPageState extends State<LibraryPage> {
   late DateTime date;
   late DateTime savedDate;
 
@@ -27,7 +26,9 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
   bool ready = false;
 
   @override
-  void didInitState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     final lang = context.countryCode;
 
     sections = ["Bible"];
@@ -86,7 +87,7 @@ class _LibraryPageState extends State<LibraryPage> with AfterInitMixin<LibraryPa
       },
       groupHeaderBuilder: (BuildContext context, int section) {
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(sections[section].tr().toUpperCase(), style: Theme.of(context).textTheme.button),
+          Text(sections[section].tr().toUpperCase(), style: Theme.of(context).textTheme.labelLarge),
           const Divider(thickness: 1)
         ]);
       },

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:after_init/after_init.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
 
 import 'package:html2md/html2md.dart';
@@ -19,8 +18,7 @@ class GreatLentFullView extends StatefulWidget {
   _GreatLentFullViewState createState() => _GreatLentFullViewState();
 }
 
-class _GreatLentFullViewState extends State<GreatLentFullView>
-    with AfterInitMixin<GreatLentFullView> {
+class _GreatLentFullViewState extends State<GreatLentFullView> {
   bool initialized = false;
   late String text;
   late StoryModel model;
@@ -43,7 +41,9 @@ class _GreatLentFullViewState extends State<GreatLentFullView>
   late Cal cal;
 
   @override
-  void didInitState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     cal = Cal.fromDate(DateTime.utc(widget.year, 1, 1));
     model = StoryModel("great_lent.db");
 

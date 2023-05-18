@@ -37,7 +37,7 @@ class BookCellText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(text,
-      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: ConfigParam.fontSize.val()));
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: ConfigParam.fontSize.val()));
 }
 
 class BookCellHTML extends StatelessWidget {
@@ -75,8 +75,7 @@ class BookCellHTML extends StatelessWidget {
 
     return Html(
         data: css + text,
-        onLinkTap: (String? url, RenderContext _context, Map<String, String> attributes,
-            dom.Element? element) async {
+        onLinkTap: (String? url, Map<String, String> attributes, dom.Element? element) async {
           final match = RegExp(r'comment://(\d+)').firstMatch(url!)?.group(1);
           if (match != null) {
             final commentId = int.parse(match);

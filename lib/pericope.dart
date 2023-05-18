@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:after_init/after_init.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_toolkit/config_param.dart';
 import 'package:flutter_toolkit/flutter_toolkit.dart';
@@ -64,12 +63,14 @@ class PericopeView extends StatefulWidget {
   _PericopeViewState createState() => _PericopeViewState();
 }
 
-class _PericopeViewState extends State<PericopeView> with AfterInitMixin<PericopeView> {
+class _PericopeViewState extends State<PericopeView> {
   bool ready = false;
   List<Widget> content = [];
 
   @override
-  void didInitState() async {
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+
     double fontSize = ConfigParam.fontSize.val();
 
     BibleUtil bu;
@@ -101,7 +102,7 @@ class _PericopeViewState extends State<PericopeView> with AfterInitMixin<Pericop
                   text: bookName + "\n",
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1!
+                      .bodyLarge!
                       .copyWith(fontWeight: FontWeight.bold, fontSize: fontSize + 2)),
               textAlign: TextAlign.center,
             ))
@@ -176,13 +177,15 @@ class ReadingView extends StatefulWidget {
   _ReadingViewState createState() => _ReadingViewState();
 }
 
-class _ReadingViewState extends State<ReadingView> with AfterInitMixin<ReadingView> {
+class _ReadingViewState extends State<ReadingView> {
   late String title;
   late String? subtitle;
   late List<String> currentReading;
 
   @override
-  void didInitState() async {
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+
     currentReading = widget.r.split("#");
     title = currentReading[0];
     subtitle = currentReading.length > 1 ? currentReading[1].trim().tr() : null;

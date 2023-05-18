@@ -48,7 +48,7 @@ class FirebaseConfig {
 
     const InitializationSettings initializationSettings = InitializationSettings(
         android: AndroidInitializationSettings('cross'),
-        iOS: IOSInitializationSettings(
+        iOS: DarwinInitializationSettings(
           requestSoundPermission: false,
           requestBadgePermission: false,
           requestAlertPermission: false,

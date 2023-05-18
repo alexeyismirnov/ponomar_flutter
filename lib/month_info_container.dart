@@ -31,10 +31,11 @@ class _MonthInfoContainerState extends State<MonthInfoContainer> {
   }
 
   void updateTitle([int index = initialPage]) {
-    final currentDate = Jiffy(widget.initialDate).add(months: index - initialPage);
+    final currentDate =
+        Jiffy.parseFromDateTime(widget.initialDate).add(months: index - initialPage);
 
     setState(() {
-      title = currentDate.format("LLLL yyyy").capitalize();
+      title = currentDate.format(pattern: "LLLL yyyy").capitalize();
     });
   }
 
@@ -95,8 +96,9 @@ class _MonthInfoContainerState extends State<MonthInfoContainer> {
                           controller: _controller,
                           onPageChanged: (page) => updateTitle(page),
                           itemBuilder: (BuildContext context, int index) {
-                            final cd =
-                                Jiffy(widget.initialDate).add(months: index - initialPage).dateTime;
+                            final cd = Jiffy.parseFromDateTime(widget.initialDate)
+                                .add(months: index - initialPage)
+                                .dateTime;
 
                             return Align(
                                 alignment: Alignment.topCenter,
